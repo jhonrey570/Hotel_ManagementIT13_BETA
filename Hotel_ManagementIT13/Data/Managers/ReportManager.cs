@@ -11,12 +11,14 @@ namespace Hotel_ManagementIT13.Data.Managers
         private readonly ReservationRepository _reservationRepo;
         private readonly RoomRepository _roomRepo;
         private readonly BillingRepository _billingRepo;
+        private readonly PaymentRepository _paymentRepo; // Added PaymentRepository
 
         public ReportManager()
         {
             _reservationRepo = new ReservationRepository();
             _roomRepo = new RoomRepository();
             _billingRepo = new BillingRepository();
+            _paymentRepo = new PaymentRepository(); // Initialize PaymentRepository
         }
 
         public OccupancyReport GenerateOccupancyReport(DateTime startDate, DateTime endDate)
@@ -101,8 +103,8 @@ namespace Hotel_ManagementIT13.Data.Managers
 
             try
             {
-                // Get total revenue
-                report.TotalRevenue = _billingRepo.GetTotalRevenue(startDate, endDate);
+                // FIXED: Get total revenue from PaymentRepository instead of BillingRepository
+                report.TotalRevenue = _paymentRepo.GetTotalRevenue(startDate, endDate);
 
                 // Get reservations in period
                 var reservations = _reservationRepo.GetReservationsByDateRange(startDate, endDate);
@@ -123,7 +125,10 @@ namespace Hotel_ManagementIT13.Data.Managers
                             roomTypeCount[roomType] = 0;
                         }
 
-                        roomTypeRevenue[roomType] += room.RoomRate * reservation.NumberOfNights;
+                        // Calculate revenue based on room rate and nights stayed
+                        // Note: This is estimated revenue, actual revenue should come from payments
+                        int nights = (reservation.CheckOutDate - reservation.CheckInDate).Days;
+                        roomTypeRevenue[roomType] += room.RoomRate * nights;
                         roomTypeCount[roomType]++;
                     }
                 }
@@ -172,17 +177,74 @@ namespace Hotel_ManagementIT13.Data.Managers
 
                 foreach (var reservation in reservations)
                 {
-                    // This would need guest type and nationality from guest table
-                    // Simplified for now
-                    if (!guestTypeCount.ContainsKey("Regular"))
-                        guestTypeCount["Regular"] = 0;
-                    guestTypeCount["Regular"]++;
+                    // Note: This is simplified - you'll need to get actual guest type from database
+                    // Assuming guest type is stored in reservation or guest object
+                    string guestType = "Regular"; // Default
+                    string nationality = "Unknown"; // Default
+
+                    // If you have access to guest object through reservation:
+                    // string guestType = reservation.Guest.GuestType;
+                    // string nationality = reservation.Guest.Nationality;
+
+                    if (!guestTypeCount.ContainsKey(guestType))
+                        guestTypeCount[guestType] = 0;
+                    guestTypeCount[guestType]++;
+
+                    if (!nationalityCount.ContainsKey(nationality))
+                        nationalityCount[nationality] = 0;
+                    nationalityCount[nationality]++;
                 }
 
                 report.GuestTypeDistribution = guestTypeCount;
                 report.NationalityDistribution = nationalityCount;
                 report.TotalGuests = reservations.Count;
 
+                report.Success = true;
+            }
+            catch (Exception ex)
+            {
+                report.Success = false;
+                report.ErrorMessage = ex.Message;
+            }
+
+            return report;
+        }
+
+        // Additional method to get payment summary
+        public PaymentSummaryReport GeneratePaymentSummaryReport(DateTime startDate, DateTime endDate)
+        {
+            var report = new PaymentSummaryReport
+            {
+                StartDate = startDate,
+                EndDate = endDate,
+                GeneratedDate = DateTime.Now
+            };
+
+            try
+            {
+                // Get payments in date range
+                var payments = _paymentRepo.GetPaymentsByDateRange(startDate, endDate);
+
+                // Summarize by payment method
+                var paymentMethodSummary = new Dictionary<string, decimal>();
+                var statusSummary = new Dictionary<string, int>();
+
+                foreach (var payment in payments)
+                {
+                    // Sum by payment method
+                    if (!paymentMethodSummary.ContainsKey(payment.PaymentMethod))
+                        paymentMethodSummary[payment.PaymentMethod] = 0;
+                    paymentMethodSummary[payment.PaymentMethod] += payment.Amount;
+
+                    // Count by status
+                    if (!statusSummary.ContainsKey(payment.StatusName))
+                        statusSummary[payment.StatusName] = 0;
+                    statusSummary[payment.StatusName]++;
+                }
+
+                report.PaymentMethodBreakdown = paymentMethodSummary;
+                report.PaymentStatusSummary = statusSummary;
+                report.TotalPayments = payments.Count;
                 report.Success = true;
             }
             catch (Exception ex)
@@ -237,6 +299,19 @@ namespace Hotel_ManagementIT13.Data.Managers
         public int TotalGuests { get; set; }
         public Dictionary<string, int> GuestTypeDistribution { get; set; } = new Dictionary<string, int>();
         public Dictionary<string, int> NationalityDistribution { get; set; } = new Dictionary<string, int>();
+        public bool Success { get; set; }
+        public string ErrorMessage { get; set; }
+    }
+
+    // New class for payment summary report
+    public class PaymentSummaryReport
+    {
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
+        public DateTime GeneratedDate { get; set; }
+        public int TotalPayments { get; set; }
+        public Dictionary<string, decimal> PaymentMethodBreakdown { get; set; } = new Dictionary<string, decimal>();
+        public Dictionary<string, int> PaymentStatusSummary { get; set; } = new Dictionary<string, int>();
         public bool Success { get; set; }
         public string ErrorMessage { get; set; }
     }

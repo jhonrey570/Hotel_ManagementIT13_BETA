@@ -9,14 +9,14 @@ namespace Hotel_ManagementIT13.Data.Managers
         private readonly ReservationRepository _reservationRepo;
         private readonly RoomRepository _roomRepo;
         private readonly BillingRepository _billingRepo;
+        private readonly PaymentRepository _paymentRepo;  // Added PaymentRepository
 
         public CheckOutManager()
         {
             _reservationRepo = new ReservationRepository();
-
-            //I HAVE AN ISSUE IN HERE RoomRepo(); NOT RECOGNIZED
             _roomRepo = new RoomRepository();
             _billingRepo = new BillingRepository();
+            _paymentRepo = new PaymentRepository();  // Initialize PaymentRepository
         }
 
         public CheckOutResult ProcessCheckOut(string bookingReference, int processedByUserId,
@@ -69,7 +69,8 @@ namespace Hotel_ManagementIT13.Data.Managers
                 // Process final payment
                 if (paymentAmount > 0)
                 {
-                    _billingRepo.ProcessPayment(reservation.ReservationId, paymentAmount,
+                    // FIXED: Use PaymentRepository instead of BillingRepository
+                    _paymentRepo.ProcessPayment(reservation.ReservationId, paymentAmount,
                                               paymentMethod, notes);
 
                     // Get final billing after payment
@@ -199,12 +200,16 @@ namespace Hotel_ManagementIT13.Data.Managers
         private bool UpdateReservationStatus(int reservationId, int statusId)
         {
             // Implementation to update reservation status
+            // This should call a repository method
+            // For now, return true for compilation
             return true;
         }
 
         private bool UpdateReservationCheckOut(int reservationId, DateTime newCheckOut)
         {
             // Implementation to update check-out date
+            // This should call a repository method
+            // For now, return true for compilation
             return true;
         }
 
@@ -212,6 +217,8 @@ namespace Hotel_ManagementIT13.Data.Managers
                                   DateTime checkOutTime, int statusId)
         {
             // Implementation to record check-out
+            // This should call a repository method
+            // For now, return true for compilation
             return true;
         }
     }

@@ -10,18 +10,16 @@ namespace Hotel_ManagementIT13.Data.Managers
         private readonly ReservationRepository _reservationRepo;
         private readonly RoomRepository _roomRepo;
         private readonly BillingRepository _billingRepo;
-
-        //ADDED THIS LINE
         private readonly GuestRepository _guestRepo;
+        private readonly PaymentRepository _paymentRepo; // Added PaymentRepository
 
         public CheckInManager()
         {
             _reservationRepo = new ReservationRepository();
             _roomRepo = new RoomRepository();
             _billingRepo = new BillingRepository();
-
-            //ADDED THIS LINE
             _guestRepo = new GuestRepository();
+            _paymentRepo = new PaymentRepository(); // Initialize PaymentRepository
         }
 
         public CheckInResult ProcessCheckIn(string bookingReference, int processedByUserId,
@@ -63,7 +61,8 @@ namespace Hotel_ManagementIT13.Data.Managers
                 // Process deposit payment if any
                 if (depositAmount > 0)
                 {
-                    _billingRepo.ProcessPayment(reservation.ReservationId, depositAmount,
+                    // FIXED: Use PaymentRepository instead of BillingRepository
+                    _paymentRepo.ProcessPayment(reservation.ReservationId, depositAmount,
                                               paymentMethod, "Deposit payment");
                 }
 
@@ -115,7 +114,6 @@ namespace Hotel_ManagementIT13.Data.Managers
                     new List<int> { roomId }, adults, children);
 
                 // Get the reservation
-                //FIXED HERE
                 string bookingRef = "";
                 if (reservationResult.StartsWith("Reservation created successfully!"))
                 {
@@ -145,15 +143,88 @@ namespace Hotel_ManagementIT13.Data.Managers
             return result;
         }
 
+        public CheckInResult ProcessGroupCheckIn(string bookingReference, List<int> roomIds,
+                                               int processedByUserId, decimal depositAmount = 0)
+        {
+            var result = new CheckInResult();
+
+            try
+            {
+                // Get reservation
+                var reservation = _reservationRepo.GetReservationByReference(bookingReference);
+                if (reservation == null)
+                {
+                    result.Success = false;
+                    result.Message = "Reservation not found";
+                    return result;
+                }
+
+                // Verify all rooms are part of the reservation
+                foreach (int roomId in roomIds)
+                {
+                    bool roomFound = false;
+                    foreach (var room in reservation.Rooms)
+                    {
+                        if (room.RoomId == roomId)
+                        {
+                            roomFound = true;
+                            break;
+                        }
+                    }
+
+                    if (!roomFound)
+                    {
+                        result.Success = false;
+                        result.Message = $"Room {roomId} is not part of this reservation";
+                        return result;
+                    }
+                }
+
+                // Update each room status to Occupied
+                foreach (int roomId in roomIds)
+                {
+                    _roomRepo.UpdateRoomStatus(roomId, 2); // Occupied
+                }
+
+                // Update reservation status to Checked-in
+                UpdateReservationStatus(reservation.ReservationId, 3);
+
+                // Record check-in
+                RecordCheckIn(reservation.ReservationId, processedByUserId, 1);
+
+                // Process deposit payment if any
+                if (depositAmount > 0)
+                {
+                    _paymentRepo.ProcessPayment(reservation.ReservationId, depositAmount,
+                                              "Cash", "Group check-in deposit");
+                }
+
+                result.Success = true;
+                result.Message = $"Group check-in processed successfully for {roomIds.Count} rooms";
+                result.Reservation = reservation;
+            }
+            catch (Exception ex)
+            {
+                result.Success = false;
+                result.Message = $"Error during group check-in: {ex.Message}";
+            }
+
+            return result;
+        }
+
         private bool UpdateReservationStatus(int reservationId, int statusId)
         {
             // Implementation to update reservation status
+            // This should call a repository method
+            // For now, return true for compilation
             return true;
         }
 
         private bool RecordCheckIn(int reservationId, int processedBy, int statusId)
         {
             // Implementation to record check-in
+            // This should call a repository method
+            // For now, return true for compilation
             return true;
         }
     }

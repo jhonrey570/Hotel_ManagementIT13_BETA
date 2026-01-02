@@ -48,6 +48,10 @@
             this.btnBook = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnPrint = new System.Windows.Forms.Button();
+            this.lblSearchResults = new System.Windows.Forms.Label();
+            this.lblSelectedGuest = new System.Windows.Forms.Label();
+            this.lblAvailableRooms = new System.Windows.Forms.Label();
+            this.btnNewGuest = new System.Windows.Forms.Button();
             this.tabReservation.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvGuestResults)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudAdults)).BeginInit();
@@ -59,29 +63,29 @@
             // 
             this.tabReservation.Controls.Add(this.tabPage1);
             this.tabReservation.Controls.Add(this.tabPage2);
-            this.tabReservation.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tabReservation.Location = new System.Drawing.Point(40, 40);
+            this.tabReservation.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.tabReservation.Location = new System.Drawing.Point(30, 30);
             this.tabReservation.Name = "tabReservation";
             this.tabReservation.SelectedIndex = 0;
-            this.tabReservation.Size = new System.Drawing.Size(600, 400);
+            this.tabReservation.Size = new System.Drawing.Size(600, 350);
             this.tabReservation.TabIndex = 0;
             // 
             // tabPage1
             // 
-            this.tabPage1.Location = new System.Drawing.Point(4, 34);
+            this.tabPage1.Location = new System.Drawing.Point(4, 29);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(592, 362);
+            this.tabPage1.Size = new System.Drawing.Size(592, 317);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "New Reservation";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
             // tabPage2
             // 
-            this.tabPage2.Location = new System.Drawing.Point(4, 34);
+            this.tabPage2.Location = new System.Drawing.Point(4, 29);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(592, 362);
+            this.tabPage2.Size = new System.Drawing.Size(592, 317);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Reservation History";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -89,26 +93,26 @@
             // pnlGuestInfo
             // 
             this.pnlGuestInfo.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.pnlGuestInfo.Location = new System.Drawing.Point(680, 40);
+            this.pnlGuestInfo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pnlGuestInfo.Location = new System.Drawing.Point(660, 30);
             this.pnlGuestInfo.Name = "pnlGuestInfo";
-            this.pnlGuestInfo.Size = new System.Drawing.Size(1200, 200);
+            this.pnlGuestInfo.Size = new System.Drawing.Size(1150, 160);
             this.pnlGuestInfo.TabIndex = 1;
             // 
             // txtGuestSearch
             // 
-            this.txtGuestSearch.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtGuestSearch.Location = new System.Drawing.Point(680, 260);
+            this.txtGuestSearch.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F);
+            this.txtGuestSearch.Location = new System.Drawing.Point(660, 210);
             this.txtGuestSearch.Name = "txtGuestSearch";
-            this.txtGuestSearch.Size = new System.Drawing.Size(1000, 34);
+            this.txtGuestSearch.Size = new System.Drawing.Size(850, 28);
             this.txtGuestSearch.TabIndex = 2;
-            this.txtGuestSearch.Text = "Search Guest...";
             // 
             // btnSearchGuest
             // 
-            this.btnSearchGuest.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnSearchGuest.Location = new System.Drawing.Point(1700, 260);
+            this.btnSearchGuest.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F);
+            this.btnSearchGuest.Location = new System.Drawing.Point(1520, 210);
             this.btnSearchGuest.Name = "btnSearchGuest";
-            this.btnSearchGuest.Size = new System.Drawing.Size(180, 40);
+            this.btnSearchGuest.Size = new System.Drawing.Size(140, 35);
             this.btnSearchGuest.TabIndex = 3;
             this.btnSearchGuest.Text = "SEARCH";
             this.btnSearchGuest.UseVisualStyleBackColor = true;
@@ -120,53 +124,63 @@
             this.dgvGuestResults.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgvGuestResults.BackgroundColor = System.Drawing.SystemColors.Control;
             this.dgvGuestResults.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvGuestResults.Location = new System.Drawing.Point(680, 320);
+            this.dgvGuestResults.Location = new System.Drawing.Point(660, 270);
             this.dgvGuestResults.Name = "dgvGuestResults";
             this.dgvGuestResults.ReadOnly = true;
             this.dgvGuestResults.RowHeadersWidth = 51;
-            this.dgvGuestResults.RowTemplate.Height = 30;
-            this.dgvGuestResults.Size = new System.Drawing.Size(1200, 300);
+            this.dgvGuestResults.RowTemplate.Height = 24;
+            this.dgvGuestResults.Size = new System.Drawing.Size(1000, 250);
             this.dgvGuestResults.TabIndex = 4;
             // 
             // dtpCheckIn
             // 
-            this.dtpCheckIn.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.dtpCheckIn.Location = new System.Drawing.Point(40, 480);
+            this.dtpCheckIn.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F);
+            this.dtpCheckIn.Location = new System.Drawing.Point(30, 410);
             this.dtpCheckIn.Name = "dtpCheckIn";
-            this.dtpCheckIn.Size = new System.Drawing.Size(280, 34);
+            this.dtpCheckIn.Size = new System.Drawing.Size(250, 28);
             this.dtpCheckIn.TabIndex = 5;
             // 
             // dtpCheckOut
             // 
-            this.dtpCheckOut.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.dtpCheckOut.Location = new System.Drawing.Point(360, 480);
+            this.dtpCheckOut.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F);
+            this.dtpCheckOut.Location = new System.Drawing.Point(320, 410);
             this.dtpCheckOut.Name = "dtpCheckOut";
-            this.dtpCheckOut.Size = new System.Drawing.Size(280, 34);
+            this.dtpCheckOut.Size = new System.Drawing.Size(250, 28);
             this.dtpCheckOut.TabIndex = 6;
             // 
             // nudAdults
             // 
-            this.nudAdults.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.nudAdults.Location = new System.Drawing.Point(40, 560);
+            this.nudAdults.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F);
+            this.nudAdults.Location = new System.Drawing.Point(30, 480);
+            this.nudAdults.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             this.nudAdults.Name = "nudAdults";
-            this.nudAdults.Size = new System.Drawing.Size(120, 34);
+            this.nudAdults.Size = new System.Drawing.Size(100, 28);
             this.nudAdults.TabIndex = 7;
+            this.nudAdults.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             // 
             // nudChildren
             // 
-            this.nudChildren.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.nudChildren.Location = new System.Drawing.Point(200, 560);
+            this.nudChildren.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F);
+            this.nudChildren.Location = new System.Drawing.Point(170, 480);
             this.nudChildren.Name = "nudChildren";
-            this.nudChildren.Size = new System.Drawing.Size(120, 34);
+            this.nudChildren.Size = new System.Drawing.Size(100, 28);
             this.nudChildren.TabIndex = 8;
             // 
             // cmbRoomType
             // 
-            this.cmbRoomType.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cmbRoomType.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F);
             this.cmbRoomType.FormattingEnabled = true;
-            this.cmbRoomType.Location = new System.Drawing.Point(360, 560);
+            this.cmbRoomType.Location = new System.Drawing.Point(320, 480);
             this.cmbRoomType.Name = "cmbRoomType";
-            this.cmbRoomType.Size = new System.Drawing.Size(280, 37);
+            this.cmbRoomType.Size = new System.Drawing.Size(250, 30);
             this.cmbRoomType.TabIndex = 9;
             // 
             // dgvAvailableRooms
@@ -176,88 +190,132 @@
             this.dgvAvailableRooms.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgvAvailableRooms.BackgroundColor = System.Drawing.SystemColors.Control;
             this.dgvAvailableRooms.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvAvailableRooms.Location = new System.Drawing.Point(40, 640);
+            this.dgvAvailableRooms.Location = new System.Drawing.Point(30, 550);
             this.dgvAvailableRooms.Name = "dgvAvailableRooms";
-            this.dgvAvailableRooms.ReadOnly = true;
             this.dgvAvailableRooms.RowHeadersWidth = 51;
-            this.dgvAvailableRooms.RowTemplate.Height = 30;
-            this.dgvAvailableRooms.Size = new System.Drawing.Size(600, 240);
+            this.dgvAvailableRooms.RowTemplate.Height = 24;
+            this.dgvAvailableRooms.Size = new System.Drawing.Size(600, 280);
             this.dgvAvailableRooms.TabIndex = 10;
             // 
             // clbSpecialRequests
             // 
-            this.clbSpecialRequests.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.clbSpecialRequests.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.clbSpecialRequests.FormattingEnabled = true;
-            this.clbSpecialRequests.Location = new System.Drawing.Point(680, 660);
+            this.clbSpecialRequests.Location = new System.Drawing.Point(660, 560);
             this.clbSpecialRequests.Name = "clbSpecialRequests";
-            this.clbSpecialRequests.Size = new System.Drawing.Size(400, 204);
+            this.clbSpecialRequests.Size = new System.Drawing.Size(350, 250);
             this.clbSpecialRequests.TabIndex = 11;
             // 
             // rtbNotes
             // 
-            this.rtbNotes.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.rtbNotes.Location = new System.Drawing.Point(1120, 660);
+            this.rtbNotes.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.rtbNotes.Location = new System.Drawing.Point(1040, 560);
             this.rtbNotes.Name = "rtbNotes";
-            this.rtbNotes.Size = new System.Drawing.Size(400, 220);
+            this.rtbNotes.Size = new System.Drawing.Size(350, 250);
             this.rtbNotes.TabIndex = 12;
             this.rtbNotes.Text = "";
             // 
             // lblTotalAmount
             // 
             this.lblTotalAmount.AutoSize = true;
-            this.lblTotalAmount.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTotalAmount.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F);
             this.lblTotalAmount.ForeColor = System.Drawing.Color.Green;
-            this.lblTotalAmount.Location = new System.Drawing.Point(1580, 660);
+            this.lblTotalAmount.Location = new System.Drawing.Point(1430, 560);
             this.lblTotalAmount.Name = "lblTotalAmount";
-            this.lblTotalAmount.Size = new System.Drawing.Size(242, 46);
+            this.lblTotalAmount.Size = new System.Drawing.Size(180, 36);
             this.lblTotalAmount.TabIndex = 13;
             this.lblTotalAmount.Text = "Total: $0.00";
             // 
             // btnCalculate
             // 
-            this.btnCalculate.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnCalculate.Location = new System.Drawing.Point(1580, 730);
+            this.btnCalculate.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F);
+            this.btnCalculate.Location = new System.Drawing.Point(1430, 620);
             this.btnCalculate.Name = "btnCalculate";
-            this.btnCalculate.Size = new System.Drawing.Size(300, 50);
+            this.btnCalculate.Size = new System.Drawing.Size(280, 45);
             this.btnCalculate.TabIndex = 14;
             this.btnCalculate.Text = "CALCULATE";
             this.btnCalculate.UseVisualStyleBackColor = true;
             // 
             // btnBook
             // 
-            this.btnBook.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnBook.Location = new System.Drawing.Point(1580, 800);
+            this.btnBook.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F);
+            this.btnBook.Location = new System.Drawing.Point(1430, 680);
             this.btnBook.Name = "btnBook";
-            this.btnBook.Size = new System.Drawing.Size(300, 50);
+            this.btnBook.Size = new System.Drawing.Size(280, 45);
             this.btnBook.TabIndex = 15;
             this.btnBook.Text = "BOOK NOW";
             this.btnBook.UseVisualStyleBackColor = true;
             // 
             // btnCancel
             // 
-            this.btnCancel.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnCancel.Location = new System.Drawing.Point(1580, 870);
+            this.btnCancel.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F);
+            this.btnCancel.Location = new System.Drawing.Point(1430, 740);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(140, 50);
+            this.btnCancel.Size = new System.Drawing.Size(130, 45);
             this.btnCancel.TabIndex = 16;
             this.btnCancel.Text = "CANCEL";
             this.btnCancel.UseVisualStyleBackColor = true;
             // 
             // btnPrint
             // 
-            this.btnPrint.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnPrint.Location = new System.Drawing.Point(1740, 870);
+            this.btnPrint.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F);
+            this.btnPrint.Location = new System.Drawing.Point(1580, 740);
             this.btnPrint.Name = "btnPrint";
-            this.btnPrint.Size = new System.Drawing.Size(140, 50);
+            this.btnPrint.Size = new System.Drawing.Size(130, 45);
             this.btnPrint.TabIndex = 17;
             this.btnPrint.Text = "PRINT";
             this.btnPrint.UseVisualStyleBackColor = true;
+            // 
+            // lblSearchResults
+            // 
+            this.lblSearchResults.AutoSize = true;
+            this.lblSearchResults.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.lblSearchResults.Location = new System.Drawing.Point(660, 530);
+            this.lblSearchResults.Name = "lblSearchResults";
+            this.lblSearchResults.Size = new System.Drawing.Size(120, 20);
+            this.lblSearchResults.TabIndex = 18;
+            this.lblSearchResults.Text = "Found 0 guests";
+            // 
+            // lblSelectedGuest
+            // 
+            this.lblSelectedGuest.AutoSize = true;
+            this.lblSelectedGuest.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.lblSelectedGuest.ForeColor = System.Drawing.Color.Red;
+            this.lblSelectedGuest.Location = new System.Drawing.Point(660, 240);
+            this.lblSelectedGuest.Name = "lblSelectedGuest";
+            this.lblSelectedGuest.Size = new System.Drawing.Size(136, 20);
+            this.lblSelectedGuest.TabIndex = 19;
+            this.lblSelectedGuest.Text = "No guest selected";
+            // 
+            // lblAvailableRooms
+            // 
+            this.lblAvailableRooms.AutoSize = true;
+            this.lblAvailableRooms.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.lblAvailableRooms.Location = new System.Drawing.Point(30, 530);
+            this.lblAvailableRooms.Name = "lblAvailableRooms";
+            this.lblAvailableRooms.Size = new System.Drawing.Size(125, 20);
+            this.lblAvailableRooms.TabIndex = 20;
+            this.lblAvailableRooms.Text = "Available rooms";
+            // 
+            // btnNewGuest
+            // 
+            this.btnNewGuest.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F);
+            this.btnNewGuest.Location = new System.Drawing.Point(1680, 210);
+            this.btnNewGuest.Name = "btnNewGuest";
+            this.btnNewGuest.Size = new System.Drawing.Size(130, 35);
+            this.btnNewGuest.TabIndex = 21;
+            this.btnNewGuest.Text = "NEW GUEST";
+            this.btnNewGuest.UseVisualStyleBackColor = true;
             // 
             // frmReservation
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1920, 960);
+            this.ClientSize = new System.Drawing.Size(1850, 870);
+            this.Controls.Add(this.btnNewGuest);
+            this.Controls.Add(this.lblAvailableRooms);
+            this.Controls.Add(this.lblSelectedGuest);
+            this.Controls.Add(this.lblSearchResults);
             this.Controls.Add(this.btnPrint);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnBook);
@@ -283,8 +341,8 @@
             this.Load += new System.EventHandler(this.frmReservation_Load);
             this.tabReservation.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvGuestResults)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudAdults)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudChildren)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudAdults)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudChildren)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvAvailableRooms)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -313,5 +371,9 @@
         private System.Windows.Forms.Button btnBook;
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Button btnPrint;
+        private System.Windows.Forms.Label lblSearchResults;
+        private System.Windows.Forms.Label lblSelectedGuest;
+        private System.Windows.Forms.Label lblAvailableRooms;
+        private System.Windows.Forms.Button btnNewGuest;
     }
 }
