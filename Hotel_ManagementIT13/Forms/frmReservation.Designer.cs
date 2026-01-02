@@ -190,7 +190,7 @@
             this.clbSpecialRequests.FormattingEnabled = true;
             this.clbSpecialRequests.Location = new System.Drawing.Point(680, 660);
             this.clbSpecialRequests.Name = "clbSpecialRequests";
-            this.clbSpecialRequests.Size = new System.Drawing.Size(400, 220);
+            this.clbSpecialRequests.Size = new System.Drawing.Size(400, 204);
             this.clbSpecialRequests.TabIndex = 11;
             // 
             // rtbNotes
@@ -209,7 +209,7 @@
             this.lblTotalAmount.ForeColor = System.Drawing.Color.Green;
             this.lblTotalAmount.Location = new System.Drawing.Point(1580, 660);
             this.lblTotalAmount.Name = "lblTotalAmount";
-            this.lblTotalAmount.Size = new System.Drawing.Size(260, 46);
+            this.lblTotalAmount.Size = new System.Drawing.Size(242, 46);
             this.lblTotalAmount.TabIndex = 13;
             this.lblTotalAmount.Text = "Total: $0.00";
             // 
@@ -280,6 +280,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Hotel Management System - Reservations";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.Load += new System.EventHandler(this.frmReservation_Load);
             this.tabReservation.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvGuestResults)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudAdults)).EndInit();

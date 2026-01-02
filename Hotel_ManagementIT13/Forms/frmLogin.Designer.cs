@@ -51,7 +51,7 @@
             this.lblTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 28F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTitle.Location = new System.Drawing.Point(210, 40);
             this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(310, 54);
+            this.lblTitle.Size = new System.Drawing.Size(350, 54);
             this.lblTitle.TabIndex = 0;
             this.lblTitle.Text = "HOTEL LOGIN";
             this.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -62,7 +62,7 @@
             this.lblUsername.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblUsername.Location = new System.Drawing.Point(120, 190);
             this.lblUsername.Name = "lblUsername";
-            this.lblUsername.Size = new System.Drawing.Size(158, 36);
+            this.lblUsername.Size = new System.Drawing.Size(150, 36);
             this.lblUsername.TabIndex = 1;
             this.lblUsername.Text = "Username";
             this.lblUsername.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -96,6 +96,7 @@
             this.txtPassword.PasswordChar = '*';
             this.txtPassword.Size = new System.Drawing.Size(500, 41);
             this.txtPassword.TabIndex = 4;
+            this.txtPassword.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtPassword_KeyPress);
             // 
             // btnLogin
             // 
@@ -107,6 +108,7 @@
             this.btnLogin.TabIndex = 5;
             this.btnLogin.Text = "LOGIN";
             this.btnLogin.UseVisualStyleBackColor = true;
+            this.btnLogin.Click += new System.EventHandler(this.btnLogin_Click);
             // 
             // btnExit
             // 
@@ -118,6 +120,7 @@
             this.btnExit.TabIndex = 6;
             this.btnExit.Text = "EXIT";
             this.btnExit.UseVisualStyleBackColor = true;
+            this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
             // 
             // chkRemember
             // 
@@ -126,7 +129,7 @@
             this.chkRemember.Location = new System.Drawing.Point(120, 430);
             this.chkRemember.Margin = new System.Windows.Forms.Padding(3, 20, 3, 10);
             this.chkRemember.Name = "chkRemember";
-            this.chkRemember.Size = new System.Drawing.Size(203, 35);
+            this.chkRemember.Size = new System.Drawing.Size(213, 35);
             this.chkRemember.TabIndex = 7;
             this.chkRemember.Text = "Remember Me";
             this.chkRemember.UseVisualStyleBackColor = true;
@@ -142,13 +145,12 @@
             // 
             // statusStrip
             // 
-            this.statusStrip.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.statusStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.lblStatus});
-            this.statusStrip.Location = new System.Drawing.Point(0, 924);
+            this.statusStrip.Location = new System.Drawing.Point(0, 916);
             this.statusStrip.Name = "statusStrip";
-            this.statusStrip.Size = new System.Drawing.Size(1920, 26);
+            this.statusStrip.Size = new System.Drawing.Size(1920, 34);
             this.statusStrip.TabIndex = 9;
             this.statusStrip.Text = "statusStrip";
             // 
@@ -156,7 +158,7 @@
             // 
             this.lblStatus.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblStatus.Name = "lblStatus";
-            this.lblStatus.Size = new System.Drawing.Size(65, 20);
+            this.lblStatus.Size = new System.Drawing.Size(65, 28);
             this.lblStatus.Text = "Ready";
             // 
             // panelMain
@@ -187,6 +189,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Hotel Management System - Login";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.Load += new System.EventHandler(this.frmLogin_Load);
             ((System.ComponentModel.ISupportInitialize)(this.picLogo)).EndInit();
             this.statusStrip.ResumeLayout(false);
             this.statusStrip.PerformLayout();

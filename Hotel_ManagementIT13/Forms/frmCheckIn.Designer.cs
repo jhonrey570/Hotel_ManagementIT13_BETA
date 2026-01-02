@@ -93,7 +93,7 @@
             this.lblGuestName.ForeColor = System.Drawing.Color.Blue;
             this.lblGuestName.Location = new System.Drawing.Point(1000, 260);
             this.lblGuestName.Name = "lblGuestName";
-            this.lblGuestName.Size = new System.Drawing.Size(196, 36);
+            this.lblGuestName.Size = new System.Drawing.Size(198, 36);
             this.lblGuestName.TabIndex = 3;
             this.lblGuestName.Text = "Guest Name:";
             // 
@@ -103,7 +103,7 @@
             this.lblBookingRef.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblBookingRef.Location = new System.Drawing.Point(1000, 320);
             this.lblBookingRef.Name = "lblBookingRef";
-            this.lblBookingRef.Size = new System.Drawing.Size(187, 31);
+            this.lblBookingRef.Size = new System.Drawing.Size(192, 31);
             this.lblBookingRef.TabIndex = 4;
             this.lblBookingRef.Text = "Booking Ref: #";
             // 
@@ -113,7 +113,7 @@
             this.lblRoomNumber.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblRoomNumber.Location = new System.Drawing.Point(1000, 380);
             this.lblRoomNumber.Name = "lblRoomNumber";
-            this.lblRoomNumber.Size = new System.Drawing.Size(208, 31);
+            this.lblRoomNumber.Size = new System.Drawing.Size(219, 31);
             this.lblRoomNumber.TabIndex = 5;
             this.lblRoomNumber.Text = "Room Number: #";
             // 
@@ -124,7 +124,7 @@
             this.lblAmountDue.ForeColor = System.Drawing.Color.Green;
             this.lblAmountDue.Location = new System.Drawing.Point(1000, 440);
             this.lblAmountDue.Name = "lblAmountDue";
-            this.lblAmountDue.Size = new System.Drawing.Size(223, 39);
+            this.lblAmountDue.Size = new System.Drawing.Size(226, 39);
             this.lblAmountDue.TabIndex = 6;
             this.lblAmountDue.Text = "Amount Due:";
             // 
@@ -226,6 +226,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Hotel Management System - Check-In";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.Load += new System.EventHandler(this.frmCheckIn_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgvTodayArrivals)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvWalkInAvailable)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudDeposit)).EndInit();

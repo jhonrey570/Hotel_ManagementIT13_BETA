@@ -259,6 +259,7 @@
     <Compile Include="Data\Managers\CheckOutManager.cs" />
     <Compile Include="Data\Managers\GuestManager.cs" />
     <Compile Include="Data\Managers\RateManager.cs" />
+    <Compile Include="Data\Managers\ReportManager.cs" />
     <Compile Include="Data\Managers\ReservationManager.cs" />
     <Compile Include="Data\Managers\RoomManager.cs" />
     <Compile Include="Data\Models\Admin.cs" />
@@ -276,6 +277,7 @@
     <Compile Include="Data\Repositories\BillingRepository.cs" />
     <Compile Include="Data\Repositories\GuestRepository.cs" />
     <Compile Include="Data\Repositories\PaymentRepository.cs" />
+    <Compile Include="Data\Repositories\RateRepository.cs" />
     <Compile Include="Data\Repositories\ReservationRepository.cs" />
     <Compile Include="Data\Repositories\RoomRepository.cs" />
     <Compile Include="Data\Repositories\UserRepository.cs" />
@@ -382,6 +384,9 @@
     <EmbeddedResource Include="Forms\frmMainDashboard.resx">
       <DependentUpon>frmMainDashboard.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmRateManagement.resx">
+      <DependentUpon>frmRateManagement.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmReports.resx">
       <DependentUpon>frmReports.cs</DependentUpon>
     </EmbeddedResource>
@@ -390,6 +395,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmRoomManagement.resx">
       <DependentUpon>frmRoomManagement.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmUserManagement.resx">
+      <DependentUpon>frmUserManagement.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

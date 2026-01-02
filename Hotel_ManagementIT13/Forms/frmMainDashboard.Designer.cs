@@ -51,6 +51,7 @@
             this.lblPendingReservations = new System.Windows.Forms.Label();
             this.chartOccupancy = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.chartRevenue = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.lblOccupancyRate = new System.Windows.Forms.Label();
             this.tabMain.SuspendLayout();
             this.pnlHeader.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvTodaysArrivals)).BeginInit();
@@ -65,7 +66,7 @@
             this.mainMenu.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.mainMenu.Location = new System.Drawing.Point(0, 0);
             this.mainMenu.Name = "mainMenu";
-            this.mainMenu.Size = new System.Drawing.Size(1920, 40);
+            this.mainMenu.Size = new System.Drawing.Size(1920, 24);
             this.mainMenu.TabIndex = 0;
             this.mainMenu.Text = "menuStrip1";
             // 
@@ -73,9 +74,9 @@
             // 
             this.statusStrip.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.statusStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
-            this.statusStrip.Location = new System.Drawing.Point(0, 934);
+            this.statusStrip.Location = new System.Drawing.Point(0, 938);
             this.statusStrip.Name = "statusStrip";
-            this.statusStrip.Size = new System.Drawing.Size(1920, 26);
+            this.statusStrip.Size = new System.Drawing.Size(1920, 22);
             this.statusStrip.TabIndex = 1;
             this.statusStrip.Text = "statusStrip1";
             // 
@@ -126,7 +127,7 @@
             this.lblWelcome.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblWelcome.Location = new System.Drawing.Point(40, 22);
             this.lblWelcome.Name = "lblWelcome";
-            this.lblWelcome.Size = new System.Drawing.Size(148, 36);
+            this.lblWelcome.Size = new System.Drawing.Size(145, 36);
             this.lblWelcome.TabIndex = 0;
             this.lblWelcome.Text = "Welcome";
             // 
@@ -184,7 +185,7 @@
             this.lblAvailableRooms.ForeColor = System.Drawing.Color.Green;
             this.lblAvailableRooms.Location = new System.Drawing.Point(40, 260);
             this.lblAvailableRooms.Name = "lblAvailableRooms";
-            this.lblAvailableRooms.Size = new System.Drawing.Size(316, 46);
+            this.lblAvailableRooms.Size = new System.Drawing.Size(335, 46);
             this.lblAvailableRooms.TabIndex = 9;
             this.lblAvailableRooms.Text = "Available Rooms";
             // 
@@ -195,7 +196,7 @@
             this.lblOccupiedRooms.ForeColor = System.Drawing.Color.Red;
             this.lblOccupiedRooms.Location = new System.Drawing.Point(40, 330);
             this.lblOccupiedRooms.Name = "lblOccupiedRooms";
-            this.lblOccupiedRooms.Size = new System.Drawing.Size(310, 46);
+            this.lblOccupiedRooms.Size = new System.Drawing.Size(343, 46);
             this.lblOccupiedRooms.TabIndex = 10;
             this.lblOccupiedRooms.Text = "Occupied Rooms";
             // 
@@ -206,7 +207,7 @@
             this.lblRevenueToday.ForeColor = System.Drawing.Color.Blue;
             this.lblRevenueToday.Location = new System.Drawing.Point(40, 400);
             this.lblRevenueToday.Name = "lblRevenueToday";
-            this.lblRevenueToday.Size = new System.Drawing.Size(282, 46);
+            this.lblRevenueToday.Size = new System.Drawing.Size(313, 46);
             this.lblRevenueToday.TabIndex = 11;
             this.lblRevenueToday.Text = "Revenue Today";
             // 
@@ -217,7 +218,7 @@
             this.lblPendingReservations.ForeColor = System.Drawing.Color.Orange;
             this.lblPendingReservations.Location = new System.Drawing.Point(40, 470);
             this.lblPendingReservations.Name = "lblPendingReservations";
-            this.lblPendingReservations.Size = new System.Drawing.Size(396, 46);
+            this.lblPendingReservations.Size = new System.Drawing.Size(429, 46);
             this.lblPendingReservations.TabIndex = 12;
             this.lblPendingReservations.Text = "Pending Reservations";
             // 
@@ -253,11 +254,21 @@
             this.chartRevenue.TabIndex = 14;
             this.chartRevenue.Text = "chart2";
             // 
+            // lblOccupancyRate
+            // 
+            this.lblOccupancyRate.AutoSize = true;
+            this.lblOccupancyRate.Location = new System.Drawing.Point(398, 247);
+            this.lblOccupancyRate.Name = "lblOccupancyRate";
+            this.lblOccupancyRate.Size = new System.Drawing.Size(44, 16);
+            this.lblOccupancyRate.TabIndex = 15;
+            this.lblOccupancyRate.Text = "label1";
+            // 
             // frmMainDashboard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1920, 960);
+            this.Controls.Add(this.lblOccupancyRate);
             this.Controls.Add(this.chartRevenue);
             this.Controls.Add(this.chartOccupancy);
             this.Controls.Add(this.lblPendingReservations);
@@ -276,6 +287,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Hotel Management System - Dashboard";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.Load += new System.EventHandler(this.frmMainDashboard_Load);
             this.tabMain.ResumeLayout(false);
             this.pnlHeader.ResumeLayout(false);
             this.pnlHeader.PerformLayout();
@@ -307,5 +319,6 @@
         private System.Windows.Forms.Label lblPendingReservations;
         private System.Windows.Forms.DataVisualization.Charting.Chart chartOccupancy;
         private System.Windows.Forms.DataVisualization.Charting.Chart chartRevenue;
+        private System.Windows.Forms.Label lblOccupancyRate;
     }
 }

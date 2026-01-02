@@ -20,7 +20,12 @@ namespace Hotel_ManagementIT13.Forms
         private void frmReports_Load(object sender, EventArgs e)
         {
 
-            this.reportViewer1.RefreshReport();
+            //this.reportViewer1.RefreshReport();
+        }
+
+        private void frmReports_Load_1(object sender, EventArgs e)
+        {
+
         }
     }
 }

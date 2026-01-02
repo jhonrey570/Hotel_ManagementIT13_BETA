@@ -33,6 +33,7 @@
             System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.tabReports = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.chartReport = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.dtpReportFrom = new System.Windows.Forms.DateTimePicker();
             this.dtpReportTo = new System.Windows.Forms.DateTimePicker();
@@ -41,14 +42,13 @@
             this.btnExport = new System.Windows.Forms.Button();
             this.btnPrint = new System.Windows.Forms.Button();
             this.dgvReport = new System.Windows.Forms.DataGridView();
-            this.chartReport = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.reportViewer = new Microsoft.Reporting.WinForms.ReportViewer();
             this.cmbRoomTypeFilter = new System.Windows.Forms.ComboBox();
             this.cmbGuestTypeFilter = new System.Windows.Forms.ComboBox();
             this.tabReports.SuspendLayout();
             this.tabPage1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvReport)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chartReport)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvReport)).BeginInit();
             this.SuspendLayout();
             // 
             // tabReports
@@ -72,6 +72,24 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Graphical Reports";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // chartReport
+            // 
+            this.chartReport.BorderlineColor = System.Drawing.SystemColors.Control;
+            chartArea1.Name = "ChartArea1";
+            this.chartReport.ChartAreas.Add(chartArea1);
+            this.chartReport.Dock = System.Windows.Forms.DockStyle.Fill;
+            legend1.Name = "Legend1";
+            this.chartReport.Legends.Add(legend1);
+            this.chartReport.Location = new System.Drawing.Point(3, 3);
+            this.chartReport.Name = "chartReport";
+            series1.ChartArea = "ChartArea1";
+            series1.Legend = "Legend1";
+            series1.Name = "Series1";
+            this.chartReport.Series.Add(series1);
+            this.chartReport.Size = new System.Drawing.Size(886, 356);
+            this.chartReport.TabIndex = 8;
+            this.chartReport.Text = "Report Chart";
             // 
             // tabPage2
             // 
@@ -154,24 +172,6 @@
             this.dgvReport.Size = new System.Drawing.Size(900, 280);
             this.dgvReport.TabIndex = 7;
             // 
-            // chartReport
-            // 
-            this.chartReport.BorderlineColor = System.Drawing.SystemColors.Control;
-            chartArea1.Name = "ChartArea1";
-            this.chartReport.ChartAreas.Add(chartArea1);
-            this.chartReport.Dock = System.Windows.Forms.DockStyle.Fill;
-            legend1.Name = "Legend1";
-            this.chartReport.Legends.Add(legend1);
-            this.chartReport.Location = new System.Drawing.Point(3, 3);
-            this.chartReport.Name = "chartReport";
-            series1.ChartArea = "ChartArea1";
-            series1.Legend = "Legend1";
-            series1.Name = "Series1";
-            this.chartReport.Series.Add(series1);
-            this.chartReport.Size = new System.Drawing.Size(886, 356);
-            this.chartReport.TabIndex = 8;
-            this.chartReport.Text = "Report Chart";
-            // 
             // reportViewer
             // 
             this.reportViewer.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -221,10 +221,11 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Hotel Management System - Reports";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.Load += new System.EventHandler(this.frmReports_Load_1);
             this.tabReports.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dgvReport)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.chartReport)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvReport)).EndInit();
             this.ResumeLayout(false);
 
         }
