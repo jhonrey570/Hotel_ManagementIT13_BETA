@@ -31,15 +31,24 @@ namespace Hotel_ManagementIT13.Data.Managers
             return _roomRepo.GetRoomById(roomId);
         }
 
+        public Room GetRoomByNumber(string roomNumber)
+        {
+            return _roomRepo.GetRoomByNumber(roomNumber);
+        }
+
         public bool AddRoom(Room room)
         {
-            return _roomRepo.AddRoom(room);
+            return _roomRepo.AddRoom(room) > 0;
         }
 
         public bool UpdateRoom(Room room)
         {
-            // TODO: Implement UpdateRoom in repository
-            return true;
+            return _roomRepo.UpdateRoom(room);
+        }
+
+        public bool DeleteRoom(int roomId)
+        {
+            return _roomRepo.DeleteRoom(roomId);
         }
 
         public bool UpdateRoomStatus(int roomId, int statusId)
@@ -55,6 +64,11 @@ namespace Hotel_ManagementIT13.Data.Managers
         public List<Room> GetAvailableRooms(DateTime checkIn, DateTime checkOut, int roomTypeId = 0)
         {
             return _roomRepo.GetAvailableRooms(checkIn, checkOut, roomTypeId);
+        }
+
+        public List<Room> SearchRooms(string searchTerm)
+        {
+            return _roomRepo.SearchRooms(searchTerm);
         }
 
         // New method to get available room count
