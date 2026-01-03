@@ -79,7 +79,7 @@
             this.lblGuestName.ForeColor = System.Drawing.Color.Blue;
             this.lblGuestName.Location = new System.Drawing.Point(1000, 260);
             this.lblGuestName.Name = "lblGuestName";
-            this.lblGuestName.Size = new System.Drawing.Size(196, 36);
+            this.lblGuestName.Size = new System.Drawing.Size(198, 36);
             this.lblGuestName.TabIndex = 2;
             this.lblGuestName.Text = "Guest Name:";
             // 
@@ -89,7 +89,7 @@
             this.lblRoomNumber.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblRoomNumber.Location = new System.Drawing.Point(1000, 320);
             this.lblRoomNumber.Name = "lblRoomNumber";
-            this.lblRoomNumber.Size = new System.Drawing.Size(208, 31);
+            this.lblRoomNumber.Size = new System.Drawing.Size(219, 31);
             this.lblRoomNumber.TabIndex = 3;
             this.lblRoomNumber.Text = "Room Number: #";
             // 
@@ -100,7 +100,7 @@
             this.lblTotalBill.ForeColor = System.Drawing.Color.Red;
             this.lblTotalBill.Location = new System.Drawing.Point(1000, 380);
             this.lblTotalBill.Name = "lblTotalBill";
-            this.lblTotalBill.Size = new System.Drawing.Size(148, 36);
+            this.lblTotalBill.Size = new System.Drawing.Size(149, 36);
             this.lblTotalBill.TabIndex = 4;
             this.lblTotalBill.Text = "Total Bill:";
             // 
@@ -122,7 +122,7 @@
             this.lblBalance.ForeColor = System.Drawing.Color.Purple;
             this.lblBalance.Location = new System.Drawing.Point(1000, 500);
             this.lblBalance.Name = "lblBalance";
-            this.lblBalance.Size = new System.Drawing.Size(156, 39);
+            this.lblBalance.Size = new System.Drawing.Size(158, 39);
             this.lblBalance.TabIndex = 6;
             this.lblBalance.Text = "Balance:";
             // 
@@ -213,7 +213,7 @@
             this.lblLateFee.ForeColor = System.Drawing.Color.OrangeRed;
             this.lblLateFee.Location = new System.Drawing.Point(1000, 580);
             this.lblLateFee.Name = "lblLateFee";
-            this.lblLateFee.Size = new System.Drawing.Size(121, 31);
+            this.lblLateFee.Size = new System.Drawing.Size(129, 31);
             this.lblLateFee.TabIndex = 15;
             this.lblLateFee.Text = "Late Fee:";
             // 
@@ -242,6 +242,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Hotel Management System - Check-Out";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.Load += new System.EventHandler(this.frmCheckOut_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgvTodayDepartures)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvBillingItems)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudLateCheckoutHours)).EndInit();

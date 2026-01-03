@@ -9,14 +9,14 @@ namespace Hotel_ManagementIT13.Data.Managers
         private readonly ReservationRepository _reservationRepo;
         private readonly RoomRepository _roomRepo;
         private readonly BillingRepository _billingRepo;
-        private readonly PaymentRepository _paymentRepo;  // Added PaymentRepository
+        private readonly PaymentRepository _paymentRepo;
 
         public CheckOutManager()
         {
             _reservationRepo = new ReservationRepository();
             _roomRepo = new RoomRepository();
             _billingRepo = new BillingRepository();
-            _paymentRepo = new PaymentRepository();  // Initialize PaymentRepository
+            _paymentRepo = new PaymentRepository();
         }
 
         public CheckOutResult ProcessCheckOut(string bookingReference, int processedByUserId,
@@ -69,7 +69,6 @@ namespace Hotel_ManagementIT13.Data.Managers
                 // Process final payment
                 if (paymentAmount > 0)
                 {
-                    // FIXED: Use PaymentRepository instead of BillingRepository
                     _paymentRepo.ProcessPayment(reservation.ReservationId, paymentAmount,
                                               paymentMethod, notes);
 
@@ -78,7 +77,7 @@ namespace Hotel_ManagementIT13.Data.Managers
                 }
 
                 // Update reservation status to Checked-out
-                UpdateReservationStatus(reservation.ReservationId, 4);
+                _reservationRepo.UpdateReservationStatus(reservation.ReservationId, 4);
 
                 // Update room status to Cleaning in Progress
                 foreach (var room in reservation.Rooms)
@@ -87,7 +86,7 @@ namespace Hotel_ManagementIT13.Data.Managers
                 }
 
                 // Record check-out
-                RecordCheckOut(reservation.ReservationId, processedByUserId, actualCheckOut, 2); // Status: Checked-out
+                _reservationRepo.RecordCheckOut(reservation.ReservationId, processedByUserId, 2, actualCheckOut);
 
                 result.Success = true;
                 result.Message = "Check-out processed successfully";
@@ -105,79 +104,9 @@ namespace Hotel_ManagementIT13.Data.Managers
             return result;
         }
 
-        public EarlyCheckOutResult ProcessEarlyCheckOut(string bookingReference,
-                                                       int processedByUserId,
-                                                       DateTime newCheckOut)
-        {
-            var result = new EarlyCheckOutResult();
-
-            try
-            {
-                // Get reservation
-                var reservation = _reservationRepo.GetReservationByReference(bookingReference);
-                if (reservation == null)
-                {
-                    result.Success = false;
-                    result.Message = "Reservation not found";
-                    return result;
-                }
-
-                // Validate new check-out date
-                if (newCheckOut <= reservation.CheckInDate)
-                {
-                    result.Success = false;
-                    result.Message = "New check-out date must be after check-in date";
-                    return result;
-                }
-
-                if (newCheckOut > reservation.CheckOutDate)
-                {
-                    result.Success = false;
-                    result.Message = "New check-out date cannot be after original check-out date";
-                    return result;
-                }
-
-                // Calculate refund if applicable
-                int originalNights = (reservation.CheckOutDate - reservation.CheckInDate).Days;
-                int newNights = (newCheckOut - reservation.CheckInDate).Days;
-                int nightsDifference = originalNights - newNights;
-
-                decimal refundAmount = 0;
-                if (nightsDifference > 0)
-                {
-                    // Calculate refund based on nightly rate
-                    decimal nightlyRate = reservation.TotalAmount / originalNights;
-                    refundAmount = nightlyRate * nightsDifference * 0.5m; // 50% refund for early checkout
-
-                    // Add refund as negative billing item
-                    var billing = _billingRepo.GetBillingByReservationId(reservation.ReservationId);
-                    if (billing != null)
-                    {
-                        _billingRepo.AddBillingItem(billing.BillingId,
-                            "Early Checkout Refund", -refundAmount);
-                    }
-                }
-
-                // Update reservation check-out date
-                UpdateReservationCheckOut(reservation.ReservationId, newCheckOut);
-
-                result.Success = true;
-                result.Message = $"Early check-out processed. Refund amount: {refundAmount:C}";
-                result.RefundAmount = refundAmount;
-                result.NewCheckOutDate = newCheckOut;
-            }
-            catch (Exception ex)
-            {
-                result.Success = false;
-                result.Message = $"Error during early check-out: {ex.Message}";
-            }
-
-            return result;
-        }
-
         private decimal CalculateLateCheckoutFee(Reservation reservation, DateTime actualCheckOut)
         {
-            DateTime standardCheckOut = reservation.CheckOutDate.AddHours(12); // Assuming 12:00 PM checkout
+            DateTime standardCheckOut = reservation.CheckOutDate.Date.AddHours(12); // Assuming 12:00 PM checkout
 
             if (actualCheckOut <= standardCheckOut)
                 return 0;
@@ -196,31 +125,6 @@ namespace Hotel_ManagementIT13.Data.Managers
         {
             return "RCPT" + DateTime.Now.ToString("yyMMddHHmmss") + new Random().Next(100, 999);
         }
-
-        private bool UpdateReservationStatus(int reservationId, int statusId)
-        {
-            // Implementation to update reservation status
-            // This should call a repository method
-            // For now, return true for compilation
-            return true;
-        }
-
-        private bool UpdateReservationCheckOut(int reservationId, DateTime newCheckOut)
-        {
-            // Implementation to update check-out date
-            // This should call a repository method
-            // For now, return true for compilation
-            return true;
-        }
-
-        private bool RecordCheckOut(int reservationId, int processedBy,
-                                  DateTime checkOutTime, int statusId)
-        {
-            // Implementation to record check-out
-            // This should call a repository method
-            // For now, return true for compilation
-            return true;
-        }
     }
 
     public class CheckOutResult
@@ -231,13 +135,5 @@ namespace Hotel_ManagementIT13.Data.Managers
         public Billing Billing { get; set; }
         public decimal LateFee { get; set; }
         public string ReceiptNumber { get; set; }
-    }
-
-    public class EarlyCheckOutResult
-    {
-        public bool Success { get; set; }
-        public string Message { get; set; }
-        public decimal RefundAmount { get; set; }
-        public DateTime NewCheckOutDate { get; set; }
     }
 }

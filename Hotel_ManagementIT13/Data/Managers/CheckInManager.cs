@@ -11,7 +11,7 @@ namespace Hotel_ManagementIT13.Data.Managers
         private readonly RoomRepository _roomRepo;
         private readonly BillingRepository _billingRepo;
         private readonly GuestRepository _guestRepo;
-        private readonly PaymentRepository _paymentRepo; // Added PaymentRepository
+        private readonly PaymentRepository _paymentRepo;
 
         public CheckInManager()
         {
@@ -19,7 +19,7 @@ namespace Hotel_ManagementIT13.Data.Managers
             _roomRepo = new RoomRepository();
             _billingRepo = new BillingRepository();
             _guestRepo = new GuestRepository();
-            _paymentRepo = new PaymentRepository(); // Initialize PaymentRepository
+            _paymentRepo = new PaymentRepository();
         }
 
         public CheckInResult ProcessCheckIn(string bookingReference, int processedByUserId,
@@ -47,7 +47,7 @@ namespace Hotel_ManagementIT13.Data.Managers
                 }
 
                 // Update reservation status to Checked-in
-                UpdateReservationStatus(reservation.ReservationId, 3);
+                _reservationRepo.UpdateReservationStatus(reservation.ReservationId, 3);
 
                 // Update room status to Occupied
                 foreach (var room in reservation.Rooms)
@@ -56,12 +56,11 @@ namespace Hotel_ManagementIT13.Data.Managers
                 }
 
                 // Record check-in
-                RecordCheckIn(reservation.ReservationId, processedByUserId, 1); // Status: Checked-in
+                _reservationRepo.RecordCheckIn(reservation.ReservationId, processedByUserId, 1); // Status: Checked-in
 
                 // Process deposit payment if any
                 if (depositAmount > 0)
                 {
-                    // FIXED: Use PaymentRepository instead of BillingRepository
                     _paymentRepo.ProcessPayment(reservation.ReservationId, depositAmount,
                                               paymentMethod, "Deposit payment");
                 }
@@ -109,25 +108,22 @@ namespace Hotel_ManagementIT13.Data.Managers
 
                 // Create instant reservation
                 var reservationManager = new ReservationManager();
-                var reservationResult = reservationManager.CreateReservation(
+                string reservationResult = reservationManager.CreateReservation(
                     guestId, processedByUserId, checkIn, checkOut,
                     new List<int> { roomId }, adults, children);
 
-                // Get the reservation
+                // Extract booking reference from result
                 string bookingRef = "";
-                if (reservationResult.StartsWith("Reservation created successfully!"))
+                if (reservationResult.Contains("Booking Reference:"))
                 {
-                    // Assuming format: "Reservation created successfully! Booking Reference: RES123"
-                    int startIndex = reservationResult.IndexOf("Booking Reference: ") + "Booking Reference: ".Length;
+                    int startIndex = reservationResult.IndexOf("Booking Reference:") + "Booking Reference:".Length;
                     bookingRef = reservationResult.Substring(startIndex).Trim();
                 }
 
-                var reservation = _reservationRepo.GetReservationByReference(bookingRef);
-
-                if (reservation != null)
+                if (!string.IsNullOrEmpty(bookingRef))
                 {
                     // Process immediate check-in
-                    return ProcessCheckIn(reservation.BookingReference, processedByUserId,
+                    return ProcessCheckIn(bookingRef, processedByUserId,
                                          paymentAmount, "Cash");
                 }
 
@@ -187,10 +183,10 @@ namespace Hotel_ManagementIT13.Data.Managers
                 }
 
                 // Update reservation status to Checked-in
-                UpdateReservationStatus(reservation.ReservationId, 3);
+                _reservationRepo.UpdateReservationStatus(reservation.ReservationId, 3);
 
                 // Record check-in
-                RecordCheckIn(reservation.ReservationId, processedByUserId, 1);
+                _reservationRepo.RecordCheckIn(reservation.ReservationId, processedByUserId, 1);
 
                 // Process deposit payment if any
                 if (depositAmount > 0)
@@ -210,22 +206,6 @@ namespace Hotel_ManagementIT13.Data.Managers
             }
 
             return result;
-        }
-
-        private bool UpdateReservationStatus(int reservationId, int statusId)
-        {
-            // Implementation to update reservation status
-            // This should call a repository method
-            // For now, return true for compilation
-            return true;
-        }
-
-        private bool RecordCheckIn(int reservationId, int processedBy, int statusId)
-        {
-            // Implementation to record check-in
-            // This should call a repository method
-            // For now, return true for compilation
-            return true;
         }
     }
 

@@ -94,6 +94,138 @@ namespace Hotel_ManagementIT13.Data.Repositories
             }
         }
 
+        public bool UpdateReservationStatus(int reservationId, int statusId)
+        {
+            using (var conn = DatabaseHelper.GetConnection())
+            {
+                conn.Open();
+                string query = "UPDATE reservations SET status_id = @statusId WHERE reservation_id = @reservationId";
+
+                using (var cmd = new MySqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@reservationId", reservationId);
+                    cmd.Parameters.AddWithValue("@statusId", statusId);
+
+                    return cmd.ExecuteNonQuery() > 0;
+                }
+            }
+        }
+
+        public bool RecordCheckIn(int reservationId, int processedBy, int statusId)
+        {
+            using (var conn = DatabaseHelper.GetConnection())
+            {
+                conn.Open();
+                string query = @"
+                    INSERT INTO check_in_out (reservation_id, processed_by, status_id, check_in_time)
+                    VALUES (@reservationId, @processedBy, @statusId, NOW())";
+
+                using (var cmd = new MySqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@reservationId", reservationId);
+                    cmd.Parameters.AddWithValue("@processedBy", processedBy);
+                    cmd.Parameters.AddWithValue("@statusId", statusId);
+
+                    return cmd.ExecuteNonQuery() > 0;
+                }
+            }
+        }
+
+        public bool RecordCheckOut(int reservationId, int processedBy, int statusId, DateTime checkOutTime)
+        {
+            using (var conn = DatabaseHelper.GetConnection())
+            {
+                conn.Open();
+                string query = @"
+                    UPDATE check_in_out 
+                    SET status_id = @statusId, check_out_time = @checkOutTime 
+                    WHERE reservation_id = @reservationId
+                    AND check_out_time IS NULL";
+
+                using (var cmd = new MySqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@reservationId", reservationId);
+                    cmd.Parameters.AddWithValue("@processedBy", processedBy);
+                    cmd.Parameters.AddWithValue("@statusId", statusId);
+                    cmd.Parameters.AddWithValue("@checkOutTime", checkOutTime);
+
+                    return cmd.ExecuteNonQuery() > 0;
+                }
+            }
+        }
+
+        public List<Reservation> GetTodaysArrivals()
+        {
+            var reservations = new List<Reservation>();
+
+            using (var conn = DatabaseHelper.GetConnection())
+            {
+                conn.Open();
+                string query = @"
+                    SELECT r.*, g.first_name, g.last_name, 
+                           rs.status_name, rt.type_name as reservation_type,
+                           c.company_name, u.username as user_name
+                    FROM reservations r
+                    JOIN guests g ON r.guest_id = g.guest_id
+                    JOIN reservation_statuses rs ON r.status_id = rs.status_id
+                    JOIN reservation_types rt ON r.reservation_type_id = rt.reservation_type_id
+                    LEFT JOIN companies c ON r.company_id = c.company_id
+                    JOIN users u ON r.user_id = u.user_id
+                    WHERE DATE(r.check_in_date) = CURDATE()
+                    AND r.status_id IN (1, 2) -- Confirmed, Pending Payment
+                    ORDER BY r.check_in_date";
+
+                using (var cmd = new MySqlCommand(query, conn))
+                {
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            reservations.Add(CreateReservationFromReader(reader));
+                        }
+                    }
+                }
+            }
+
+            return reservations;
+        }
+
+        public List<Reservation> GetTodaysDepartures()
+        {
+            var reservations = new List<Reservation>();
+
+            using (var conn = DatabaseHelper.GetConnection())
+            {
+                conn.Open();
+                string query = @"
+                    SELECT r.*, g.first_name, g.last_name, 
+                           rs.status_name, rt.type_name as reservation_type,
+                           c.company_name, u.username as user_name
+                    FROM reservations r
+                    JOIN guests g ON r.guest_id = g.guest_id
+                    JOIN reservation_statuses rs ON r.status_id = rs.status_id
+                    JOIN reservation_types rt ON r.reservation_type_id = rt.reservation_type_id
+                    LEFT JOIN companies c ON r.company_id = c.company_id
+                    JOIN users u ON r.user_id = u.user_id
+                    WHERE DATE(r.check_out_date) = CURDATE()
+                    AND r.status_id = 3 -- Checked-in
+                    ORDER BY r.check_out_date";
+
+                using (var cmd = new MySqlCommand(query, conn))
+                {
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            reservations.Add(CreateReservationFromReader(reader));
+                        }
+                    }
+                }
+            }
+
+            return reservations;
+        }
+
         public List<Reservation> GetReservationsByDateRange(DateTime startDate, DateTime endDate)
         {
             var reservations = new List<Reservation>();
@@ -166,6 +298,44 @@ namespace Hotel_ManagementIT13.Data.Repositories
             return null;
         }
 
+        public List<ReservationRoom> GetReservationRooms(int reservationId)
+        {
+            var rooms = new List<ReservationRoom>();
+
+            using (var conn = DatabaseHelper.GetConnection())
+            {
+                conn.Open();
+                string query = @"
+                    SELECT rr.*, r.room_number, rt.type_name as room_type_name
+                    FROM reservation_rooms rr
+                    JOIN rooms r ON rr.room_id = r.room_id
+                    JOIN room_types rt ON r.room_type_id = rt.room_type_id
+                    WHERE rr.reservation_id = @reservationId";
+
+                using (var cmd = new MySqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@reservationId", reservationId);
+
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            rooms.Add(new ReservationRoom
+                            {
+                                ResRoomId = Convert.ToInt32(reader["res_room_id"]),
+                                ReservationId = Convert.ToInt32(reader["reservation_id"]),
+                                RoomId = Convert.ToInt32(reader["room_id"]),
+                                RoomNumber = reader["room_number"].ToString(),
+                                RoomTypeName = reader["room_type_name"].ToString()
+                            });
+                        }
+                    }
+                }
+            }
+
+            return rooms;
+        }
+
         private Reservation CreateReservationFromReader(MySqlDataReader reader)
         {
             var reservation = new Reservation
@@ -190,6 +360,9 @@ namespace Hotel_ManagementIT13.Data.Repositories
                 CompanyName = reader["company_name"]?.ToString(),
                 UserName = reader["user_name"].ToString()
             };
+
+            // Load rooms for this reservation
+            reservation.Rooms = GetReservationRooms(reservation.ReservationId);
 
             return reservation;
         }

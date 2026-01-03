@@ -206,8 +206,8 @@
             this.txtSearch.TabIndex = 0;
             this.txtSearch.Text = "Search rooms...";
             this.txtSearch.Enter += new System.EventHandler(this.txtSearch_Enter);
-            this.txtSearch.Leave += new System.EventHandler(this.txtSearch_Leave);
             this.txtSearch.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtSearch_KeyPress);
+            this.txtSearch.Leave += new System.EventHandler(this.txtSearch_Leave);
             // 
             // cmbFilterStatus
             // 
@@ -364,7 +364,7 @@
             this.lblRoomCount.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
             this.lblRoomCount.Location = new System.Drawing.Point(40, 670);
             this.lblRoomCount.Name = "lblRoomCount";
-            this.lblRoomCount.Size = new System.Drawing.Size(100, 20);
+            this.lblRoomCount.Size = new System.Drawing.Size(128, 20);
             this.lblRoomCount.TabIndex = 19;
             this.lblRoomCount.Text = "0 room(s) found";
             // 

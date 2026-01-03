@@ -135,37 +135,47 @@
             this.txtPayment.Name = "txtPayment";
             this.txtPayment.Size = new System.Drawing.Size(400, 38);
             this.txtPayment.TabIndex = 7;
-            this.txtPayment.Text = "Payment Amount";
+            this.txtPayment.Text = "0.00";
+            this.txtPayment.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // btnProcessCheckIn
             // 
+            this.btnProcessCheckIn.BackColor = System.Drawing.Color.LimeGreen;
             this.btnProcessCheckIn.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnProcessCheckIn.ForeColor = System.Drawing.Color.White;
             this.btnProcessCheckIn.Location = new System.Drawing.Point(1000, 680);
             this.btnProcessCheckIn.Name = "btnProcessCheckIn";
             this.btnProcessCheckIn.Size = new System.Drawing.Size(400, 60);
             this.btnProcessCheckIn.TabIndex = 8;
             this.btnProcessCheckIn.Text = "PROCESS CHECK-IN";
-            this.btnProcessCheckIn.UseVisualStyleBackColor = true;
+            this.btnProcessCheckIn.UseVisualStyleBackColor = false;
+            this.btnProcessCheckIn.Click += new System.EventHandler(this.btnProcessCheckIn_Click);
             // 
             // btnWalkInCheckIn
             // 
-            this.btnWalkInCheckIn.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnWalkInCheckIn.BackColor = System.Drawing.Color.Orange;
+            this.btnWalkInCheckIn.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnWalkInCheckIn.ForeColor = System.Drawing.Color.White;
             this.btnWalkInCheckIn.Location = new System.Drawing.Point(1480, 680);
             this.btnWalkInCheckIn.Name = "btnWalkInCheckIn";
             this.btnWalkInCheckIn.Size = new System.Drawing.Size(400, 60);
             this.btnWalkInCheckIn.TabIndex = 9;
             this.btnWalkInCheckIn.Text = "WALK-IN CHECK-IN";
-            this.btnWalkInCheckIn.UseVisualStyleBackColor = true;
+            this.btnWalkInCheckIn.UseVisualStyleBackColor = false;
+            this.btnWalkInCheckIn.Click += new System.EventHandler(this.btnWalkInCheckIn_Click);
             // 
             // btnPrintKeyCard
             // 
-            this.btnPrintKeyCard.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnPrintKeyCard.BackColor = System.Drawing.Color.SteelBlue;
+            this.btnPrintKeyCard.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnPrintKeyCard.ForeColor = System.Drawing.Color.White;
             this.btnPrintKeyCard.Location = new System.Drawing.Point(1000, 760);
             this.btnPrintKeyCard.Name = "btnPrintKeyCard";
             this.btnPrintKeyCard.Size = new System.Drawing.Size(400, 60);
             this.btnPrintKeyCard.TabIndex = 10;
             this.btnPrintKeyCard.Text = "PRINT KEY CARD";
-            this.btnPrintKeyCard.UseVisualStyleBackColor = true;
+            this.btnPrintKeyCard.UseVisualStyleBackColor = false;
+            this.btnPrintKeyCard.Click += new System.EventHandler(this.btnPrintKeyCard_Click);
             // 
             // dtpActualCheckIn
             // 
@@ -177,11 +187,18 @@
             // 
             // nudDeposit
             // 
+            this.nudDeposit.DecimalPlaces = 2;
             this.nudDeposit.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.nudDeposit.Location = new System.Drawing.Point(1480, 500);
+            this.nudDeposit.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
             this.nudDeposit.Name = "nudDeposit";
             this.nudDeposit.Size = new System.Drawing.Size(400, 38);
             this.nudDeposit.TabIndex = 12;
+            this.nudDeposit.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // cmbPaymentMethod
             // 
@@ -191,7 +208,6 @@
             this.cmbPaymentMethod.Name = "cmbPaymentMethod";
             this.cmbPaymentMethod.Size = new System.Drawing.Size(400, 39);
             this.cmbPaymentMethod.TabIndex = 13;
-            this.cmbPaymentMethod.Text = "Payment Method";
             // 
             // rtbCheckInNotes
             // 
