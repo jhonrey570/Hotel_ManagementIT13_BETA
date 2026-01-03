@@ -253,6 +253,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApplicationContext.cs" />
     <Compile Include="Data\DatabaseHelper.cs" />
     <Compile Include="Data\Managers\BillingManager.cs" />
     <Compile Include="Data\Managers\CheckInManager.cs" />

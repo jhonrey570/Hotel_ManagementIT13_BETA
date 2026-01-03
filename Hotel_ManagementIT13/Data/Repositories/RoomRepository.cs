@@ -171,6 +171,7 @@ namespace Hotel_ManagementIT13.Data.Repositories
             return rooms;
         }
 
+        // ADDED METHOD - GetAvailableRooms
         public List<Room> GetAvailableRooms(DateTime checkIn, DateTime checkOut, int roomTypeId = 0)
         {
             var rooms = new List<Room>();

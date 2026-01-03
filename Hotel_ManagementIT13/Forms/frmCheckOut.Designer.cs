@@ -44,6 +44,8 @@
             this.cmbPaymentMethod = new System.Windows.Forms.ComboBox();
             this.nudLateCheckoutHours = new System.Windows.Forms.NumericUpDown();
             this.lblLateFee = new System.Windows.Forms.Label();
+            this.lblDeparturesCount = new System.Windows.Forms.Label();
+            this.btnRefresh = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvTodayDepartures)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvBillingItems)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudLateCheckoutHours)).BeginInit();
@@ -63,6 +65,7 @@
             this.dgvTodayDepartures.RowTemplate.Height = 30;
             this.dgvTodayDepartures.Size = new System.Drawing.Size(900, 400);
             this.dgvTodayDepartures.TabIndex = 0;
+            this.dgvTodayDepartures.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvTodayDepartures_CellClick);
             // 
             // pnlGuestDetails
             // 
@@ -148,37 +151,46 @@
             this.txtPaymentAmount.Name = "txtPaymentAmount";
             this.txtPaymentAmount.Size = new System.Drawing.Size(400, 38);
             this.txtPaymentAmount.TabIndex = 8;
-            this.txtPaymentAmount.Text = "Payment Amount";
+            this.txtPaymentAmount.Text = "0.00";
             // 
             // btnProcessCheckOut
             // 
+            this.btnProcessCheckOut.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
             this.btnProcessCheckOut.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnProcessCheckOut.ForeColor = System.Drawing.Color.White;
             this.btnProcessCheckOut.Location = new System.Drawing.Point(1480, 380);
             this.btnProcessCheckOut.Name = "btnProcessCheckOut";
             this.btnProcessCheckOut.Size = new System.Drawing.Size(400, 60);
             this.btnProcessCheckOut.TabIndex = 9;
             this.btnProcessCheckOut.Text = "PROCESS CHECK-OUT";
-            this.btnProcessCheckOut.UseVisualStyleBackColor = true;
+            this.btnProcessCheckOut.UseVisualStyleBackColor = false;
+            this.btnProcessCheckOut.Click += new System.EventHandler(this.btnProcessCheckOut_Click);
             // 
             // btnPrintInvoice
             // 
+            this.btnPrintInvoice.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.btnPrintInvoice.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnPrintInvoice.ForeColor = System.Drawing.Color.White;
             this.btnPrintInvoice.Location = new System.Drawing.Point(1480, 460);
             this.btnPrintInvoice.Name = "btnPrintInvoice";
             this.btnPrintInvoice.Size = new System.Drawing.Size(400, 60);
             this.btnPrintInvoice.TabIndex = 10;
             this.btnPrintInvoice.Text = "PRINT INVOICE";
-            this.btnPrintInvoice.UseVisualStyleBackColor = true;
+            this.btnPrintInvoice.UseVisualStyleBackColor = false;
+            this.btnPrintInvoice.Click += new System.EventHandler(this.btnPrintInvoice_Click);
             // 
             // btnAddCharge
             // 
+            this.btnAddCharge.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(120)))), ((int)(((byte)(215)))));
             this.btnAddCharge.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnAddCharge.ForeColor = System.Drawing.Color.White;
             this.btnAddCharge.Location = new System.Drawing.Point(1480, 540);
             this.btnAddCharge.Name = "btnAddCharge";
             this.btnAddCharge.Size = new System.Drawing.Size(400, 60);
             this.btnAddCharge.TabIndex = 11;
             this.btnAddCharge.Text = "ADD CHARGE";
-            this.btnAddCharge.UseVisualStyleBackColor = true;
+            this.btnAddCharge.UseVisualStyleBackColor = false;
+            this.btnAddCharge.Click += new System.EventHandler(this.btnAddCharge_Click);
             // 
             // dtpActualCheckOut
             // 
@@ -187,6 +199,7 @@
             this.dtpActualCheckOut.Name = "dtpActualCheckOut";
             this.dtpActualCheckOut.Size = new System.Drawing.Size(400, 38);
             this.dtpActualCheckOut.TabIndex = 12;
+            this.dtpActualCheckOut.ValueChanged += new System.EventHandler(this.dtpActualCheckOut_ValueChanged);
             // 
             // cmbPaymentMethod
             // 
@@ -205,6 +218,7 @@
             this.nudLateCheckoutHours.Name = "nudLateCheckoutHours";
             this.nudLateCheckoutHours.Size = new System.Drawing.Size(400, 38);
             this.nudLateCheckoutHours.TabIndex = 14;
+            this.nudLateCheckoutHours.ValueChanged += new System.EventHandler(this.nudLateCheckoutHours_ValueChanged);
             // 
             // lblLateFee
             // 
@@ -217,11 +231,36 @@
             this.lblLateFee.TabIndex = 15;
             this.lblLateFee.Text = "Late Fee:";
             // 
+            // lblDeparturesCount
+            // 
+            this.lblDeparturesCount.AutoSize = true;
+            this.lblDeparturesCount.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDeparturesCount.Location = new System.Drawing.Point(40, 450);
+            this.lblDeparturesCount.Name = "lblDeparturesCount";
+            this.lblDeparturesCount.Size = new System.Drawing.Size(144, 25);
+            this.lblDeparturesCount.TabIndex = 16;
+            this.lblDeparturesCount.Text = "0 departure(s)";
+            // 
+            // btnRefresh
+            // 
+            this.btnRefresh.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.btnRefresh.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnRefresh.ForeColor = System.Drawing.Color.White;
+            this.btnRefresh.Location = new System.Drawing.Point(850, 450);
+            this.btnRefresh.Name = "btnRefresh";
+            this.btnRefresh.Size = new System.Drawing.Size(90, 30);
+            this.btnRefresh.TabIndex = 17;
+            this.btnRefresh.Text = "Refresh";
+            this.btnRefresh.UseVisualStyleBackColor = false;
+            this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
+            // 
             // frmCheckOut
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1920, 960);
+            this.Controls.Add(this.btnRefresh);
+            this.Controls.Add(this.lblDeparturesCount);
             this.Controls.Add(this.lblLateFee);
             this.Controls.Add(this.nudLateCheckoutHours);
             this.Controls.Add(this.cmbPaymentMethod);
@@ -269,5 +308,7 @@
         private System.Windows.Forms.ComboBox cmbPaymentMethod;
         private System.Windows.Forms.NumericUpDown nudLateCheckoutHours;
         private System.Windows.Forms.Label lblLateFee;
+        private System.Windows.Forms.Label lblDeparturesCount;
+        private System.Windows.Forms.Button btnRefresh;
     }
 }
