@@ -16,6 +16,8 @@ namespace Hotel_ManagementIT13.Forms
         private RoomManager _roomManager;
         private List<Room> _allRooms;
         private List<string> _roomTypes;
+        private List<string> _roomStatuses;
+        private List<string> _roomViews;
         private Room _selectedRoom;
         private bool _isAddingNew;
 
@@ -55,6 +57,8 @@ namespace Hotel_ManagementIT13.Forms
             _roomManager = new RoomManager();
             _allRooms = new List<Room>();
             _roomTypes = new List<string>();
+            _roomStatuses = new List<string>();
+            _roomViews = new List<string>();
         }
 
         private void frmRoomManagement_Load(object sender, EventArgs e)
@@ -126,15 +130,23 @@ namespace Hotel_ManagementIT13.Forms
                     cmbRoomType.Items.Add(type);
                 }
 
-                // Load status types
+                // Load status types from database
+                _roomStatuses = GetRoomStatusesFromDatabase();
                 cmbStatus.Items.Clear();
-                cmbStatus.Items.AddRange(new string[] { "Available", "Occupied", "Reserved", "Maintenance" });
+                foreach (var status in _roomStatuses)
+                {
+                    cmbStatus.Items.Add(status);
+                }
 
-                // Load view types
+                // Load view types from database
+                _roomViews = GetRoomViewsFromDatabase();
                 cmbView.Items.Clear();
-                cmbView.Items.AddRange(new string[] { "City View", "Garden View", "Pool View", "Ocean View" });
+                foreach (var view in _roomViews)
+                {
+                    cmbView.Items.Add(view);
+                }
 
-                // Load amenities
+                // Load amenities (keeping hardcoded for now, but can be loaded from database too)
                 clbAmenities.Items.Clear();
                 clbAmenities.Items.AddRange(new string[]
                 {
@@ -180,6 +192,66 @@ namespace Hotel_ManagementIT13.Forms
             return roomTypes;
         }
 
+        private List<string> GetRoomStatusesFromDatabase()
+        {
+            var statuses = new List<string>();
+
+            try
+            {
+                using (var conn = DatabaseHelper.GetConnection())
+                {
+                    conn.Open();
+                    string query = "SELECT status_name FROM room_statuses ORDER BY status_id";
+
+                    using (var cmd = new MySqlCommand(query, conn))
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            statuses.Add(reader["status_name"].ToString());
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading room statuses: {ex.Message}", "Error",
+                              MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            return statuses;
+        }
+
+        private List<string> GetRoomViewsFromDatabase()
+        {
+            var views = new List<string>();
+
+            try
+            {
+                using (var conn = DatabaseHelper.GetConnection())
+                {
+                    conn.Open();
+                    string query = "SELECT view_name FROM room_views ORDER BY view_id";
+
+                    using (var cmd = new MySqlCommand(query, conn))
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            views.Add(reader["view_name"].ToString());
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading room views: {ex.Message}", "Error",
+                              MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            return views;
+        }
+
         private void InitializeFilters()
         {
             try
@@ -193,14 +265,22 @@ namespace Hotel_ManagementIT13.Forms
                 }
                 cmbFilterType.SelectedIndex = 0;
 
+                // Load filter options for room statuses from database
                 cmbFilterStatus.Items.Clear();
                 cmbFilterStatus.Items.Add("All Status");
-                cmbFilterStatus.Items.AddRange(new string[] { "Available", "Occupied", "Reserved", "Maintenance" });
+                foreach (var status in _roomStatuses)
+                {
+                    cmbFilterStatus.Items.Add(status);
+                }
                 cmbFilterStatus.SelectedIndex = 0;
 
+                // Load filter options for room views from database
                 cmbFilterView.Items.Clear();
                 cmbFilterView.Items.Add("All Views");
-                cmbFilterView.Items.AddRange(new string[] { "City View", "Garden View", "Pool View", "Ocean View" });
+                foreach (var view in _roomViews)
+                {
+                    cmbFilterView.Items.Add(view);
+                }
                 cmbFilterView.SelectedIndex = 0;
             }
             catch (Exception ex)
@@ -346,14 +426,29 @@ namespace Hotel_ManagementIT13.Forms
             txtRoomNumber.Text = room.RoomNumber;
             txtRoomNumber.ForeColor = SystemColors.ControlText;
 
+            // Set room type
             if (!string.IsNullOrEmpty(room.RoomTypeName))
-                cmbRoomType.SelectedItem = room.RoomTypeName;
+            {
+                int index = cmbRoomType.FindStringExact(room.RoomTypeName);
+                if (index >= 0)
+                    cmbRoomType.SelectedIndex = index;
+            }
 
+            // Set status
             if (!string.IsNullOrEmpty(room.StatusName))
-                cmbStatus.SelectedItem = room.StatusName;
+            {
+                int index = cmbStatus.FindStringExact(room.StatusName);
+                if (index >= 0)
+                    cmbStatus.SelectedIndex = index;
+            }
 
+            // Set view
             if (!string.IsNullOrEmpty(room.ViewName))
-                cmbView.SelectedItem = room.ViewName;
+            {
+                int index = cmbView.FindStringExact(room.ViewName);
+                if (index >= 0)
+                    cmbView.SelectedIndex = index;
+            }
 
             nudFloor.Value = room.Floor;
 
