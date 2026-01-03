@@ -29,6 +29,13 @@
         private void InitializeComponent()
         {
             this.dgvGuests = new System.Windows.Forms.DataGridView();
+            this.colGuestId = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colFullName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colPhone = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colEmail = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colNationality = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colGuestType = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colCreatedAt = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.btnAddGuest = new System.Windows.Forms.Button();
             this.btnEditGuest = new System.Windows.Forms.Button();
             this.btnDeleteGuest = new System.Windows.Forms.Button();
@@ -47,6 +54,7 @@
             this.cmbGuestType = new System.Windows.Forms.ComboBox();
             this.btnSaveGuest = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
+            this.lblGuestCount = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dgvGuests)).BeginInit();
             this.SuspendLayout();
             // 
@@ -57,6 +65,14 @@
             this.dgvGuests.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgvGuests.BackgroundColor = System.Drawing.SystemColors.Control;
             this.dgvGuests.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvGuests.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.colGuestId,
+            this.colFullName,
+            this.colPhone,
+            this.colEmail,
+            this.colNationality,
+            this.colGuestType,
+            this.colCreatedAt});
             this.dgvGuests.Location = new System.Drawing.Point(40, 160);
             this.dgvGuests.Name = "dgvGuests";
             this.dgvGuests.ReadOnly = true;
@@ -64,6 +80,64 @@
             this.dgvGuests.RowTemplate.Height = 30;
             this.dgvGuests.Size = new System.Drawing.Size(900, 700);
             this.dgvGuests.TabIndex = 0;
+            this.dgvGuests.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvGuests_CellClick);
+            // 
+            // colGuestId
+            // 
+            this.colGuestId.DataPropertyName = "GuestId";
+            this.colGuestId.HeaderText = "ID";
+            this.colGuestId.MinimumWidth = 6;
+            this.colGuestId.Name = "colGuestId";
+            this.colGuestId.ReadOnly = true;
+            this.colGuestId.Width = 50;
+            // 
+            // colFullName
+            // 
+            this.colFullName.DataPropertyName = "FullName";
+            this.colFullName.HeaderText = "Full Name";
+            this.colFullName.MinimumWidth = 6;
+            this.colFullName.Name = "colFullName";
+            this.colFullName.ReadOnly = true;
+            // 
+            // colPhone
+            // 
+            this.colPhone.DataPropertyName = "Phone";
+            this.colPhone.HeaderText = "Phone";
+            this.colPhone.MinimumWidth = 6;
+            this.colPhone.Name = "colPhone";
+            this.colPhone.ReadOnly = true;
+            // 
+            // colEmail
+            // 
+            this.colEmail.DataPropertyName = "Email";
+            this.colEmail.HeaderText = "Email";
+            this.colEmail.MinimumWidth = 6;
+            this.colEmail.Name = "colEmail";
+            this.colEmail.ReadOnly = true;
+            // 
+            // colNationality
+            // 
+            this.colNationality.DataPropertyName = "Nationality";
+            this.colNationality.HeaderText = "Nationality";
+            this.colNationality.MinimumWidth = 6;
+            this.colNationality.Name = "colNationality";
+            this.colNationality.ReadOnly = true;
+            // 
+            // colGuestType
+            // 
+            this.colGuestType.DataPropertyName = "GuestTypeName";
+            this.colGuestType.HeaderText = "Guest Type";
+            this.colGuestType.MinimumWidth = 6;
+            this.colGuestType.Name = "colGuestType";
+            this.colGuestType.ReadOnly = true;
+            // 
+            // colCreatedAt
+            // 
+            this.colCreatedAt.DataPropertyName = "CreatedAt";
+            this.colCreatedAt.HeaderText = "Created Date";
+            this.colCreatedAt.MinimumWidth = 6;
+            this.colCreatedAt.Name = "colCreatedAt";
+            this.colCreatedAt.ReadOnly = true;
             // 
             // btnAddGuest
             // 
@@ -74,6 +148,7 @@
             this.btnAddGuest.TabIndex = 1;
             this.btnAddGuest.Text = "ADD GUEST";
             this.btnAddGuest.UseVisualStyleBackColor = true;
+            this.btnAddGuest.Click += new System.EventHandler(this.btnAddGuest_Click);
             // 
             // btnEditGuest
             // 
@@ -84,6 +159,7 @@
             this.btnEditGuest.TabIndex = 2;
             this.btnEditGuest.Text = "EDIT GUEST";
             this.btnEditGuest.UseVisualStyleBackColor = true;
+            this.btnEditGuest.Click += new System.EventHandler(this.btnEditGuest_Click);
             // 
             // btnDeleteGuest
             // 
@@ -94,6 +170,7 @@
             this.btnDeleteGuest.TabIndex = 3;
             this.btnDeleteGuest.Text = "DELETE GUEST";
             this.btnDeleteGuest.UseVisualStyleBackColor = true;
+            this.btnDeleteGuest.Click += new System.EventHandler(this.btnDeleteGuest_Click);
             // 
             // btnSearch
             // 
@@ -104,6 +181,7 @@
             this.btnSearch.TabIndex = 4;
             this.btnSearch.Text = "SEARCH";
             this.btnSearch.UseVisualStyleBackColor = true;
+            this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
             // 
             // txtSearch
             // 
@@ -111,12 +189,16 @@
             this.txtSearch.Location = new System.Drawing.Point(40, 40);
             this.txtSearch.Name = "txtSearch";
             this.txtSearch.Size = new System.Drawing.Size(860, 34);
-            this.txtSearch.TabIndex = 5;
+            this.txtSearch.TabIndex = 0;
             this.txtSearch.Text = "Search guests by name, email, or phone...";
+            this.txtSearch.Enter += new System.EventHandler(this.txtSearch_Enter);
+            this.txtSearch.Leave += new System.EventHandler(this.txtSearch_Leave);
+            this.txtSearch.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtSearch_KeyPress);
             // 
             // pnlGuestForm
             // 
             this.pnlGuestForm.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.pnlGuestForm.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pnlGuestForm.Location = new System.Drawing.Point(1000, 40);
             this.pnlGuestForm.Name = "pnlGuestForm";
             this.pnlGuestForm.Size = new System.Drawing.Size(880, 300);
@@ -130,6 +212,8 @@
             this.txtFirstName.Size = new System.Drawing.Size(400, 34);
             this.txtFirstName.TabIndex = 7;
             this.txtFirstName.Text = "First Name";
+            this.txtFirstName.Enter += new System.EventHandler(this.TextBox_Enter);
+            this.txtFirstName.Leave += new System.EventHandler(this.TextBox_Leave);
             // 
             // txtLastName
             // 
@@ -139,6 +223,8 @@
             this.txtLastName.Size = new System.Drawing.Size(400, 34);
             this.txtLastName.TabIndex = 8;
             this.txtLastName.Text = "Last Name";
+            this.txtLastName.Enter += new System.EventHandler(this.TextBox_Enter);
+            this.txtLastName.Leave += new System.EventHandler(this.TextBox_Leave);
             // 
             // txtEmail
             // 
@@ -148,6 +234,8 @@
             this.txtEmail.Size = new System.Drawing.Size(400, 34);
             this.txtEmail.TabIndex = 9;
             this.txtEmail.Text = "Email Address";
+            this.txtEmail.Enter += new System.EventHandler(this.TextBox_Enter);
+            this.txtEmail.Leave += new System.EventHandler(this.TextBox_Leave);
             // 
             // txtPhone
             // 
@@ -157,6 +245,8 @@
             this.txtPhone.Size = new System.Drawing.Size(400, 34);
             this.txtPhone.TabIndex = 10;
             this.txtPhone.Text = "Phone Number";
+            this.txtPhone.Enter += new System.EventHandler(this.TextBox_Enter);
+            this.txtPhone.Leave += new System.EventHandler(this.TextBox_Leave);
             // 
             // txtAddress
             // 
@@ -167,34 +257,37 @@
             this.txtAddress.Size = new System.Drawing.Size(880, 100);
             this.txtAddress.TabIndex = 11;
             this.txtAddress.Text = "Address";
+            this.txtAddress.Enter += new System.EventHandler(this.TextBox_Enter);
+            this.txtAddress.Leave += new System.EventHandler(this.TextBox_Leave);
             // 
             // cmbNationality
             // 
+            this.cmbNationality.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbNationality.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmbNationality.FormattingEnabled = true;
             this.cmbNationality.Location = new System.Drawing.Point(1000, 600);
             this.cmbNationality.Name = "cmbNationality";
             this.cmbNationality.Size = new System.Drawing.Size(400, 37);
             this.cmbNationality.TabIndex = 12;
-            this.cmbNationality.Text = "Nationality";
             // 
             // dtpDOB
             // 
             this.dtpDOB.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dtpDOB.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.dtpDOB.Location = new System.Drawing.Point(1480, 600);
             this.dtpDOB.Name = "dtpDOB";
-            this.dtpDOB.Size = new System.Drawing.Size(400, 38);
+            this.dtpDOB.Size = new System.Drawing.Size(400, 34);
             this.dtpDOB.TabIndex = 13;
             // 
             // cmbIDType
             // 
+            this.cmbIDType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbIDType.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmbIDType.FormattingEnabled = true;
             this.cmbIDType.Location = new System.Drawing.Point(1000, 660);
             this.cmbIDType.Name = "cmbIDType";
             this.cmbIDType.Size = new System.Drawing.Size(400, 37);
             this.cmbIDType.TabIndex = 14;
-            this.cmbIDType.Text = "ID Type";
             // 
             // txtIDNumber
             // 
@@ -204,16 +297,18 @@
             this.txtIDNumber.Size = new System.Drawing.Size(400, 34);
             this.txtIDNumber.TabIndex = 15;
             this.txtIDNumber.Text = "ID Number";
+            this.txtIDNumber.Enter += new System.EventHandler(this.TextBox_Enter);
+            this.txtIDNumber.Leave += new System.EventHandler(this.TextBox_Leave);
             // 
             // cmbGuestType
             // 
+            this.cmbGuestType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbGuestType.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmbGuestType.FormattingEnabled = true;
             this.cmbGuestType.Location = new System.Drawing.Point(1000, 720);
             this.cmbGuestType.Name = "cmbGuestType";
             this.cmbGuestType.Size = new System.Drawing.Size(400, 37);
             this.cmbGuestType.TabIndex = 16;
-            this.cmbGuestType.Text = "Guest Type";
             // 
             // btnSaveGuest
             // 
@@ -224,6 +319,7 @@
             this.btnSaveGuest.TabIndex = 17;
             this.btnSaveGuest.Text = "SAVE GUEST";
             this.btnSaveGuest.UseVisualStyleBackColor = true;
+            this.btnSaveGuest.Click += new System.EventHandler(this.btnSaveGuest_Click);
             // 
             // btnCancel
             // 
@@ -234,12 +330,26 @@
             this.btnCancel.TabIndex = 18;
             this.btnCancel.Text = "CANCEL";
             this.btnCancel.UseVisualStyleBackColor = true;
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
+            // 
+            // lblGuestCount
+            // 
+            this.lblGuestCount.AutoSize = true;
+            this.lblGuestCount.BackColor = System.Drawing.SystemColors.Control;
+            this.lblGuestCount.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblGuestCount.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.lblGuestCount.Location = new System.Drawing.Point(40, 870);
+            this.lblGuestCount.Name = "lblGuestCount";
+            this.lblGuestCount.Size = new System.Drawing.Size(107, 20);
+            this.lblGuestCount.TabIndex = 19;
+            this.lblGuestCount.Text = "0 guest(s) found";
             // 
             // frmGuestManagement
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1920, 960);
+            this.Controls.Add(this.lblGuestCount);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnSaveGuest);
             this.Controls.Add(this.cmbGuestType);
@@ -263,6 +373,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Hotel Management System - Guest Management";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.Load += new System.EventHandler(this.frmGuestManagement_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgvGuests)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -272,6 +383,13 @@
         #endregion
 
         private System.Windows.Forms.DataGridView dgvGuests;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colGuestId;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colFullName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colPhone;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colEmail;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colNationality;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colGuestType;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colCreatedAt;
         private System.Windows.Forms.Button btnAddGuest;
         private System.Windows.Forms.Button btnEditGuest;
         private System.Windows.Forms.Button btnDeleteGuest;
@@ -290,5 +408,6 @@
         private System.Windows.Forms.ComboBox cmbGuestType;
         private System.Windows.Forms.Button btnSaveGuest;
         private System.Windows.Forms.Button btnCancel;
+        private System.Windows.Forms.Label lblGuestCount;
     }
 }

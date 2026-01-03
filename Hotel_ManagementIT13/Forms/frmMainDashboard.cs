@@ -15,6 +15,7 @@ namespace Hotel_ManagementIT13.Forms
         private RoomRepository _roomRepo;
         private PaymentRepository _paymentRepo;
         private RoomManager _roomManager;
+        private ReportManager _reportManager;
         private Timer _dashboardTimer;
 
         public frmMainDashboard()
@@ -29,7 +30,6 @@ namespace Hotel_ManagementIT13.Forms
 
         private void frmMainDashboard_Load(object sender, EventArgs e)
         {
-            // Ensure data is loaded on form load
             LoadDashboardData();
         }
 
@@ -39,6 +39,7 @@ namespace Hotel_ManagementIT13.Forms
             _roomRepo = new RoomRepository();
             _paymentRepo = new PaymentRepository();
             _roomManager = new RoomManager();
+            _reportManager = new ReportManager();
         }
 
         private void SetupMenu()
@@ -128,7 +129,7 @@ namespace Hotel_ManagementIT13.Forms
             LoadDashboardData();
 
             _dashboardTimer = new Timer();
-            _dashboardTimer.Interval = 300000;
+            _dashboardTimer.Interval = 300000; // 5 minutes
             _dashboardTimer.Tick += Timer_Tick;
             _dashboardTimer.Start();
 
@@ -157,72 +158,129 @@ namespace Hotel_ManagementIT13.Forms
 
         private void LoadTodaysArrivals(DateTime today)
         {
-            /*dgvTodaysArrivals.Rows.Clear();
             try
             {
-                var arrivals = _reservationManager.GetTodaysArrivals(today);
-                if (arrivals != null && arrivals.Any())
+                // Clear existing rows
+                dgvTodaysArrivals.Rows.Clear();
+
+                // For demo purposes - in real app, get actual arrivals from reservation manager
+                // var arrivals = _reservationManager.GetArrivalsForDate(today);
+
+                // Sample data for testing
+                string[] sampleArrivals = new[]
                 {
-                    foreach (var arrival in arrivals)
+                    "John Smith,Room 101,Standard,Confirmed",
+                    "Maria Garcia,Room 205,Deluxe,Confirmed",
+                    "Robert Johnson,Room 312,Suite,Pending"
+                };
+
+                foreach (var arrival in sampleArrivals)
+                {
+                    var parts = arrival.Split(',');
+                    if (parts.Length >= 4)
                     {
-                        dgvTodaysArrivals.Rows.Add(
-                            arrival.ReservationNumber,
-                            arrival.GuestName,
-                            arrival.RoomNumber,
-                            arrival.RoomType,
-                            arrival.Status
-                        );
+                        dgvTodaysArrivals.Rows.Add(parts[0], parts[1], parts[2], parts[3]);
                     }
                 }
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error loading arrivals: {ex.Message}");
-            }*/
+            }
         }
 
         private void LoadTodaysDepartures(DateTime today)
         {
-            /*dgvTodaysDepartures.Rows.Clear();
             try
             {
-                var departures = _reservationManager.GetTodaysDepartures(today);
-                if (departures != null && departures.Any())
+                // Clear existing rows
+                dgvTodaysDepartures.Rows.Clear();
+
+                // For demo purposes - in real app, get actual departures from reservation manager
+                // var departures = _reservationManager.GetDeparturesForDate(today);
+
+                // Sample data for testing
+                string[] sampleDepartures = new[]
                 {
-                    foreach (var departure in departures)
+                    "Sarah Wilson,Room 102,Standard,Paid",
+                    "David Brown,Room 208,Deluxe,Paid",
+                    "Lisa Miller,Room 310,Suite,Unpaid"
+                };
+
+                foreach (var departure in sampleDepartures)
+                {
+                    var parts = departure.Split(',');
+                    if (parts.Length >= 4)
                     {
-                        dgvTodaysDepartures.Rows.Add(
-                            departure.ReservationNumber,
-                            departure.GuestName,
-                            departure.RoomNumber,
-                            departure.RoomType,
-                            departure.CheckoutTime.ToString("hh:mm tt")
-                        );
+                        dgvTodaysDepartures.Rows.Add(parts[0], parts[1], parts[2], parts[3]);
                     }
                 }
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error loading departures: {ex.Message}");
-            }*/
+            }
         }
 
         private void LoadRoomStatistics()
         {
             try
             {
-                // Get all rooms
+                // Use ReportManager for occupancy data
+                DateTime today = DateTime.Today;
+                var occupancyReport = _reportManager.GenerateOccupancyReport(today, today);
+
+                if (occupancyReport.Success && occupancyReport.DailyOccupancy.Count > 0)
+                {
+                    int occupiedRooms = occupancyReport.DailyOccupancy[0].OccupiedRooms;
+                    int reservedRooms = occupancyReport.DailyOccupancy[0].ReservedRooms;
+                    int totalRooms = occupancyReport.TotalRooms;
+                    int availableRooms = totalRooms - occupiedRooms - reservedRooms;
+
+                    // Update labels
+                    lblAvailableRoomsValue.Text = availableRooms.ToString();
+                    lblOccupiedRoomsValue.Text = occupiedRooms.ToString();
+                    lblPendingValue.Text = reservedRooms.ToString();
+
+                    if (totalRooms > 0)
+                    {
+                        decimal occupancyRate = occupancyReport.DailyOccupancy[0].OccupancyRate;
+                        lblOccupancyRate.Text = $"{occupancyRate:F1}%";
+                        UpdateOccupancyRateColor(occupancyRate);
+                    }
+                    else
+                    {
+                        lblOccupancyRate.Text = "0%";
+                        lblOccupancyRate.ForeColor = Color.Gray;
+                    }
+                }
+                else
+                {
+                    // Fallback to original method
+                    FallbackLoadRoomStatistics();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error loading room statistics from ReportManager: {ex.Message}");
+                FallbackLoadRoomStatistics();
+            }
+        }
+
+        private void FallbackLoadRoomStatistics()
+        {
+            try
+            {
+                // Original room statistics loading
                 var rooms = _roomManager.GetAllRooms();
 
                 if (rooms != null && rooms.Count > 0)
                 {
-                    // Count rooms by status
                     int availableRooms = rooms.Count(r => r.StatusId == RoomManager.STATUS_AVAILABLE);
                     int occupiedRooms = rooms.Count(r => r.StatusId == RoomManager.STATUS_OCCUPIED);
                     int reservedRooms = rooms.Count(r => r.StatusId == RoomManager.STATUS_RESERVED);
                     int totalRooms = rooms.Count;
 
-                    // Update the VALUE labels (the large colored numbers)
                     lblAvailableRoomsValue.Text = availableRooms.ToString();
                     lblOccupiedRoomsValue.Text = occupiedRooms.ToString();
                     lblPendingValue.Text = reservedRooms.ToString();
@@ -246,7 +304,7 @@ namespace Hotel_ManagementIT13.Forms
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error loading room statistics: {ex.Message}");
+                Console.WriteLine($"Error in fallback room statistics: {ex.Message}");
                 SetDefaultRoomStatistics();
             }
         }
@@ -255,15 +313,15 @@ namespace Hotel_ManagementIT13.Forms
         {
             if (occupancyRate > 80)
             {
-                lblOccupancyRate.ForeColor = Color.FromArgb(192, 57, 43);
+                lblOccupancyRate.ForeColor = Color.FromArgb(192, 57, 43); // Red
             }
             else if (occupancyRate > 60)
             {
-                lblOccupancyRate.ForeColor = Color.FromArgb(243, 156, 18);
+                lblOccupancyRate.ForeColor = Color.FromArgb(243, 156, 18); // Orange
             }
             else
             {
-                lblOccupancyRate.ForeColor = Color.FromArgb(39, 174, 96);
+                lblOccupancyRate.ForeColor = Color.FromArgb(39, 174, 96); // Green
             }
         }
 
@@ -297,6 +355,9 @@ namespace Hotel_ManagementIT13.Forms
             {
                 UpdateOccupancyChart();
                 UpdateRevenueChart();
+
+                // Debug: Check chart configuration
+                DebugChartConfiguration();
             }
             catch (Exception ex)
             {
@@ -306,60 +367,276 @@ namespace Hotel_ManagementIT13.Forms
 
         private void UpdateOccupancyChart()
         {
-            chartOccupancy.Series.Clear();
-
             try
             {
-                // Parse values from the VALUE labels
-                int available = int.Parse(lblAvailableRoomsValue.Text);
-                int occupied = int.Parse(lblOccupiedRoomsValue.Text);
-                int reserved = int.Parse(lblPendingValue.Text);
+                // Clear existing series
+                chartOccupancy.Series.Clear();
+
+                // Get data from ReportManager
+                DateTime today = DateTime.Today;
+                var occupancyReport = _reportManager.GenerateOccupancyReport(today, today);
+
+                if (occupancyReport.Success && occupancyReport.DailyOccupancy.Count > 0)
+                {
+                    int occupied = occupancyReport.DailyOccupancy[0].OccupiedRooms;
+                    int reserved = occupancyReport.DailyOccupancy[0].ReservedRooms;
+                    int totalRooms = occupancyReport.TotalRooms;
+                    int available = totalRooms - occupied - reserved;
+
+                    // Ensure we have valid data
+                    if (available < 0) available = 0;
+
+                    // Create new series
+                    var occupancySeries = new System.Windows.Forms.DataVisualization.Charting.Series("Room Status")
+                    {
+                        ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Pie,
+                        IsValueShownAsLabel = true,
+                        Font = new Font("Microsoft Sans Serif", 10, FontStyle.Bold),
+                        ChartArea = "ChartArea1"
+                    };
+
+                    // Add data points
+                    if (available + occupied + reserved > 0)
+                    {
+                        occupancySeries.Points.AddXY("Available", available);
+                        occupancySeries.Points.AddXY("Occupied", occupied);
+                        occupancySeries.Points.AddXY("Reserved", reserved);
+                    }
+                    else
+                    {
+                        // Add a single point if no data
+                        occupancySeries.Points.AddXY("No Data", 1);
+                    }
+
+                    // Set colors
+                    if (occupancySeries.Points.Count >= 3)
+                    {
+                        occupancySeries.Points[0].Color = Color.FromArgb(39, 174, 96);   // Green
+                        occupancySeries.Points[1].Color = Color.FromArgb(192, 57, 43);   // Red
+                        occupancySeries.Points[2].Color = Color.FromArgb(243, 156, 18);  // Orange
+                    }
+                    else if (occupancySeries.Points.Count == 1)
+                    {
+                        occupancySeries.Points[0].Color = Color.LightGray;
+                    }
+
+                    // Add series to chart
+                    chartOccupancy.Series.Add(occupancySeries);
+
+                    // Configure chart area
+                    chartOccupancy.ChartAreas[0].Area3DStyle.Enable3D = true;
+                    chartOccupancy.ChartAreas[0].Area3DStyle.Rotation = 10;
+                    chartOccupancy.ChartAreas[0].Area3DStyle.Inclination = 15;
+                    chartOccupancy.ChartAreas[0].Area3DStyle.IsRightAngleAxes = false;
+                    chartOccupancy.ChartAreas[0].Area3DStyle.PointDepth = 100;
+                    chartOccupancy.ChartAreas[0].Area3DStyle.PointGapDepth = 100;
+
+                    // Configure legend
+                    if (chartOccupancy.Legends.Count == 0)
+                    {
+                        chartOccupancy.Legends.Add(new System.Windows.Forms.DataVisualization.Charting.Legend());
+                    }
+                    chartOccupancy.Legends[0].Enabled = true;
+                    chartOccupancy.Legends[0].Font = new Font("Microsoft Sans Serif", 10, FontStyle.Regular);
+                    chartOccupancy.Legends[0].Docking = System.Windows.Forms.DataVisualization.Charting.Docking.Bottom;
+
+                    // Configure labels - show both count and percentage
+                    int total = available + occupied + reserved;
+                    if (total > 0)
+                    {
+                        foreach (var point in occupancySeries.Points)
+                        {
+                            double percentage = (point.YValues[0] / total) * 100;
+                            point.Label = $"{point.YValues[0]} ({percentage:F1}%)";
+                            point.LabelForeColor = Color.White;
+                            point.Font = new Font("Microsoft Sans Serif", 10, FontStyle.Bold);
+                        }
+                    }
+
+                    // Set chart title
+                    chartOccupancy.Titles.Clear();
+                    var title = new System.Windows.Forms.DataVisualization.Charting.Title($"Room Occupancy - {today:MMM dd, yyyy}")
+                    {
+                        Font = new Font("Microsoft Sans Serif", 12, FontStyle.Bold),
+                        ForeColor = Color.FromArgb(44, 62, 80)
+                    };
+                    chartOccupancy.Titles.Add(title);
+
+                    // Ensure chart is visible
+                    chartOccupancy.Visible = true;
+                }
+                else
+                {
+                    // Fallback to original method
+                    FallbackUpdateOccupancyChart();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error updating occupancy chart: {ex.Message}");
+
+                // Show error on chart
+                chartOccupancy.Titles.Clear();
+                chartOccupancy.Titles.Add("Chart Error - Check Data");
+                chartOccupancy.Titles[0].Font = new Font("Microsoft Sans Serif", 12, FontStyle.Bold);
+                chartOccupancy.Titles[0].ForeColor = Color.Red;
+
+                // Try fallback
+                try
+                {
+                    FallbackUpdateOccupancyChart();
+                }
+                catch
+                {
+                    // Last resort - create empty chart with message
+                    var emptySeries = new System.Windows.Forms.DataVisualization.Charting.Series("No Data")
+                    {
+                        ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Pie
+                    };
+                    emptySeries.Points.AddXY("No Data", 1);
+                    emptySeries.Points[0].Color = Color.LightGray;
+                    chartOccupancy.Series.Clear();
+                    chartOccupancy.Series.Add(emptySeries);
+                }
+            }
+        }
+
+        private void FallbackUpdateOccupancyChart()
+        {
+            try
+            {
+                chartOccupancy.Series.Clear();
+
+                int available, occupied, reserved;
+
+                // Parse values safely
+                if (!int.TryParse(lblAvailableRoomsValue.Text, out available))
+                    available = 0;
+                if (!int.TryParse(lblOccupiedRoomsValue.Text, out occupied))
+                    occupied = 0;
+                if (!int.TryParse(lblPendingValue.Text, out reserved))
+                    reserved = 0;
+
+                int total = available + occupied + reserved;
 
                 var occupancySeries = new System.Windows.Forms.DataVisualization.Charting.Series("Room Status")
                 {
                     ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Pie,
                     IsValueShownAsLabel = true,
-                    LabelFormat = "#,##0"
+                    Font = new Font("Microsoft Sans Serif", 10, FontStyle.Bold),
+                    ChartArea = "ChartArea1"
                 };
 
-                var availablePoint = occupancySeries.Points.Add(available);
-                availablePoint.Color = Color.FromArgb(39, 174, 96);
-                availablePoint.LegendText = "Available";
+                // Add data
+                if (total > 0)
+                {
+                    occupancySeries.Points.AddXY("Available", available);
+                    occupancySeries.Points.AddXY("Occupied", occupied);
+                    occupancySeries.Points.AddXY("Reserved", reserved);
+                }
+                else
+                {
+                    // Add a single point if no data
+                    occupancySeries.Points.AddXY("No Data", 1);
+                }
 
-                var occupiedPoint = occupancySeries.Points.Add(occupied);
-                occupiedPoint.Color = Color.FromArgb(192, 57, 43);
-                occupiedPoint.LegendText = "Occupied";
-
-                var reservedPoint = occupancySeries.Points.Add(reserved);
-                reservedPoint.Color = Color.FromArgb(243, 156, 18);
-                reservedPoint.LegendText = "Reserved";
+                // Set colors
+                if (occupancySeries.Points.Count >= 3)
+                {
+                    occupancySeries.Points[0].Color = Color.FromArgb(39, 174, 96);
+                    occupancySeries.Points[1].Color = Color.FromArgb(192, 57, 43);
+                    occupancySeries.Points[2].Color = Color.FromArgb(243, 156, 18);
+                }
+                else if (occupancySeries.Points.Count == 1)
+                {
+                    occupancySeries.Points[0].Color = Color.LightGray;
+                }
 
                 chartOccupancy.Series.Add(occupancySeries);
+
+                // Configure chart area
+                chartOccupancy.ChartAreas[0].Area3DStyle.Enable3D = true;
+                chartOccupancy.ChartAreas[0].Area3DStyle.Rotation = 10;
+                chartOccupancy.ChartAreas[0].Area3DStyle.Inclination = 15;
+
+                // Configure legend
+                if (chartOccupancy.Legends.Count == 0)
+                {
+                    chartOccupancy.Legends.Add(new System.Windows.Forms.DataVisualization.Charting.Legend());
+                }
+                chartOccupancy.Legends[0].Enabled = true;
+                chartOccupancy.Legends[0].Docking = System.Windows.Forms.DataVisualization.Charting.Docking.Bottom;
+
+                // Set labels with percentages
+                if (total > 0)
+                {
+                    foreach (var point in occupancySeries.Points)
+                    {
+                        double percentage = (point.YValues[0] / total) * 100;
+                        point.Label = $"{point.YValues[0]} ({percentage:F1}%)";
+                        point.LabelForeColor = Color.White;
+                        point.Font = new Font("Microsoft Sans Serif", 10, FontStyle.Bold);
+                    }
+                }
+
                 chartOccupancy.Titles.Clear();
                 chartOccupancy.Titles.Add("Room Occupancy Status");
                 chartOccupancy.Titles[0].Font = new Font("Microsoft Sans Serif", 12, FontStyle.Bold);
             }
-            catch
+            catch (Exception ex)
             {
+                Console.WriteLine($"Error in fallback chart: {ex.Message}");
+
+                // Minimal chart with error
+                chartOccupancy.Series.Clear();
                 chartOccupancy.Titles.Clear();
-                chartOccupancy.Titles.Add("No Data Available");
+                chartOccupancy.Titles.Add("Chart Error - Check Data");
+                chartOccupancy.Titles[0].ForeColor = Color.Red;
+            }
+        }
+
+        private void DebugChartConfiguration()
+        {
+            // Debug method to check chart configuration
+            try
+            {
+                Console.WriteLine($"Chart Occupancy - Series Count: {chartOccupancy.Series.Count}");
+                Console.WriteLine($"Chart Occupancy - Chart Areas: {chartOccupancy.ChartAreas.Count}");
+                Console.WriteLine($"Chart Occupancy - Visible: {chartOccupancy.Visible}");
+
+                if (chartOccupancy.Series.Count > 0)
+                {
+                    Console.WriteLine($"First Series - Points: {chartOccupancy.Series[0].Points.Count}");
+                    Console.WriteLine($"First Series - Chart Type: {chartOccupancy.Series[0].ChartType}");
+
+                    if (chartOccupancy.Series[0].Points.Count > 0)
+                    {
+                        Console.WriteLine($"First Point - Value: {chartOccupancy.Series[0].Points[0].YValues[0]}");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Debug error: {ex.Message}");
             }
         }
 
         private void UpdateRevenueChart()
         {
-            chartRevenue.Series.Clear();
-
             try
             {
+                chartRevenue.Series.Clear();
+
                 var revenueSeries = new System.Windows.Forms.DataVisualization.Charting.Series("Revenue")
                 {
                     ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Column,
                     Color = Color.FromArgb(52, 152, 219),
                     IsValueShownAsLabel = true,
-                    LabelFormat = "C0"
+                    LabelFormat = "C0",
+                    ChartArea = "ChartArea1"
                 };
 
+                // Get revenue for last 7 days
                 for (int i = 6; i >= 0; i--)
                 {
                     DateTime date = DateTime.Today.AddDays(-i);
@@ -369,11 +646,15 @@ namespace Hotel_ManagementIT13.Forms
                 }
 
                 chartRevenue.Series.Add(revenueSeries);
+
+                // Configure chart
+                chartRevenue.ChartAreas[0].AxisY.Title = "Amount ($)";
+                chartRevenue.ChartAreas[0].AxisY.TitleFont = new Font("Microsoft Sans Serif", 10, FontStyle.Bold);
+                chartRevenue.ChartAreas[0].AxisX.LabelStyle.Angle = -45;
+
                 chartRevenue.Titles.Clear();
                 chartRevenue.Titles.Add("Last 7 Days Revenue");
                 chartRevenue.Titles[0].Font = new Font("Microsoft Sans Serif", 12, FontStyle.Bold);
-                chartRevenue.ChartAreas[0].AxisY.Title = "Amount ($)";
-                chartRevenue.ChartAreas[0].AxisY.TitleFont = new Font("Microsoft Sans Serif", 10, FontStyle.Bold);
             }
             catch (Exception ex)
             {

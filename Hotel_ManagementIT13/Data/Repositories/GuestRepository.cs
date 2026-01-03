@@ -170,6 +170,37 @@ namespace Hotel_ManagementIT13.Data.Repositories
             }
         }
 
+        public bool DeleteGuest(int guestId)
+        {
+            using (var conn = DatabaseHelper.GetConnection())
+            {
+                conn.Open();
+                string query = "DELETE FROM guests WHERE guest_id = @guestId";
+
+                using (var cmd = new MySqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@guestId", guestId);
+                    return cmd.ExecuteNonQuery() > 0;
+                }
+            }
+        }
+
+        public bool GuestHasReservations(int guestId)
+        {
+            using (var conn = DatabaseHelper.GetConnection())
+            {
+                conn.Open();
+                string query = "SELECT COUNT(*) FROM reservations WHERE guest_id = @guestId";
+
+                using (var cmd = new MySqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@guestId", guestId);
+                    int count = Convert.ToInt32(cmd.ExecuteScalar());
+                    return count > 0;
+                }
+            }
+        }
+
         private Guest CreateGuestFromReader(MySqlDataReader reader)
         {
             return new Guest
