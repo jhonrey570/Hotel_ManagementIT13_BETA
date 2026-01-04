@@ -1,7 +1,9 @@
-﻿using Hotel_ManagementIT13.Data.Managers;
+﻿using Hotel_ManagementIT13.Data;
+using Hotel_ManagementIT13.Data.Managers;
 using Hotel_ManagementIT13.Data.Models;
 using Hotel_ManagementIT13.Data.Repositories;
 using Hotel_ManagementIT13.Utilities;
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -17,6 +19,7 @@ namespace Hotel_ManagementIT13.Forms
         private GuestRepository _guestRepo;
         private RoomRepository _roomRepo;
         private ReservationRepository _reservationRepo;
+        private AmenityRepository _amenityRepo;
         private List<Guest> _searchResults;
         private List<Room> _availableRooms;
         private Guest _selectedGuest;
@@ -35,8 +38,11 @@ namespace Hotel_ManagementIT13.Forms
         // Bookable statuses (rooms that can be reserved)
         private readonly int[] BOOKABLE_STATUSES = { STATUS_AVAILABLE, STATUS_READY_FOR_CHECKIN };
 
-        // Current logged in user (you'll need to get this from your login system)
-        private int _currentUserId = 1; // Default to admin user, change this based on your login system
+        // Current logged in user
+        private int _currentUserId = 1;
+
+        // Track if reservation history tab has been initialized
+        private bool _historyTabInitialized = false;
 
         public frmReservation()
         {
@@ -47,6 +53,7 @@ namespace Hotel_ManagementIT13.Forms
             _guestRepo = new GuestRepository();
             _roomRepo = new RoomRepository();
             _reservationRepo = new ReservationRepository();
+            _amenityRepo = new AmenityRepository();
             _searchResults = new List<Guest>();
             _availableRooms = new List<Room>();
             _selectedRoomIds = new List<int>();
@@ -57,228 +64,33 @@ namespace Hotel_ManagementIT13.Forms
             InitializeForm();
             LoadAllGuests();
             LoadAvailableRoomsFromDatabase();
-            LoadReservationHistory();
         }
 
         private void InitializeForm()
         {
-            // Set default dates
             dtpCheckIn.Value = DateTime.Today;
             dtpCheckOut.Value = DateTime.Today.AddDays(1);
 
-            // Load room types from database
             LoadRoomTypesFromDatabase();
-
-            // Load special requests
             LoadSpecialRequests();
-
-            // Initialize data grids
             InitializeDataGrids();
 
-            // Initialize tab controls
-            InitializeTabControls();
-
-            // Initialize UI state
             lblSelectedGuest.Text = "No guest selected";
             lblSelectedGuest.ForeColor = Color.Red;
             lblTotalAmount.Text = "$0.00";
-
-            // Initialize labels
             lblSearchResults.Text = "Found 0 guest(s)";
             lblAvailableRooms.Text = "Available: 0 room(s)";
 
-            // Disable booking controls initially
             EnableBookingControls(false);
-        }
-
-        private void InitializeTabControls()
-        {
-            // Clear existing controls in tab pages
-            tabPage1.Controls.Clear();
-            tabPage2.Controls.Clear();
-
-            // New Reservation tab (already has all controls)
-            // Reservation History tab setup
-            SetupReservationHistoryTab();
-        }
-
-        private void SetupReservationHistoryTab()
-        {
-            // Create DataGridView for reservation history
-            DataGridView dgvReservationHistory = new DataGridView();
-            dgvReservationHistory.Dock = DockStyle.Fill;
-            dgvReservationHistory.Name = "dgvReservationHistory";
-            dgvReservationHistory.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dgvReservationHistory.ReadOnly = true;
-            dgvReservationHistory.AllowUserToAddRows = false;
-            dgvReservationHistory.AllowUserToDeleteRows = false;
-            dgvReservationHistory.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-
-            // Add columns
-            dgvReservationHistory.Columns.Add("BookingReference", "Booking #");
-            dgvReservationHistory.Columns.Add("GuestName", "Guest Name");
-            dgvReservationHistory.Columns.Add("CheckInDate", "Check-in");
-            dgvReservationHistory.Columns.Add("CheckOutDate", "Check-out");
-            dgvReservationHistory.Columns.Add("Rooms", "Rooms");
-            dgvReservationHistory.Columns.Add("TotalAmount", "Total");
-            dgvReservationHistory.Columns.Add("StatusName", "Status");
-            dgvReservationHistory.Columns.Add("CreatedAt", "Booking Date");
-
-            // Format columns
-            dgvReservationHistory.Columns["CheckInDate"].DefaultCellStyle.Format = "MM/dd/yyyy";
-            dgvReservationHistory.Columns["CheckOutDate"].DefaultCellStyle.Format = "MM/dd/yyyy";
-            dgvReservationHistory.Columns["CreatedAt"].DefaultCellStyle.Format = "MM/dd/yyyy HH:mm";
-            dgvReservationHistory.Columns["TotalAmount"].DefaultCellStyle.Format = "C";
-            dgvReservationHistory.Columns["TotalAmount"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-
-            // Add refresh button
-            Button btnRefreshHistory = new Button();
-            btnRefreshHistory.Text = "Refresh";
-            btnRefreshHistory.Location = new Point(10, 10);
-            btnRefreshHistory.Size = new Size(100, 30);
-            btnRefreshHistory.Click += BtnRefreshHistory_Click;
-
-            // Add date filter controls
-            Label lblFromDate = new Label();
-            lblFromDate.Text = "From:";
-            lblFromDate.Location = new Point(120, 15);
-            lblFromDate.Size = new Size(40, 20);
-
-            DateTimePicker dtpFromDate = new DateTimePicker();
-            dtpFromDate.Name = "dtpFromDate";
-            dtpFromDate.Value = DateTime.Today.AddMonths(-1);
-            dtpFromDate.Location = new Point(165, 10);
-            dtpFromDate.Size = new Size(120, 20);
-
-            Label lblToDate = new Label();
-            lblToDate.Text = "To:";
-            lblToDate.Location = new Point(295, 15);
-            lblToDate.Size = new Size(30, 20);
-
-            DateTimePicker dtpToDate = new DateTimePicker();
-            dtpToDate.Name = "dtpToDate";
-            dtpToDate.Value = DateTime.Today.AddDays(30);
-            dtpToDate.Location = new Point(330, 10);
-            dtpToDate.Size = new Size(120, 20);
-
-            Button btnFilterHistory = new Button();
-            btnFilterHistory.Text = "Filter";
-            btnFilterHistory.Location = new Point(460, 10);
-            btnFilterHistory.Size = new Size(80, 30);
-            btnFilterHistory.Click += BtnFilterHistory_Click;
-
-            // Add controls to tab page
-            Panel filterPanel = new Panel();
-            filterPanel.Dock = DockStyle.Top;
-            filterPanel.Height = 50;
-            filterPanel.BackColor = SystemColors.Control;
-
-            filterPanel.Controls.Add(btnRefreshHistory);
-            filterPanel.Controls.Add(lblFromDate);
-            filterPanel.Controls.Add(dtpFromDate);
-            filterPanel.Controls.Add(lblToDate);
-            filterPanel.Controls.Add(dtpToDate);
-            filterPanel.Controls.Add(btnFilterHistory);
-
-            tabPage2.Controls.Add(filterPanel);
-            tabPage2.Controls.Add(dgvReservationHistory);
-
-            // Set DataGridView to be below filter panel
-            dgvReservationHistory.Top = filterPanel.Height;
-            dgvReservationHistory.Height = tabPage2.Height - filterPanel.Height;
-        }
-
-        private void LoadReservationHistory()
-        {
-            try
-            {
-                // Get controls from tab page 2
-                DataGridView dgvReservationHistory = tabPage2.Controls.OfType<DataGridView>().FirstOrDefault();
-                DateTimePicker dtpFromDate = tabPage2.Controls.OfType<DateTimePicker>().FirstOrDefault(d => d.Name == "dtpFromDate");
-                DateTimePicker dtpToDate = tabPage2.Controls.OfType<DateTimePicker>().FirstOrDefault(d => d.Name == "dtpToDate");
-
-                if (dgvReservationHistory == null) return;
-
-                DateTime fromDate = dtpFromDate?.Value ?? DateTime.Today.AddMonths(-1);
-                DateTime toDate = dtpToDate?.Value ?? DateTime.Today.AddDays(30);
-
-                // Get reservations from database
-                var reservations = _reservationRepo.GetReservationsByDateRange(fromDate, toDate);
-
-                // Clear existing rows
-                dgvReservationHistory.Rows.Clear();
-
-                // Add rows
-                foreach (var reservation in reservations)
-                {
-                    string roomNumbers = string.Join(", ", reservation.Rooms.Select(r => r.RoomNumber));
-
-                    dgvReservationHistory.Rows.Add(
-                        reservation.BookingReference,
-                        reservation.GuestName,
-                        reservation.CheckInDate,
-                        reservation.CheckOutDate,
-                        roomNumbers,
-                        reservation.TotalAmount,
-                        reservation.StatusName,
-                        reservation.CreatedAt
-                    );
-                }
-
-                // Add row coloring based on status
-                foreach (DataGridViewRow row in dgvReservationHistory.Rows)
-                {
-                    string status = row.Cells["StatusName"].Value?.ToString();
-                    if (!string.IsNullOrEmpty(status))
-                    {
-                        row.DefaultCellStyle.BackColor = GetStatusColorForHistory(status);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error loading reservation history: {ex.Message}", "Error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private Color GetStatusColorForHistory(string status)
-        {
-            switch (status.ToLower())
-            {
-                case "confirmed":
-                case "checked-in":
-                    return Color.LightGreen;
-                case "pending payment":
-                    return Color.LightYellow;
-                case "cancelled":
-                    return Color.LightGray;
-                case "no-show":
-                    return Color.LightPink;
-                default:
-                    return Color.White;
-            }
-        }
-
-        private void BtnRefreshHistory_Click(object sender, EventArgs e)
-        {
-            LoadReservationHistory();
-        }
-
-        private void BtnFilterHistory_Click(object sender, EventArgs e)
-        {
-            LoadReservationHistory();
         }
 
         private void LoadAllGuests()
         {
             try
             {
-                // Show loading message
                 lblSearchResults.Text = "Loading guests...";
                 Application.DoEvents();
 
-                // Get all guests from database using GuestRepository
                 var allGuests = _guestRepo.GetAllGuests();
 
                 if (allGuests != null && allGuests.Count > 0)
@@ -308,29 +120,20 @@ namespace Hotel_ManagementIT13.Forms
         {
             try
             {
-                // Show loading message
                 lblAvailableRooms.Text = "Loading rooms...";
                 Application.DoEvents();
 
-                // Clear existing rooms
                 _availableRooms.Clear();
-
-                // Load ALL rooms from database
                 var allRooms = _roomRepo.GetAllRooms();
 
                 if (allRooms != null && allRooms.Count > 0)
                 {
-                    // Filter to show only bookable rooms
                     var bookableRooms = allRooms
                         .Where(r => BOOKABLE_STATUSES.Contains(r.StatusId))
                         .ToList();
 
                     lblAvailableRooms.Text = $"Loaded {allRooms.Count} rooms, {bookableRooms.Count} available";
-
-                    // Add only bookable rooms
                     _availableRooms.AddRange(bookableRooms);
-
-                    // Display available rooms
                     DisplayAvailableRooms();
                 }
                 else
@@ -353,7 +156,6 @@ namespace Hotel_ManagementIT13.Forms
                 cmbRoomType.Items.Clear();
                 cmbRoomType.Items.Add("All Types");
 
-                // Get unique room types from available rooms
                 if (_availableRooms != null && _availableRooms.Count > 0)
                 {
                     var uniqueTypes = _availableRooms
@@ -369,7 +171,6 @@ namespace Hotel_ManagementIT13.Forms
                     }
                 }
 
-                // If no types loaded, try to get from all rooms in database
                 if (cmbRoomType.Items.Count <= 1)
                 {
                     try
@@ -392,13 +193,9 @@ namespace Hotel_ManagementIT13.Forms
                     }
                     catch
                     {
-                        // If still no types, add defaults
                         cmbRoomType.Items.Add("Standard");
                         cmbRoomType.Items.Add("Deluxe");
                         cmbRoomType.Items.Add("Suite");
-                        cmbRoomType.Items.Add("Presidential");
-                        cmbRoomType.Items.Add("Executive");
-                        cmbRoomType.Items.Add("Family");
                     }
                 }
 
@@ -415,22 +212,32 @@ namespace Hotel_ManagementIT13.Forms
 
         private void LoadSpecialRequests()
         {
-            clbSpecialRequests.Items.Clear();
-
-            string[] requests = {
-                "Early Check-in (before 2 PM)",
-                "Late Check-out (after 12 PM)",
-                "Extra Bed",
-                "Crib/Child Bed",
-                "Non-smoking Room",
-                "High Floor",
-                "Adjoining Rooms",
-                "Airport Transfer"
-            };
-
-            foreach (var request in requests)
+            try
             {
-                clbSpecialRequests.Items.Add(request);
+                clbSpecialRequests.Items.Clear();
+
+                // Get amenities from database
+                var amenities = _amenityRepo.GetAllAmenities();
+
+                if (amenities != null && amenities.Count > 0)
+                {
+                    // Add each amenity to the CheckedListBox
+                    foreach (var amenity in amenities)
+                    {
+                        clbSpecialRequests.Items.Add(amenity.AmenityName, false);
+                    }
+                }
+                else
+                {
+                    // If no amenities in database, show message
+                    MessageBox.Show("No amenities found in the database. Please add amenities to the amenities table.",
+                        "No Amenities", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading amenities from database: {ex.Message}",
+                    "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -438,16 +245,12 @@ namespace Hotel_ManagementIT13.Forms
         {
             try
             {
-                // Clear grids
                 dgvGuestResults.Columns.Clear();
                 dgvGuestResults.Rows.Clear();
                 dgvAvailableRooms.Columns.Clear();
                 dgvAvailableRooms.Rows.Clear();
 
-                // Setup Guest Results Grid
                 SetupGuestGrid();
-
-                // Setup Available Rooms Grid
                 SetupRoomsGrid();
             }
             catch (Exception ex)
@@ -459,42 +262,36 @@ namespace Hotel_ManagementIT13.Forms
 
         private void SetupGuestGrid()
         {
-            // Guest ID column
             DataGridViewTextBoxColumn guestIdCol = new DataGridViewTextBoxColumn();
             guestIdCol.Name = "GuestId";
             guestIdCol.HeaderText = "ID";
             guestIdCol.Visible = false;
             dgvGuestResults.Columns.Add(guestIdCol);
 
-            // Name column
             DataGridViewTextBoxColumn nameCol = new DataGridViewTextBoxColumn();
             nameCol.Name = "Name";
             nameCol.HeaderText = "Name";
             nameCol.Width = 150;
             dgvGuestResults.Columns.Add(nameCol);
 
-            // Phone column
             DataGridViewTextBoxColumn phoneCol = new DataGridViewTextBoxColumn();
             phoneCol.Name = "Phone";
             phoneCol.HeaderText = "Phone";
             phoneCol.Width = 100;
             dgvGuestResults.Columns.Add(phoneCol);
 
-            // Email column
             DataGridViewTextBoxColumn emailCol = new DataGridViewTextBoxColumn();
             emailCol.Name = "Email";
             emailCol.HeaderText = "Email";
             emailCol.Width = 150;
             dgvGuestResults.Columns.Add(emailCol);
 
-            // Type column
             DataGridViewTextBoxColumn typeCol = new DataGridViewTextBoxColumn();
             typeCol.Name = "Type";
             typeCol.HeaderText = "Type";
             typeCol.Width = 80;
             dgvGuestResults.Columns.Add(typeCol);
 
-            // Add a "Select" button column
             DataGridViewButtonColumn selectCol = new DataGridViewButtonColumn();
             selectCol.Name = "SelectAction";
             selectCol.HeaderText = "Action";
@@ -506,42 +303,27 @@ namespace Hotel_ManagementIT13.Forms
 
         private void SetupRoomsGrid()
         {
-            // Checkbox column for selection
             DataGridViewCheckBoxColumn checkCol = new DataGridViewCheckBoxColumn();
             checkCol.Name = "Select";
             checkCol.HeaderText = "Select";
             checkCol.Width = 50;
             dgvAvailableRooms.Columns.Add(checkCol);
 
-            // Room ID column (hidden)
             dgvAvailableRooms.Columns.Add("RoomId", "ID");
             dgvAvailableRooms.Columns["RoomId"].Visible = false;
-
-            // Room Number column
             dgvAvailableRooms.Columns.Add("RoomNumber", "Room #");
             dgvAvailableRooms.Columns["RoomNumber"].Width = 70;
-
-            // Room Type column
             dgvAvailableRooms.Columns.Add("Type", "Type");
             dgvAvailableRooms.Columns["Type"].Width = 80;
-
-            // Floor column
             dgvAvailableRooms.Columns.Add("Floor", "Floor");
             dgvAvailableRooms.Columns["Floor"].Width = 50;
-
-            // View column
             dgvAvailableRooms.Columns.Add("View", "View");
             dgvAvailableRooms.Columns["View"].Width = 80;
-
-            // Status column
             dgvAvailableRooms.Columns.Add("Status", "Status");
             dgvAvailableRooms.Columns["Status"].Width = 100;
-
-            // Rate column
             dgvAvailableRooms.Columns.Add("Rate", "Rate/Night");
             dgvAvailableRooms.Columns["Rate"].Width = 90;
 
-            // Setup checkbox handling
             dgvAvailableRooms.CurrentCellDirtyStateChanged += dgvAvailableRooms_CurrentCellDirtyStateChanged;
             dgvAvailableRooms.CellValueChanged += dgvAvailableRooms_CellValueChanged;
             dgvGuestResults.CellClick += dgvGuestResults_CellClick;
@@ -558,18 +340,15 @@ namespace Hotel_ManagementIT13.Forms
 
             if (string.IsNullOrWhiteSpace(searchTerm))
             {
-                // If search is empty, show all guests
                 LoadAllGuests();
                 return;
             }
 
             try
             {
-                // Show searching message
                 lblSearchResults.Text = "Searching...";
                 Application.DoEvents();
 
-                // Use GuestManager for search
                 var searchResult = _guestManager.SearchGuests(searchTerm);
 
                 if (searchResult.Success)
@@ -608,7 +387,6 @@ namespace Hotel_ManagementIT13.Forms
                         guest.GuestTypeName ?? ""
                     );
 
-                    // Add "Select" button text
                     dgvGuestResults.Rows[rowIndex].Cells["SelectAction"].Value = "Select";
                 }
 
@@ -627,14 +405,12 @@ namespace Hotel_ManagementIT13.Forms
             {
                 try
                 {
-                    // Check if the click is on the Select button column
                     if (e.ColumnIndex == dgvGuestResults.Columns["SelectAction"].Index)
                     {
                         SelectGuestFromRow(e.RowIndex);
                     }
                     else
                     {
-                        // Regular cell click - also select the guest
                         SelectGuestFromRow(e.RowIndex);
                     }
                 }
@@ -656,7 +432,6 @@ namespace Hotel_ManagementIT13.Forms
             {
                 DisplaySelectedGuest();
 
-                // Highlight the selected row
                 foreach (DataGridViewRow r in dgvGuestResults.Rows)
                 {
                     r.DefaultCellStyle.BackColor = Color.White;
@@ -704,12 +479,9 @@ namespace Hotel_ManagementIT13.Forms
             try
             {
                 string selectedType = cmbRoomType.SelectedItem?.ToString();
-
-                // Show searching message
                 lblAvailableRooms.Text = "Searching available rooms...";
                 Application.DoEvents();
 
-                // Get available rooms from database based on dates
                 List<Room> availableRooms = new List<Room>();
 
                 try
@@ -718,7 +490,6 @@ namespace Hotel_ManagementIT13.Forms
 
                     if (availableRooms != null && availableRooms.Count > 0)
                     {
-                        // Additional filter to ensure only bookable rooms
                         availableRooms = availableRooms
                             .Where(r => BOOKABLE_STATUSES.Contains(r.StatusId))
                             .ToList();
@@ -727,7 +498,6 @@ namespace Hotel_ManagementIT13.Forms
                     }
                     else
                     {
-                        // If repository returns nothing, use current available rooms
                         availableRooms = _availableRooms.ToList();
                         lblAvailableRooms.Text = $"Showing {availableRooms.Count} available rooms";
                     }
@@ -740,14 +510,12 @@ namespace Hotel_ManagementIT13.Forms
                     lblAvailableRooms.Text = $"Showing {availableRooms.Count} rooms";
                 }
 
-                // Filter by room type if specified
                 if (selectedType != "All Types" && !string.IsNullOrEmpty(selectedType))
                 {
                     availableRooms = availableRooms.Where(r => r.RoomTypeName == selectedType).ToList();
                     lblAvailableRooms.Text = $"Found {availableRooms.Count} {selectedType} rooms";
                 }
 
-                // Update the available rooms list
                 _availableRooms = availableRooms;
                 DisplayAvailableRooms();
                 _selectedRoomIds.Clear();
@@ -774,15 +542,11 @@ namespace Hotel_ManagementIT13.Forms
 
                 foreach (var room in _availableRooms)
                 {
-                    // Get status display text
                     string statusDisplay = GetStatusDisplayText(room.StatusId);
-
-                    // Color code based on status
                     Color statusColor = GetStatusColor(room.StatusId);
 
-                    // Add row
                     int rowIndex = dgvAvailableRooms.Rows.Add(
-                        false, // Checkbox
+                        false,
                         room.RoomId,
                         room.RoomNumber ?? "",
                         room.RoomTypeName ?? "Unknown",
@@ -792,7 +556,6 @@ namespace Hotel_ManagementIT13.Forms
                         room.BaseRate.ToString("C")
                     );
 
-                    // Set status cell color
                     if (rowIndex >= 0)
                     {
                         dgvAvailableRooms.Rows[rowIndex].Cells["Status"].Style.ForeColor = statusColor;
@@ -876,11 +639,10 @@ namespace Hotel_ManagementIT13.Forms
                     }
                 }
 
-                // Apply loyalty discount if applicable
                 var guestHistory = _guestManager.GetGuestHistory(_selectedGuest.GuestId);
                 if (guestHistory != null && guestHistory.TotalReservations > 0)
                 {
-                    totalAmount = totalAmount * 0.95m; // 5% discount for returning guests
+                    totalAmount = totalAmount * 0.95m;
                 }
 
                 lblTotalAmount.Text = totalAmount.ToString("C");
@@ -899,17 +661,15 @@ namespace Hotel_ManagementIT13.Forms
 
             try
             {
-                // Get special requests
                 string specialRequests = GetSpecialRequests();
 
-                // Create reservation object
                 var reservation = new Reservation
                 {
                     GuestId = _selectedGuest.GuestId,
-                    UserId = _currentUserId, // Current logged in user
-                    CompanyId = null, // You can add company selection if needed
-                    StatusId = 1, // Confirmed (adjust based on your status IDs)
-                    ReservationTypeId = 1, // Standard reservation (adjust based on your types)
+                    UserId = _currentUserId,
+                    CompanyId = null,
+                    StatusId = 1, // Confirmed status
+                    ReservationTypeId = 1, // Standard reservation
                     BookingReference = _reservationRepo.GenerateBookingReference(),
                     CheckInDate = dtpCheckIn.Value,
                     CheckOutDate = dtpCheckOut.Value,
@@ -920,7 +680,6 @@ namespace Hotel_ManagementIT13.Forms
                     CreatedAt = DateTime.Now
                 };
 
-                // Add selected rooms
                 foreach (int roomId in _selectedRoomIds)
                 {
                     var room = _availableRooms.FirstOrDefault(r => r.RoomId == roomId);
@@ -941,7 +700,6 @@ namespace Hotel_ManagementIT13.Forms
 
                 if (reservationId > 0)
                 {
-                    // Show success message
                     string roomNumbers = string.Join(", ", reservation.Rooms.Select(r => r.RoomNumber));
                     string confirmationMessage = $"RESERVATION CONFIRMED!\n\n" +
                                                $"Booking Reference: {reservation.BookingReference}\n" +
@@ -956,14 +714,17 @@ namespace Hotel_ManagementIT13.Forms
                     MessageBox.Show(confirmationMessage, "Booking Confirmed",
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                    // Switch to reservation history tab
+                    // IMPORTANT: Reset form FIRST before switching tabs
+                    ResetForm();
+
+                    // Force immediate refresh of the database connection
+                    RefreshDatabaseConnection();
+
+                    // Now switch to history tab and reload
                     tabReservation.SelectedTab = tabPage2;
 
-                    // Refresh reservation history
-                    LoadReservationHistory();
-
-                    // Reset form for next reservation
-                    ResetForm();
+                    // Force a complete refresh of the history tab
+                    ForceRefreshReservationHistory();
                 }
                 else
                 {
@@ -974,6 +735,55 @@ namespace Hotel_ManagementIT13.Forms
             catch (Exception ex)
             {
                 MessageBox.Show($"Error creating reservation: {ex.Message}", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void RefreshDatabaseConnection()
+        {
+            try
+            {
+                // Force a fresh database connection
+                using (var conn = DatabaseHelper.GetConnection())
+                {
+                    conn.Open();
+                    // Just test the connection
+                    using (var cmd = new MySqlCommand("SELECT 1", conn))
+                    {
+                        cmd.ExecuteScalar();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Database refresh error: {ex.Message}");
+            }
+        }
+
+        private void ForceRefreshReservationHistory()
+        {
+            try
+            {
+                // Clear the history tab flag to force reinitialization
+                _historyTabInitialized = false;
+
+                // Clear existing controls in tabPage2
+                tabPage2.Controls.Clear();
+
+                // Add a small delay to ensure UI updates
+                Application.DoEvents();
+                System.Threading.Thread.Sleep(200);
+
+                // Now load the reservation history
+                LoadReservationHistory();
+
+                // Force UI refresh
+                tabPage2.Refresh();
+                Application.DoEvents();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error refreshing history: {ex.Message}", "Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -1008,7 +818,6 @@ namespace Hotel_ManagementIT13.Forms
                 return false;
             }
 
-            // Additional validation: Check if selected rooms are still available
             foreach (int roomId in _selectedRoomIds)
             {
                 var room = _availableRooms.FirstOrDefault(r => r.RoomId == roomId);
@@ -1047,17 +856,11 @@ namespace Hotel_ManagementIT13.Forms
         {
             try
             {
-                // Clear search but keep guests displayed
                 txtGuestSearch.Clear();
-
-                // Keep guests loaded but clear selection
                 _selectedGuest = null;
                 _selectedRoomIds.Clear();
-
-                // Clear room selection but keep rooms loaded
                 dgvAvailableRooms.Rows.Clear();
 
-                // Reset UI state
                 lblSelectedGuest.Text = "No guest selected";
                 lblSelectedGuest.ForeColor = Color.Red;
                 lblTotalAmount.Text = "$0.00";
@@ -1076,18 +879,12 @@ namespace Hotel_ManagementIT13.Forms
 
                 rtbNotes.Clear();
                 EnableBookingControls(false);
-
-                // Reload available rooms from database
                 LoadAvailableRoomsFromDatabase();
 
-                // Clear guest selection highlight
                 foreach (DataGridViewRow row in dgvGuestResults.Rows)
                 {
                     row.DefaultCellStyle.BackColor = Color.White;
                 }
-
-                // Switch back to new reservation tab
-                tabReservation.SelectedTab = tabPage1;
             }
             catch (Exception ex)
             {
@@ -1132,7 +929,7 @@ namespace Hotel_ManagementIT13.Forms
 
         private void dgvAvailableRooms_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.ColumnIndex == 0 && e.RowIndex >= 0) // Checkbox column
+            if (e.ColumnIndex == 0 && e.RowIndex >= 0)
             {
                 try
                 {
@@ -1175,7 +972,6 @@ namespace Hotel_ManagementIT13.Forms
                 frmGuestManagement guestForm = new frmGuestManagement();
                 if (guestForm.ShowDialog() == DialogResult.OK)
                 {
-                    // Refresh the guest list after adding new guest
                     LoadAllGuests();
                     MessageBox.Show("Guest added successfully! The guest list has been refreshed.",
                         "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -1252,11 +1048,358 @@ namespace Hotel_ManagementIT13.Forms
 
         private void tabReservation_SelectedIndexChanged(object sender, EventArgs e)
         {
-            // When switching to Reservation History tab, refresh the data
             if (tabReservation.SelectedTab == tabPage2)
             {
                 LoadReservationHistory();
             }
+        }
+
+        private void SetupReservationHistoryTab()
+        {
+            // Only create controls once
+            if (_historyTabInitialized && tabPage2.Controls.Count > 0)
+            {
+                return;
+            }
+
+            tabPage2.Controls.Clear();
+
+            DataGridView dgvReservationHistory = new DataGridView();
+            dgvReservationHistory.Dock = DockStyle.Fill;
+            dgvReservationHistory.Name = "dgvReservationHistory";
+            dgvReservationHistory.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgvReservationHistory.ReadOnly = true;
+            dgvReservationHistory.AllowUserToAddRows = false;
+            dgvReservationHistory.AllowUserToDeleteRows = false;
+            dgvReservationHistory.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvReservationHistory.RowHeadersVisible = false;
+
+            dgvReservationHistory.Columns.Add("BookingReference", "Booking #");
+            dgvReservationHistory.Columns.Add("GuestName", "Guest Name");
+            dgvReservationHistory.Columns.Add("CheckInDate", "Check-in");
+            dgvReservationHistory.Columns.Add("CheckOutDate", "Check-out");
+            dgvReservationHistory.Columns.Add("Rooms", "Rooms");
+            dgvReservationHistory.Columns.Add("TotalAmount", "Total");
+            dgvReservationHistory.Columns.Add("StatusName", "Status");
+            dgvReservationHistory.Columns.Add("CreatedAt", "Booking Date");
+
+            dgvReservationHistory.Columns["CheckInDate"].DefaultCellStyle.Format = "MM/dd/yyyy";
+            dgvReservationHistory.Columns["CheckOutDate"].DefaultCellStyle.Format = "MM/dd/yyyy";
+            dgvReservationHistory.Columns["CreatedAt"].DefaultCellStyle.Format = "MM/dd/yyyy HH:mm";
+            dgvReservationHistory.Columns["TotalAmount"].DefaultCellStyle.Format = "C";
+            dgvReservationHistory.Columns["TotalAmount"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+
+            Button btnRefreshHistory = new Button();
+            btnRefreshHistory.Text = "Refresh";
+            btnRefreshHistory.Location = new Point(10, 10);
+            btnRefreshHistory.Size = new Size(100, 30);
+            btnRefreshHistory.Click += BtnRefreshHistory_Click;
+
+            Label lblFromDate = new Label();
+            lblFromDate.Text = "From:";
+            lblFromDate.Location = new Point(120, 15);
+            lblFromDate.Size = new Size(40, 20);
+
+            DateTimePicker dtpFromDate = new DateTimePicker();
+            dtpFromDate.Name = "dtpFromDate";
+            dtpFromDate.Value = DateTime.Today.AddYears(-5);
+            dtpFromDate.Location = new Point(165, 10);
+            dtpFromDate.Size = new Size(120, 20);
+
+            Label lblToDate = new Label();
+            lblToDate.Text = "To:";
+            lblToDate.Location = new Point(295, 15);
+            lblToDate.Size = new Size(30, 20);
+
+            DateTimePicker dtpToDate = new DateTimePicker();
+            dtpToDate.Name = "dtpToDate";
+            dtpToDate.Value = DateTime.Today.AddYears(5);
+            dtpToDate.Location = new Point(330, 10);
+            dtpToDate.Size = new Size(120, 20);
+
+            Button btnFilterHistory = new Button();
+            btnFilterHistory.Text = "Filter";
+            btnFilterHistory.Location = new Point(460, 10);
+            btnFilterHistory.Size = new Size(80, 30);
+            btnFilterHistory.Click += BtnFilterHistory_Click;
+
+            Panel filterPanel = new Panel();
+            filterPanel.Dock = DockStyle.Top;
+            filterPanel.Height = 50;
+            filterPanel.BackColor = SystemColors.Control;
+
+            filterPanel.Controls.Add(btnRefreshHistory);
+            filterPanel.Controls.Add(lblFromDate);
+            filterPanel.Controls.Add(dtpFromDate);
+            filterPanel.Controls.Add(lblToDate);
+            filterPanel.Controls.Add(dtpToDate);
+            filterPanel.Controls.Add(btnFilterHistory);
+
+            tabPage2.Controls.Add(filterPanel);
+            tabPage2.Controls.Add(dgvReservationHistory);
+
+            _historyTabInitialized = true;
+        }
+
+        private void LoadReservationHistory()
+        {
+            try
+            {
+                // Ensure tab is initialized
+                if (!_historyTabInitialized)
+                {
+                    SetupReservationHistoryTab();
+                }
+
+                // Find controls
+                DataGridView dgvReservationHistory = null;
+                DateTimePicker dtpFromDate = null;
+                DateTimePicker dtpToDate = null;
+
+                foreach (Control control in tabPage2.Controls)
+                {
+                    if (control is DataGridView dgv)
+                    {
+                        dgvReservationHistory = dgv;
+                    }
+                    else if (control is Panel panel)
+                    {
+                        foreach (Control panelControl in panel.Controls)
+                        {
+                            if (panelControl is DateTimePicker dtp)
+                            {
+                                if (panelControl.Name == "dtpFromDate")
+                                    dtpFromDate = dtp;
+                                else if (panelControl.Name == "dtpToDate")
+                                    dtpToDate = dtp;
+                            }
+                        }
+                    }
+                }
+
+                if (dgvReservationHistory == null)
+                {
+                    SetupReservationHistoryTab();
+                    LoadReservationHistory();
+                    return;
+                }
+
+                // Get ALL reservations
+                var reservations = GetAllReservationsDirectly();
+
+                // Clear and reload the grid
+                dgvReservationHistory.Rows.Clear();
+
+                if (reservations != null && reservations.Count > 0)
+                {
+                    // Sort by creation date descending (newest first)
+                    var sortedReservations = reservations.OrderByDescending(r => r.CreatedAt).ToList();
+
+                    foreach (var reservation in sortedReservations)
+                    {
+                        string roomNumbers = "No rooms";
+                        if (reservation.Rooms != null && reservation.Rooms.Count > 0)
+                        {
+                            roomNumbers = string.Join(", ", reservation.Rooms.Select(r => r.RoomNumber));
+                        }
+
+                        dgvReservationHistory.Rows.Add(
+                            reservation.BookingReference,
+                            reservation.GuestName,
+                            reservation.CheckInDate,
+                            reservation.CheckOutDate,
+                            roomNumbers,
+                            reservation.TotalAmount,
+                            reservation.StatusName,
+                            reservation.CreatedAt
+                        );
+                    }
+
+                    // Add row coloring
+                    foreach (DataGridViewRow row in dgvReservationHistory.Rows)
+                    {
+                        string status = row.Cells["StatusName"].Value?.ToString();
+                        if (!string.IsNullOrEmpty(status))
+                        {
+                            row.DefaultCellStyle.BackColor = GetStatusColorForHistory(status);
+                        }
+                    }
+
+                    dgvReservationHistory.ClearSelection();
+
+                    // Show success message with count
+                    MessageBox.Show($"Successfully loaded {reservations.Count} reservation(s)", "History Loaded",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    MessageBox.Show("No reservations found in the database.", "Information",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading reservation history: {ex.Message}", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private List<Reservation> GetAllReservationsDirectly()
+        {
+            var reservations = new List<Reservation>();
+
+            try
+            {
+                using (var conn = DatabaseHelper.GetConnection())
+                {
+                    conn.Open();
+                    // Get ALL reservations - NO DATE FILTERING
+                    string query = @"
+                        SELECT 
+                            r.*, 
+                            COALESCE(g.first_name, 'Unknown') as first_name, 
+                            COALESCE(g.last_name, 'Guest') as last_name,
+                            CASE 
+                                WHEN r.status_id = 1 THEN 'Confirmed'
+                                WHEN r.status_id = 2 THEN 'Pending Payment'
+                                WHEN r.status_id = 3 THEN 'Checked-in'
+                                WHEN r.status_id = 4 THEN 'Checked-out'
+                                WHEN r.status_id = 5 THEN 'Cancelled'
+                                ELSE 'Confirmed'
+                            END as status_name,
+                            'Standard' as reservation_type,
+                            NULL as company_name,
+                            'System' as user_name
+                        FROM reservations r
+                        LEFT JOIN guests g ON r.guest_id = g.guest_id
+                        ORDER BY r.created_at DESC";
+
+                    using (var cmd = new MySqlCommand(query, conn))
+                    {
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                try
+                                {
+                                    var reservation = new Reservation
+                                    {
+                                        ReservationId = Convert.ToInt32(reader["reservation_id"]),
+                                        GuestId = Convert.ToInt32(reader["guest_id"]),
+                                        UserId = Convert.ToInt32(reader["user_id"]),
+                                        CompanyId = reader["company_id"] != DBNull.Value ? Convert.ToInt32(reader["company_id"]) : (int?)null,
+                                        StatusId = Convert.ToInt32(reader["status_id"]),
+                                        ReservationTypeId = Convert.ToInt32(reader["reservation_type_id"]),
+                                        BookingReference = reader["booking_reference"].ToString(),
+                                        CheckInDate = Convert.ToDateTime(reader["check_in_date"]),
+                                        CheckOutDate = Convert.ToDateTime(reader["check_out_date"]),
+                                        Adults = Convert.ToInt32(reader["adults"]),
+                                        Children = Convert.ToInt32(reader["children"]),
+                                        SpecialRequests = reader["special_requests"]?.ToString() ?? "",
+                                        TotalAmount = Convert.ToDecimal(reader["total_amount"]),
+                                        CreatedAt = Convert.ToDateTime(reader["created_at"]),
+                                        GuestName = $"{reader["first_name"]} {reader["last_name"]}",
+                                        StatusName = reader["status_name"].ToString(),
+                                        ReservationTypeName = reader["reservation_type"].ToString(),
+                                        CompanyName = reader["company_name"]?.ToString(),
+                                        UserName = reader["user_name"].ToString()
+                                    };
+
+                                    // Load rooms for this reservation
+                                    reservation.Rooms = GetReservationRoomsDirectly(reservation.ReservationId);
+                                    reservations.Add(reservation);
+                                }
+                                catch (Exception rowEx)
+                                {
+                                    Console.WriteLine($"Error loading reservation: {rowEx.Message}");
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading reservations: {ex.Message}", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            return reservations;
+        }
+
+        private List<ReservationRoom> GetReservationRoomsDirectly(int reservationId)
+        {
+            var rooms = new List<ReservationRoom>();
+
+            try
+            {
+                using (var conn = DatabaseHelper.GetConnection())
+                {
+                    conn.Open();
+                    string query = @"
+                        SELECT rr.*, 
+                               COALESCE(r.room_number, 'Unknown') as room_number, 
+                               COALESCE(rt.type_name, 'Standard') as room_type_name
+                        FROM reservation_rooms rr
+                        LEFT JOIN rooms r ON rr.room_id = r.room_id
+                        LEFT JOIN room_types rt ON r.room_type_id = rt.room_type_id
+                        WHERE rr.reservation_id = @reservationId";
+
+                    using (var cmd = new MySqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@reservationId", reservationId);
+
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                rooms.Add(new ReservationRoom
+                                {
+                                    ResRoomId = Convert.ToInt32(reader["res_room_id"]),
+                                    ReservationId = Convert.ToInt32(reader["reservation_id"]),
+                                    RoomId = Convert.ToInt32(reader["room_id"]),
+                                    RoomNumber = reader["room_number"]?.ToString() ?? "Unknown",
+                                    RoomTypeName = reader["room_type_name"]?.ToString() ?? "Standard"
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Silent fail
+            }
+
+            return rooms;
+        }
+
+        private Color GetStatusColorForHistory(string status)
+        {
+            switch (status.ToLower())
+            {
+                case "confirmed":
+                case "checked-in":
+                    return Color.LightGreen;
+                case "pending payment":
+                    return Color.LightYellow;
+                case "cancelled":
+                    return Color.LightGray;
+                case "no-show":
+                    return Color.LightPink;
+                default:
+                    return Color.White;
+            }
+        }
+
+        private void BtnRefreshHistory_Click(object sender, EventArgs e)
+        {
+            LoadReservationHistory();
+        }
+
+        private void BtnFilterHistory_Click(object sender, EventArgs e)
+        {
+            LoadReservationHistory();
         }
     }
 }

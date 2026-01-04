@@ -1,6 +1,7 @@
 ﻿using Hotel_ManagementIT13.Data;
 using Hotel_ManagementIT13.Data.Managers;
 using Hotel_ManagementIT13.Data.Models;
+using Hotel_ManagementIT13.Data.Repositories;
 using Hotel_ManagementIT13.Utilities;
 using MySql.Data.MySqlClient;
 using System;
@@ -14,10 +15,12 @@ namespace Hotel_ManagementIT13.Forms
     public partial class frmRoomManagement : Form
     {
         private RoomManager _roomManager;
+        private AmenityRepository _amenityRepo;
         private List<Room> _allRooms;
         private List<string> _roomTypes;
         private List<string> _roomStatuses;
         private List<string> _roomViews;
+        private List<Amenity> _allAmenities;
         private Room _selectedRoom;
         private bool _isAddingNew;
 
@@ -55,10 +58,12 @@ namespace Hotel_ManagementIT13.Forms
         {
             InitializeComponent();
             _roomManager = new RoomManager();
+            _amenityRepo = new AmenityRepository();
             _allRooms = new List<Room>();
             _roomTypes = new List<string>();
             _roomStatuses = new List<string>();
             _roomViews = new List<string>();
+            _allAmenities = new List<Amenity>();
         }
 
         private void frmRoomManagement_Load(object sender, EventArgs e)
@@ -146,20 +151,48 @@ namespace Hotel_ManagementIT13.Forms
                     cmbView.Items.Add(view);
                 }
 
-                // Load amenities (keeping hardcoded for now, but can be loaded from database too)
-                clbAmenities.Items.Clear();
-                clbAmenities.Items.AddRange(new string[]
-                {
-                    "Wi-Fi", "TV", "Mini Bar", "Air Conditioning",
-                    "Balcony", "Jacuzzi", "Kitchenette", "Safe",
-                    "Hairdryer", "Iron", "Coffee Maker", "Refrigerator"
-                });
+                // Load amenities from database
+                LoadAmenitiesFromDatabase();
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Error loading form data: {ex.Message}", "Error",
                               MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void LoadAmenitiesFromDatabase()
+        {
+            try
+            {
+                _allAmenities = _amenityRepo.GetAllAmenities();
+                clbAmenities.Items.Clear();
+
+                // Store Amenity objects in the Tag property for easy retrieval
+                foreach (var amenity in _allAmenities)
+                {
+                    clbAmenities.Items.Add(amenity.AmenityName, false);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading amenities: {ex.Message}", "Error",
+                              MessageBoxButtons.OK, MessageBoxIcon.Error);
+                // Fallback to hardcoded amenities if database fails
+                LoadDefaultAmenities();
+            }
+        }
+
+        private void LoadDefaultAmenities()
+        {
+            // Fallback method if database fails
+            clbAmenities.Items.Clear();
+            clbAmenities.Items.AddRange(new string[]
+            {
+                "Wi-Fi", "TV", "Mini Bar", "Air Conditioning",
+                "Balcony", "Jacuzzi", "Kitchenette", "Safe",
+                "Hairdryer", "Iron", "Coffee Maker", "Refrigerator"
+            });
         }
 
         private List<string> GetRoomTypesFromDatabase()
@@ -453,15 +486,38 @@ namespace Hotel_ManagementIT13.Forms
             nudFloor.Value = room.Floor;
 
             // Set amenities
-            for (int i = 0; i < clbAmenities.Items.Count; i++)
-            {
-                string amenity = clbAmenities.Items[i].ToString();
-                clbAmenities.SetItemChecked(i, room.Amenities?.Any(a => a.AmenityName == amenity) ?? false);
-            }
+            SetAmenitiesForRoom(room);
 
             _isAddingNew = false;
             btnSaveRoom.Text = "Update Room";
             pnlRoomDetails.Enabled = true;
+        }
+
+        private void SetAmenitiesForRoom(Room room)
+        {
+            // First, uncheck all items
+            for (int i = 0; i < clbAmenities.Items.Count; i++)
+            {
+                clbAmenities.SetItemChecked(i, false);
+            }
+
+            // Then check the amenities that belong to this room
+            if (room.Amenities != null && room.Amenities.Count > 0)
+            {
+                foreach (var roomAmenity in room.Amenities)
+                {
+                    // Find the index of this amenity in the checklist
+                    for (int i = 0; i < clbAmenities.Items.Count; i++)
+                    {
+                        string amenityName = clbAmenities.Items[i].ToString();
+                        if (amenityName.Equals(roomAmenity.AmenityName, StringComparison.OrdinalIgnoreCase))
+                        {
+                            clbAmenities.SetItemChecked(i, true);
+                            break;
+                        }
+                    }
+                }
+            }
         }
 
         private void btnAddRoom_Click(object sender, EventArgs e)
@@ -491,17 +547,8 @@ namespace Hotel_ManagementIT13.Forms
                 room.StatusName = cmbStatus.SelectedItem?.ToString();
                 room.ViewName = cmbView.SelectedItem?.ToString();
 
-                // Get selected amenities
-                room.Amenities = new List<Amenity>();
-                foreach (var item in clbAmenities.CheckedItems)
-                {
-                    room.Amenities.Add(new Amenity
-                    {
-                        AmenityName = item.ToString(),
-                        Category = "General",
-                        IsStandard = true
-                    });
-                }
+                // Get selected amenities from database
+                room.Amenities = GetSelectedAmenities();
 
                 bool success;
 
@@ -565,10 +612,65 @@ namespace Hotel_ManagementIT13.Forms
             }
         }
 
+        private List<Amenity> GetSelectedAmenities()
+        {
+            var selectedAmenities = new List<Amenity>();
+
+            // Get checked items and find corresponding Amenity objects
+            foreach (var checkedItem in clbAmenities.CheckedItems)
+            {
+                string amenityName = checkedItem.ToString();
+                // Find the amenity in our list
+                var amenity = _allAmenities.FirstOrDefault(a =>
+                    a.AmenityName.Equals(amenityName, StringComparison.OrdinalIgnoreCase));
+
+                if (amenity != null)
+                {
+                    selectedAmenities.Add(amenity);
+                }
+                else
+                {
+                    // If not found in database, create a new one (for fallback scenario)
+                    selectedAmenities.Add(new Amenity
+                    {
+                        AmenityName = amenityName,
+                        Category = "General",
+                        IsStandard = true
+                    });
+                }
+            }
+
+            return selectedAmenities;
+        }
+
         private Room CreateRoomByType(string roomTypeName)
         {
             // Create a concrete instance
             var room = new ConcreteRoom();
+
+            // Set base rate and max occupancy based on room type
+            // You might want to load these from database as well
+            if (roomTypeName.Contains("Standard"))
+            {
+                room.BaseRate = 100.00m;
+                room.MaxOccupancy = 2;
+            }
+            else if (roomTypeName.Contains("Deluxe"))
+            {
+                room.BaseRate = 150.00m;
+                room.MaxOccupancy = 3;
+            }
+            else if (roomTypeName.Contains("Suite"))
+            {
+                room.BaseRate = 250.00m;
+                room.MaxOccupancy = 4;
+            }
+            else
+            {
+                room.BaseRate = 100.00m;
+                room.MaxOccupancy = 2;
+            }
+
             return room;
         }
 
@@ -776,6 +878,16 @@ namespace Hotel_ManagementIT13.Forms
             {
                 Helper.ShowError($"Error loading statistics: {ex.Message}");
             }
+        }
+
+        private void btnManageAmenities_Click(object sender, EventArgs e)
+        {
+            // Optional: Add a button to open a form for managing amenities
+            MessageBox.Show("Amenity management feature can be added here.\n\n" +
+                          "You could create a separate form to add/edit/delete amenities in the database.",
+                          "Manage Amenities",
+                          MessageBoxButtons.OK,
+                          MessageBoxIcon.Information);
         }
     }
 }

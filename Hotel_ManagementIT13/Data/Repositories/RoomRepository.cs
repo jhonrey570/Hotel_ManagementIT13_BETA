@@ -8,6 +8,13 @@ namespace Hotel_ManagementIT13.Data.Repositories
 {
     public class RoomRepository
     {
+        private readonly AmenityRepository _amenityRepo;
+
+        public RoomRepository()
+        {
+            _amenityRepo = new AmenityRepository();
+        }
+
         // Nested concrete class since Room is abstract
         private class ConcreteRoom : Room
         {
@@ -61,6 +68,8 @@ namespace Hotel_ManagementIT13.Data.Repositories
                         while (reader.Read())
                         {
                             var room = CreateRoomFromReader(reader);
+                            // Load amenities for this room
+                            room.Amenities = _amenityRepo.GetAmenitiesForRoom(room.RoomId);
                             rooms.Add(room);
                         }
                     }
@@ -92,7 +101,10 @@ namespace Hotel_ManagementIT13.Data.Repositories
                     {
                         if (reader.Read())
                         {
-                            return CreateRoomFromReader(reader);
+                            var room = CreateRoomFromReader(reader);
+                            // Load amenities for this room
+                            room.Amenities = _amenityRepo.GetAmenitiesForRoom(roomId);
+                            return room;
                         }
                     }
                 }
@@ -123,7 +135,10 @@ namespace Hotel_ManagementIT13.Data.Repositories
                     {
                         if (reader.Read())
                         {
-                            return CreateRoomFromReader(reader);
+                            var room = CreateRoomFromReader(reader);
+                            // Load amenities for this room
+                            room.Amenities = _amenityRepo.GetAmenitiesForRoom(room.RoomId);
+                            return room;
                         }
                     }
                 }
@@ -162,6 +177,8 @@ namespace Hotel_ManagementIT13.Data.Repositories
                         while (reader.Read())
                         {
                             var room = CreateRoomFromReader(reader);
+                            // Load amenities for this room
+                            room.Amenities = _amenityRepo.GetAmenitiesForRoom(room.RoomId);
                             rooms.Add(room);
                         }
                     }
@@ -217,6 +234,8 @@ namespace Hotel_ManagementIT13.Data.Repositories
                         while (reader.Read())
                         {
                             var room = CreateRoomFromReader(reader);
+                            // Load amenities for this room
+                            room.Amenities = _amenityRepo.GetAmenitiesForRoom(room.RoomId);
                             rooms.Add(room);
                         }
                     }
@@ -232,48 +251,68 @@ namespace Hotel_ManagementIT13.Data.Repositories
             {
                 conn.Open();
 
-                // Get IDs based on names
-                int roomTypeId = GetRoomTypeIdByName(room.RoomTypeName, conn);
-                int statusId = GetStatusIdByName(room.StatusName, conn);
-                int viewId = GetViewIdByName(room.ViewName, conn);
-
-                if (roomTypeId == 0)
+                using (var transaction = conn.BeginTransaction())
                 {
-                    throw new Exception($"Room type '{room.RoomTypeName}' not found in database.");
-                }
-
-                if (statusId == 0)
-                {
-                    throw new Exception($"Status '{room.StatusName}' not found in database.");
-                }
-
-                if (viewId == 0)
-                {
-                    throw new Exception($"View type '{room.ViewName}' not found in database.");
-                }
-
-                string query = @"
-                    INSERT INTO rooms (room_type_id, status_id, view_id, room_number, floor)
-                    VALUES (@typeId, @statusId, @viewId, @roomNumber, @floor);
-                    SELECT LAST_INSERT_ID();";
-
-                using (var cmd = new MySqlCommand(query, conn))
-                {
-                    cmd.Parameters.AddWithValue("@typeId", roomTypeId);
-                    cmd.Parameters.AddWithValue("@statusId", statusId);
-                    cmd.Parameters.AddWithValue("@viewId", viewId);
-                    cmd.Parameters.AddWithValue("@roomNumber", room.RoomNumber);
-                    cmd.Parameters.AddWithValue("@floor", room.Floor);
-
-                    int newRoomId = Convert.ToInt32(cmd.ExecuteScalar());
-
-                    // Save beds if any
-                    if (room.Beds != null && room.Beds.Count > 0)
+                    try
                     {
-                        SaveRoomBeds(newRoomId, room.Beds, conn);
-                    }
+                        // Get IDs based on names
+                        int roomTypeId = GetRoomTypeIdByName(room.RoomTypeName, conn);
+                        int statusId = GetStatusIdByName(room.StatusName, conn);
+                        int viewId = GetViewIdByName(room.ViewName, conn);
 
-                    return newRoomId;
+                        if (roomTypeId == 0)
+                        {
+                            throw new Exception($"Room type '{room.RoomTypeName}' not found in database.");
+                        }
+
+                        if (statusId == 0)
+                        {
+                            throw new Exception($"Status '{room.StatusName}' not found in database.");
+                        }
+
+                        if (viewId == 0)
+                        {
+                            throw new Exception($"View type '{room.ViewName}' not found in database.");
+                        }
+
+                        string query = @"
+                            INSERT INTO rooms (room_type_id, status_id, view_id, room_number, floor)
+                            VALUES (@typeId, @statusId, @viewId, @roomNumber, @floor);
+                            SELECT LAST_INSERT_ID();";
+
+                        int newRoomId;
+
+                        using (var cmd = new MySqlCommand(query, conn, transaction))
+                        {
+                            cmd.Parameters.AddWithValue("@typeId", roomTypeId);
+                            cmd.Parameters.AddWithValue("@statusId", statusId);
+                            cmd.Parameters.AddWithValue("@viewId", viewId);
+                            cmd.Parameters.AddWithValue("@roomNumber", room.RoomNumber);
+                            cmd.Parameters.AddWithValue("@floor", room.Floor);
+
+                            newRoomId = Convert.ToInt32(cmd.ExecuteScalar());
+                        }
+
+                        // Save beds if any
+                        if (room.Beds != null && room.Beds.Count > 0)
+                        {
+                            SaveRoomBeds(newRoomId, room.Beds, conn, transaction);
+                        }
+
+                        // Save amenities if any - PASS THE TRANSACTION
+                        if (room.Amenities != null && room.Amenities.Count > 0)
+                        {
+                            _amenityRepo.SaveRoomAmenities(newRoomId, room.Amenities, conn, transaction);
+                        }
+
+                        transaction.Commit();
+                        return newRoomId;
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        throw new Exception($"Error adding room: {ex.Message}", ex);
+                    }
                 }
             }
         }
@@ -284,53 +323,77 @@ namespace Hotel_ManagementIT13.Data.Repositories
             {
                 conn.Open();
 
-                // Get IDs based on names
-                int roomTypeId = GetRoomTypeIdByName(room.RoomTypeName, conn);
-                int statusId = GetStatusIdByName(room.StatusName, conn);
-                int viewId = GetViewIdByName(room.ViewName, conn);
-
-                if (roomTypeId == 0)
+                using (var transaction = conn.BeginTransaction())
                 {
-                    throw new Exception($"Room type '{room.RoomTypeName}' not found in database.");
-                }
-
-                if (statusId == 0)
-                {
-                    throw new Exception($"Status '{room.StatusName}' not found in database.");
-                }
-
-                if (viewId == 0)
-                {
-                    throw new Exception($"View type '{room.ViewName}' not found in database.");
-                }
-
-                string query = @"
-                    UPDATE rooms SET
-                    room_type_id = @typeId,
-                    status_id = @statusId,
-                    view_id = @viewId,
-                    room_number = @roomNumber,
-                    floor = @floor
-                    WHERE room_id = @roomId";
-
-                using (var cmd = new MySqlCommand(query, conn))
-                {
-                    cmd.Parameters.AddWithValue("@roomId", room.RoomId);
-                    cmd.Parameters.AddWithValue("@typeId", roomTypeId);
-                    cmd.Parameters.AddWithValue("@statusId", statusId);
-                    cmd.Parameters.AddWithValue("@viewId", viewId);
-                    cmd.Parameters.AddWithValue("@roomNumber", room.RoomNumber);
-                    cmd.Parameters.AddWithValue("@floor", room.Floor);
-
-                    bool success = cmd.ExecuteNonQuery() > 0;
-
-                    // Update beds if any
-                    if (success && room.Beds != null)
+                    try
                     {
-                        UpdateRoomBeds(room.RoomId, room.Beds, conn);
-                    }
+                        // Get IDs based on names
+                        int roomTypeId = GetRoomTypeIdByName(room.RoomTypeName, conn);
+                        int statusId = GetStatusIdByName(room.StatusName, conn);
+                        int viewId = GetViewIdByName(room.ViewName, conn);
 
-                    return success;
+                        if (roomTypeId == 0)
+                        {
+                            throw new Exception($"Room type '{room.RoomTypeName}' not found in database.");
+                        }
+
+                        if (statusId == 0)
+                        {
+                            throw new Exception($"Status '{room.StatusName}' not found in database.");
+                        }
+
+                        if (viewId == 0)
+                        {
+                            throw new Exception($"View type '{room.ViewName}' not found in database.");
+                        }
+
+                        string query = @"
+                            UPDATE rooms SET
+                            room_type_id = @typeId,
+                            status_id = @statusId,
+                            view_id = @viewId,
+                            room_number = @roomNumber,
+                            floor = @floor
+                            WHERE room_id = @roomId";
+
+                        using (var cmd = new MySqlCommand(query, conn, transaction))
+                        {
+                            cmd.Parameters.AddWithValue("@roomId", room.RoomId);
+                            cmd.Parameters.AddWithValue("@typeId", roomTypeId);
+                            cmd.Parameters.AddWithValue("@statusId", statusId);
+                            cmd.Parameters.AddWithValue("@viewId", viewId);
+                            cmd.Parameters.AddWithValue("@roomNumber", room.RoomNumber);
+                            cmd.Parameters.AddWithValue("@floor", room.Floor);
+
+                            bool success = cmd.ExecuteNonQuery() > 0;
+
+                            if (!success)
+                            {
+                                transaction.Rollback();
+                                return false;
+                            }
+                        }
+
+                        // Update beds if any
+                        if (room.Beds != null)
+                        {
+                            UpdateRoomBeds(room.RoomId, room.Beds, conn, transaction);
+                        }
+
+                        // Update amenities if any - PASS THE TRANSACTION
+                        if (room.Amenities != null)
+                        {
+                            _amenityRepo.SaveRoomAmenities(room.RoomId, room.Amenities, conn, transaction);
+                        }
+
+                        transaction.Commit();
+                        return true;
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        throw new Exception($"Error updating room: {ex.Message}", ex);
+                    }
                 }
             }
         }
@@ -341,33 +404,63 @@ namespace Hotel_ManagementIT13.Data.Repositories
             {
                 conn.Open();
 
-                // First check if room has any reservations
-                string checkQuery = "SELECT COUNT(*) FROM reservation_rooms WHERE room_id = @roomId";
-                using (var checkCmd = new MySqlCommand(checkQuery, conn))
+                using (var transaction = conn.BeginTransaction())
                 {
-                    checkCmd.Parameters.AddWithValue("@roomId", roomId);
-                    int reservationCount = Convert.ToInt32(checkCmd.ExecuteScalar());
-
-                    if (reservationCount > 0)
+                    try
                     {
-                        throw new InvalidOperationException("Cannot delete room with existing reservations.");
+                        // First check if room has any reservations
+                        string checkQuery = "SELECT COUNT(*) FROM reservation_rooms WHERE room_id = @roomId";
+                        using (var checkCmd = new MySqlCommand(checkQuery, conn, transaction))
+                        {
+                            checkCmd.Parameters.AddWithValue("@roomId", roomId);
+                            int reservationCount = Convert.ToInt32(checkCmd.ExecuteScalar());
+
+                            if (reservationCount > 0)
+                            {
+                                throw new InvalidOperationException("Cannot delete room with existing reservations.");
+                            }
+                        }
+
+                        // Delete room amenities first
+                        string deleteAmenitiesQuery = "DELETE FROM room_amenities WHERE room_id = @roomId";
+                        using (var amenitiesCmd = new MySqlCommand(deleteAmenitiesQuery, conn, transaction))
+                        {
+                            amenitiesCmd.Parameters.AddWithValue("@roomId", roomId);
+                            amenitiesCmd.ExecuteNonQuery();
+                        }
+
+                        // Delete room beds first
+                        string deleteBedsQuery = "DELETE FROM room_beds WHERE room_id = @roomId";
+                        using (var bedsCmd = new MySqlCommand(deleteBedsQuery, conn, transaction))
+                        {
+                            bedsCmd.Parameters.AddWithValue("@roomId", roomId);
+                            bedsCmd.ExecuteNonQuery();
+                        }
+
+                        string query = "DELETE FROM rooms WHERE room_id = @roomId";
+
+                        using (var cmd = new MySqlCommand(query, conn, transaction))
+                        {
+                            cmd.Parameters.AddWithValue("@roomId", roomId);
+                            bool success = cmd.ExecuteNonQuery() > 0;
+
+                            if (success)
+                            {
+                                transaction.Commit();
+                            }
+                            else
+                            {
+                                transaction.Rollback();
+                            }
+
+                            return success;
+                        }
                     }
-                }
-
-                // Delete room beds first
-                string deleteBedsQuery = "DELETE FROM room_beds WHERE room_id = @roomId";
-                using (var bedsCmd = new MySqlCommand(deleteBedsQuery, conn))
-                {
-                    bedsCmd.Parameters.AddWithValue("@roomId", roomId);
-                    bedsCmd.ExecuteNonQuery();
-                }
-
-                string query = "DELETE FROM rooms WHERE room_id = @roomId";
-
-                using (var cmd = new MySqlCommand(query, conn))
-                {
-                    cmd.Parameters.AddWithValue("@roomId", roomId);
-                    return cmd.ExecuteNonQuery() > 0;
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        throw new Exception($"Error deleting room: {ex.Message}", ex);
+                    }
                 }
             }
         }
@@ -441,7 +534,7 @@ namespace Hotel_ManagementIT13.Data.Repositories
             return room;
         }
 
-        private void SaveRoomBeds(int roomId, List<RoomBed> beds, MySqlConnection conn)
+        private void SaveRoomBeds(int roomId, List<RoomBed> beds, MySqlConnection conn, MySqlTransaction transaction = null)
         {
             foreach (var bed in beds)
             {
@@ -449,7 +542,9 @@ namespace Hotel_ManagementIT13.Data.Repositories
                     INSERT INTO room_beds (room_id, bed_type_id, quantity)
                     VALUES (@roomId, @bedTypeId, @quantity)";
 
-                using (var cmd = new MySqlCommand(query, conn))
+                using (var cmd = transaction != null
+                    ? new MySqlCommand(query, conn, transaction)
+                    : new MySqlCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@roomId", roomId);
                     cmd.Parameters.AddWithValue("@bedTypeId", bed.BedTypeId);
@@ -459,18 +554,20 @@ namespace Hotel_ManagementIT13.Data.Repositories
             }
         }
 
-        private void UpdateRoomBeds(int roomId, List<RoomBed> beds, MySqlConnection conn)
+        private void UpdateRoomBeds(int roomId, List<RoomBed> beds, MySqlConnection conn, MySqlTransaction transaction = null)
         {
             // First delete existing beds
             string deleteQuery = "DELETE FROM room_beds WHERE room_id = @roomId";
-            using (var deleteCmd = new MySqlCommand(deleteQuery, conn))
+            using (var deleteCmd = transaction != null
+                ? new MySqlCommand(deleteQuery, conn, transaction)
+                : new MySqlCommand(deleteQuery, conn))
             {
                 deleteCmd.Parameters.AddWithValue("@roomId", roomId);
                 deleteCmd.ExecuteNonQuery();
             }
 
             // Add new beds
-            SaveRoomBeds(roomId, beds, conn);
+            SaveRoomBeds(roomId, beds, conn, transaction);
         }
     }
 }
