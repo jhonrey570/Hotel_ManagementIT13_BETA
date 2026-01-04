@@ -130,7 +130,7 @@
             this.chkIsActive.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.chkIsActive.Location = new System.Drawing.Point(1480, 450);
             this.chkIsActive.Name = "chkIsActive";
-            this.chkIsActive.Size = new System.Drawing.Size(120, 33);
+            this.chkIsActive.Size = new System.Drawing.Size(123, 33);
             this.chkIsActive.TabIndex = 8;
             this.chkIsActive.Text = "Is Active";
             this.chkIsActive.UseVisualStyleBackColor = true;
@@ -219,6 +219,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Hotel Management System - User Management";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.Load += new System.EventHandler(this.frmUserManagement_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgvUsers)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

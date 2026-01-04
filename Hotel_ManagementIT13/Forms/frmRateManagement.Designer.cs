@@ -104,7 +104,7 @@
             this.dtpStartDate.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.dtpStartDate.Location = new System.Drawing.Point(1480, 320);
             this.dtpStartDate.Name = "dtpStartDate";
-            this.dtpStartDate.Size = new System.Drawing.Size(400, 38);
+            this.dtpStartDate.Size = new System.Drawing.Size(400, 34);
             this.dtpStartDate.TabIndex = 5;
             // 
             // dtpEndDate
@@ -112,7 +112,7 @@
             this.dtpEndDate.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.dtpEndDate.Location = new System.Drawing.Point(1000, 380);
             this.dtpEndDate.Name = "dtpEndDate";
-            this.dtpEndDate.Size = new System.Drawing.Size(400, 38);
+            this.dtpEndDate.Size = new System.Drawing.Size(400, 34);
             this.dtpEndDate.TabIndex = 6;
             // 
             // btnAddRate
@@ -222,6 +222,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Hotel Management System - Rate Management";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.Load += new System.EventHandler(this.frmRateManagement_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgvRates)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvRatePlans)).EndInit();
             this.ResumeLayout(false);

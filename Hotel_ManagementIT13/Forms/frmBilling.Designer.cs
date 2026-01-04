@@ -158,7 +158,7 @@
             this.lblTotalAmount.ForeColor = System.Drawing.Color.Red;
             this.lblTotalAmount.Location = new System.Drawing.Point(1000, 40);
             this.lblTotalAmount.Name = "lblTotalAmount";
-            this.lblTotalAmount.Size = new System.Drawing.Size(227, 39);
+            this.lblTotalAmount.Size = new System.Drawing.Size(241, 39);
             this.lblTotalAmount.TabIndex = 10;
             this.lblTotalAmount.Text = "Total Amount:";
             // 
@@ -180,7 +180,7 @@
             this.lblBalance.ForeColor = System.Drawing.Color.Purple;
             this.lblBalance.Location = new System.Drawing.Point(1480, 40);
             this.lblBalance.Name = "lblBalance";
-            this.lblBalance.Size = new System.Drawing.Size(173, 42);
+            this.lblBalance.Size = new System.Drawing.Size(172, 42);
             this.lblBalance.TabIndex = 12;
             this.lblBalance.Text = "Balance:";
             // 
@@ -227,6 +227,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Hotel Management System - Billing & Payments";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.Load += new System.EventHandler(this.frmBilling_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgvBills)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvBillItems)).EndInit();
             this.ResumeLayout(false);

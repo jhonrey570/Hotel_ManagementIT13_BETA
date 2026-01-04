@@ -398,6 +398,9 @@
     <EmbeddedResource Include="Forms\frmRoomManagement.resx">
       <DependentUpon>frmRoomManagement.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmSearch.resx">
+      <DependentUpon>frmSearch.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmUserManagement.resx">
       <DependentUpon>frmUserManagement.cs</DependentUpon>
     </EmbeddedResource>

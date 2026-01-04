@@ -16,5 +16,10 @@ namespace Hotel_ManagementIT13.Forms
         {
             InitializeComponent();
         }
+
+        private void frmRateManagement_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

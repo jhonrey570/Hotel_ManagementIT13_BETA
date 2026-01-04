@@ -200,18 +200,22 @@ namespace Hotel_ManagementIT13.Data.Repositories
             {
                 conn.Open();
                 string query = @"
-                    SELECT r.*, g.first_name, g.last_name, 
+                    SELECT DISTINCT r.*, g.first_name, g.last_name, 
                            rs.status_name, rt.type_name as reservation_type,
-                           c.company_name, u.username as user_name
+                           c.company_name, u.username as user_name,
+                           cio.check_in_time, cio.check_out_time
                     FROM reservations r
                     JOIN guests g ON r.guest_id = g.guest_id
                     JOIN reservation_statuses rs ON r.status_id = rs.status_id
                     JOIN reservation_types rt ON r.reservation_type_id = rt.reservation_type_id
                     LEFT JOIN companies c ON r.company_id = c.company_id
                     JOIN users u ON r.user_id = u.user_id
-                    WHERE DATE(r.check_out_date) = CURDATE()
+                    LEFT JOIN check_in_out cio ON r.reservation_id = cio.reservation_id
+                    WHERE (DATE(r.check_out_date) = CURDATE() 
+                           OR cio.check_out_time IS NULL) -- Currently checked in
                     AND r.status_id = 3 -- Checked-in (reservation_statuses)
-                    ORDER BY r.check_out_date";
+                    AND (cio.check_out_time IS NULL OR cio.status_id = 1) -- Currently checked in
+                    ORDER BY r.check_out_date, cio.check_in_time DESC";
 
                 using (var cmd = new MySqlCommand(query, conn))
                 {
@@ -228,6 +232,110 @@ namespace Hotel_ManagementIT13.Data.Repositories
             }
 
             return reservations;
+        }
+
+        public List<Reservation> GetCurrentlyCheckedIn()
+        {
+            var reservations = new List<Reservation>();
+
+            using (var conn = DatabaseHelper.GetConnection())
+            {
+                conn.Open();
+                string query = @"
+                    SELECT DISTINCT r.*, g.first_name, g.last_name, 
+                           rs.status_name, rt.type_name as reservation_type,
+                           c.company_name, u.username as user_name,
+                           cio.check_in_time
+                    FROM reservations r
+                    JOIN guests g ON r.guest_id = g.guest_id
+                    JOIN reservation_statuses rs ON r.status_id = rs.status_id
+                    JOIN reservation_types rt ON r.reservation_type_id = rt.reservation_type_id
+                    LEFT JOIN companies c ON r.company_id = c.company_id
+                    JOIN users u ON r.user_id = u.user_id
+                    JOIN check_in_out cio ON r.reservation_id = cio.reservation_id
+                    WHERE r.status_id = 3 -- Checked-in (reservation_statuses)
+                    AND cio.check_out_time IS NULL -- Not checked out yet
+                    AND cio.status_id = 1 -- Checked-in status
+                    ORDER BY cio.check_in_time DESC";
+
+                using (var cmd = new MySqlCommand(query, conn))
+                {
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            var reservation = CreateReservationFromReader(reader);
+                            reservation.Rooms = GetReservationRooms(reservation.ReservationId);
+
+                            // Store check-in time in a custom field in the Tag property
+                            DateTime checkInTime = reader["check_in_time"] != DBNull.Value
+                                ? Convert.ToDateTime(reader["check_in_time"])
+                                : DateTime.MinValue;
+
+                            // We'll handle this differently in the form
+                            reservations.Add(reservation);
+                        }
+                    }
+                }
+            }
+
+            return reservations;
+        }
+
+        public DateTime? GetCheckInTime(int reservationId)
+        {
+            using (var conn = DatabaseHelper.GetConnection())
+            {
+                conn.Open();
+                string query = @"
+                    SELECT check_in_time 
+                    FROM check_in_out 
+                    WHERE reservation_id = @reservationId 
+                    AND check_out_time IS NULL
+                    ORDER BY check_in_time DESC 
+                    LIMIT 1";
+
+                using (var cmd = new MySqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@reservationId", reservationId);
+
+                    var result = cmd.ExecuteScalar();
+                    if (result != null && result != DBNull.Value)
+                    {
+                        return Convert.ToDateTime(result);
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        public DateTime? GetCheckOutTime(int reservationId)
+        {
+            using (var conn = DatabaseHelper.GetConnection())
+            {
+                conn.Open();
+                string query = @"
+                    SELECT check_out_time 
+                    FROM check_in_out 
+                    WHERE reservation_id = @reservationId 
+                    AND check_out_time IS NOT NULL
+                    ORDER BY check_out_time DESC 
+                    LIMIT 1";
+
+                using (var cmd = new MySqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@reservationId", reservationId);
+
+                    var result = cmd.ExecuteScalar();
+                    if (result != null && result != DBNull.Value)
+                    {
+                        return Convert.ToDateTime(result);
+                    }
+                }
+            }
+
+            return null;
         }
 
         public List<Reservation> GetReservationsByDateRange(DateTime startDate, DateTime endDate)

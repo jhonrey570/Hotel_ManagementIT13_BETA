@@ -23,20 +23,29 @@ namespace Hotel_ManagementIT13.Forms
             _reservationRepo = new ReservationRepository();
             _billingRepo = new BillingRepository();
 
+            // Initialize data grids FIRST
+            InitializeDataGrids();
+
+            // Then initialize the rest of the form
             InitializeForm();
         }
 
         private void InitializeForm()
         {
             dtpActualCheckOut.Value = DateTime.Now;
-            LoadTodaysDepartures();
             InitializePaymentMethods();
-            InitializeDataGrids();
+
+            // Wire up events
+            dgvTodayDepartures.CellClick += dgvTodayDepartures_CellClick;
+            dgvTodayDepartures.SelectionChanged += dgvTodayDepartures_SelectionChanged;
 
             // Disable buttons until guest is selected
             btnProcessCheckOut.Enabled = false;
             btnPrintInvoice.Enabled = false;
             btnAddCharge.Enabled = false;
+
+            // Load data LAST
+            LoadCurrentlyCheckedIn();
         }
 
         private void InitializePaymentMethods()
@@ -51,56 +60,125 @@ namespace Hotel_ManagementIT13.Forms
 
         private void InitializeDataGrids()
         {
-            // Today's departures grid
+            // Clear existing columns if any
             dgvTodayDepartures.Columns.Clear();
-            dgvTodayDepartures.Columns.Add("colBookingRef", "Booking #");
-            dgvTodayDepartures.Columns.Add("colGuestName", "Guest Name");
-            dgvTodayDepartures.Columns.Add("colRoom", "Room");
-            dgvTodayDepartures.Columns.Add("colAmount", "Total Amount");
-            dgvTodayDepartures.Columns.Add("colDepartureTime", "Departure");
+            dgvBillingItems.Columns.Clear();
 
-            dgvTodayDepartures.Columns["colBookingRef"].Width = 120;
-            dgvTodayDepartures.Columns["colGuestName"].Width = 200;
-            dgvTodayDepartures.Columns["colRoom"].Width = 100;
-            dgvTodayDepartures.Columns["colAmount"].Width = 120;
-            dgvTodayDepartures.Columns["colDepartureTime"].Width = 100;
+            // Today's departures grid - FIXED COLUMN NAMES
+            // Create columns with proper names
+            DataGridViewTextBoxColumn col1 = new DataGridViewTextBoxColumn();
+            col1.Name = "colBookingRef";
+            col1.HeaderText = "Booking #";
+            col1.Width = 120;
+            dgvTodayDepartures.Columns.Add(col1);
+
+            DataGridViewTextBoxColumn col2 = new DataGridViewTextBoxColumn();
+            col2.Name = "colGuestName";
+            col2.HeaderText = "Guest Name";
+            col2.Width = 200;
+            dgvTodayDepartures.Columns.Add(col2);
+
+            DataGridViewTextBoxColumn col3 = new DataGridViewTextBoxColumn();
+            col3.Name = "colRoom";
+            col3.HeaderText = "Room";
+            col3.Width = 100;
+            dgvTodayDepartures.Columns.Add(col3);
+
+            DataGridViewTextBoxColumn col4 = new DataGridViewTextBoxColumn();
+            col4.Name = "colAmount";
+            col4.HeaderText = "Total Amount";
+            col4.Width = 120;
+            dgvTodayDepartures.Columns.Add(col4);
+
+            DataGridViewTextBoxColumn col5 = new DataGridViewTextBoxColumn();
+            col5.Name = "colCheckInTime";
+            col5.HeaderText = "Check-in Time";
+            col5.Width = 120;
+            dgvTodayDepartures.Columns.Add(col5);
+
+            DataGridViewTextBoxColumn col6 = new DataGridViewTextBoxColumn();
+            col6.Name = "colDepartureTime";
+            col6.HeaderText = "Departure";
+            col6.Width = 100;
+            dgvTodayDepartures.Columns.Add(col6);
+
+            // Add status column
+            DataGridViewTextBoxColumn col7 = new DataGridViewTextBoxColumn();
+            col7.Name = "colStatus";
+            col7.HeaderText = "Status";
+            col7.Width = 100;
+            dgvTodayDepartures.Columns.Add(col7);
 
             // Billing items grid
-            dgvBillingItems.Columns.Clear();
-            dgvBillingItems.Columns.Add("colDescription", "Description");
-            dgvBillingItems.Columns.Add("colAmount", "Amount");
+            DataGridViewTextBoxColumn col8 = new DataGridViewTextBoxColumn();
+            col8.Name = "colDescription";
+            col8.HeaderText = "Description";
+            col8.Width = 600;
+            dgvBillingItems.Columns.Add(col8);
 
-            dgvBillingItems.Columns["colDescription"].Width = 600;
-            dgvBillingItems.Columns["colAmount"].Width = 250;
+            DataGridViewTextBoxColumn col9 = new DataGridViewTextBoxColumn();
+            col9.Name = "colAmount";
+            col9.HeaderText = "Amount";
+            col9.Width = 250;
+            dgvBillingItems.Columns.Add(col9);
+
+            // Set selection modes
+            dgvTodayDepartures.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvTodayDepartures.MultiSelect = false;
         }
 
-        private void LoadTodaysDepartures()
+        private void LoadCurrentlyCheckedIn()
         {
             dgvTodayDepartures.Rows.Clear();
+            _selectedReservation = null;
+            btnProcessCheckOut.Enabled = false;
+            btnAddCharge.Enabled = false;
+            btnPrintInvoice.Enabled = false;
 
             try
             {
-                var departures = _reservationRepo.GetTodaysDepartures();
+                var checkedInGuests = _reservationRepo.GetCurrentlyCheckedIn();
 
-                foreach (var departure in departures)
+                foreach (var reservation in checkedInGuests)
                 {
                     string roomNumbers = string.Join(", ",
-                        departure.Rooms.Select(r => r.RoomNumber));
+                        reservation.Rooms.Select(r => r.RoomNumber));
 
-                    dgvTodayDepartures.Rows.Add(
-                        departure.BookingReference,
-                        departure.GuestName,
+                    // Get check-in time separately
+                    var checkInTime = _reservationRepo.GetCheckInTime(reservation.ReservationId);
+                    string checkInTimeStr = checkInTime.HasValue
+                        ? checkInTime.Value.ToString("hh:mm tt")
+                        : "N/A";
+
+                    string departureTime = reservation.CheckOutDate.ToString("hh:mm tt");
+
+                    int rowIndex = dgvTodayDepartures.Rows.Add(
+                        reservation.BookingReference,
+                        reservation.GuestName,
                         roomNumbers,
-                        Helper.FormatCurrency(departure.TotalAmount),
-                        departure.CheckOutDate.ToString("hh:mm tt")
+                        Helper.FormatCurrency(reservation.TotalAmount),
+                        checkInTimeStr,
+                        departureTime,
+                        reservation.StatusName
                     );
+
+                    // Store the reservation in the row tag for easy access
+                    dgvTodayDepartures.Rows[rowIndex].Tag = reservation;
+
+                    // Color code based on status
+                    if (reservation.StatusId == 3) // Checked-in
+                        dgvTodayDepartures.Rows[rowIndex].DefaultCellStyle.BackColor = Color.LightGreen;
+                    else if (reservation.StatusId == 4) // Checked-out
+                        dgvTodayDepartures.Rows[rowIndex].DefaultCellStyle.BackColor = Color.LightGray;
+                    else if (reservation.StatusId == 1) // Confirmed
+                        dgvTodayDepartures.Rows[rowIndex].DefaultCellStyle.BackColor = Color.LightYellow;
                 }
 
-                lblDeparturesCount.Text = $"{departures.Count} departure(s) today";
+                lblDeparturesCount.Text = $"{checkedInGuests.Count} guest(s) currently checked in";
             }
             catch (Exception ex)
             {
-                Helper.ShowError($"Error loading departures: {ex.Message}");
+                Helper.ShowError($"Error loading checked-in guests: {ex.Message}");
             }
         }
 
@@ -108,9 +186,33 @@ namespace Hotel_ManagementIT13.Forms
         {
             if (e.RowIndex >= 0 && e.RowIndex < dgvTodayDepartures.Rows.Count)
             {
-                string bookingRef = dgvTodayDepartures.Rows[e.RowIndex].Cells[0].Value.ToString();
-                LoadReservationDetails(bookingRef);
-                Helper.HighlightRow(dgvTodayDepartures, e.RowIndex);
+                string bookingRef = dgvTodayDepartures.Rows[e.RowIndex].Cells["colBookingRef"].Value?.ToString();
+                if (!string.IsNullOrEmpty(bookingRef))
+                {
+                    LoadReservationDetails(bookingRef);
+                    Helper.HighlightRow(dgvTodayDepartures, e.RowIndex);
+                }
+            }
+        }
+
+        private void dgvTodayDepartures_SelectionChanged(object sender, EventArgs e)
+        {
+            if (dgvTodayDepartures.SelectedRows.Count > 0)
+            {
+                string bookingRef = dgvTodayDepartures.SelectedRows[0].Cells["colBookingRef"].Value?.ToString();
+                if (!string.IsNullOrEmpty(bookingRef))
+                {
+                    LoadReservationDetails(bookingRef);
+                    Helper.HighlightRow(dgvTodayDepartures, dgvTodayDepartures.SelectedRows[0].Index);
+                }
+            }
+            else
+            {
+                // Clear selection if nothing is selected
+                _selectedReservation = null;
+                btnProcessCheckOut.Enabled = false;
+                btnAddCharge.Enabled = false;
+                btnPrintInvoice.Enabled = false;
             }
         }
 
@@ -147,26 +249,64 @@ namespace Hotel_ManagementIT13.Forms
                         lblTotalBill.Text = Helper.FormatCurrency(_selectedReservation.TotalAmount);
                         lblAmountPaid.Text = "$0.00";
                         lblBalance.Text = Helper.FormatCurrency(_selectedReservation.TotalAmount);
+                        txtPaymentAmount.Text = _selectedReservation.TotalAmount.ToString("0.00");
                     }
 
                     // Calculate late checkout fee
                     CalculateLateFee();
 
-                    // Enable buttons
-                    btnProcessCheckOut.Enabled = true;
-                    btnAddCharge.Enabled = true;
-                    btnPrintInvoice.Enabled = true;
+                    // Enable/disable buttons based on status
+                    if (_selectedReservation.StatusId == 3) // Checked-in
+                    {
+                        btnProcessCheckOut.Enabled = true;
+                        btnAddCharge.Enabled = true;
+                        btnPrintInvoice.Enabled = true;
+                    }
+                    else if (_selectedReservation.StatusId == 4) // Already checked-out
+                    {
+                        btnProcessCheckOut.Enabled = false;
+                        btnAddCharge.Enabled = false;
+                        btnPrintInvoice.Enabled = true;
+                        MessageBox.Show("This reservation is already checked out.",
+                                        "Information",
+                                        MessageBoxButtons.OK,
+                                        MessageBoxIcon.Information);
+                    }
+                    else
+                    {
+                        btnProcessCheckOut.Enabled = false;
+                        btnAddCharge.Enabled = false;
+                        btnPrintInvoice.Enabled = false;
+                        MessageBox.Show($"This reservation is not checked in. Current status: {_selectedReservation.StatusName}",
+                                        "Information",
+                                        MessageBoxButtons.OK,
+                                        MessageBoxIcon.Information);
+                    }
+                }
+                else
+                {
+                    Helper.ShowError($"Reservation with reference '{bookingReference}' not found");
+                    _selectedReservation = null;
+                    btnProcessCheckOut.Enabled = false;
+                    btnAddCharge.Enabled = false;
+                    btnPrintInvoice.Enabled = false;
                 }
             }
             catch (Exception ex)
             {
                 Helper.ShowError($"Error loading reservation: {ex.Message}");
+                _selectedReservation = null;
+                btnProcessCheckOut.Enabled = false;
+                btnAddCharge.Enabled = false;
+                btnPrintInvoice.Enabled = false;
             }
         }
 
         private void DisplayBillingItems(Billing billing)
         {
             dgvBillingItems.Rows.Clear();
+
+            if (_selectedReservation == null) return;
 
             // Add room charges
             foreach (var room in _selectedReservation.Rooms)
@@ -181,12 +321,15 @@ namespace Hotel_ManagementIT13.Forms
             }
 
             // Add additional billing items
-            foreach (var item in billing.Items)
+            if (billing.Items != null)
             {
-                dgvBillingItems.Rows.Add(
-                    item.Description,
-                    Helper.FormatCurrency(item.Amount)
-                );
+                foreach (var item in billing.Items)
+                {
+                    dgvBillingItems.Rows.Add(
+                        item.Description,
+                        Helper.FormatCurrency(item.Amount)
+                    );
+                }
             }
         }
 
@@ -215,9 +358,40 @@ namespace Hotel_ManagementIT13.Forms
 
         private void btnProcessCheckOut_Click(object sender, EventArgs e)
         {
-            if (_selectedReservation == null)
+            // First, check if a row is selected in the DataGridView
+            if (dgvTodayDepartures.SelectedRows.Count == 0 && _selectedReservation == null)
             {
-                Helper.ShowError("Please select a reservation");
+                Helper.ShowError("Please select a reservation from the list");
+                return;
+            }
+
+            // If _selectedReservation is null but a row is selected, load it
+            if (_selectedReservation == null && dgvTodayDepartures.SelectedRows.Count > 0)
+            {
+                string bookingRef = dgvTodayDepartures.SelectedRows[0].Cells["colBookingRef"].Value?.ToString();
+                if (!string.IsNullOrEmpty(bookingRef))
+                {
+                    LoadReservationDetails(bookingRef);
+                }
+
+                if (_selectedReservation == null)
+                {
+                    Helper.ShowError("Please select a valid reservation");
+                    return;
+                }
+            }
+
+            // Check if already checked out
+            if (_selectedReservation.StatusId == 4)
+            {
+                Helper.ShowError("This reservation is already checked out");
+                return;
+            }
+
+            // Check if not checked in
+            if (_selectedReservation.StatusId != 3)
+            {
+                Helper.ShowError("This reservation is not checked in. Status: " + _selectedReservation.StatusName);
                 return;
             }
 
@@ -235,15 +409,41 @@ namespace Hotel_ManagementIT13.Forms
                 return;
             }
 
+            // Get current user
+            var currentUser = ApplicationContext.CurrentUser;
+            if (currentUser == null)
+            {
+                Helper.ShowError("No user logged in. Please login first.");
+                return;
+            }
+
+            // Confirm check-out
+            DialogResult confirm = MessageBox.Show(
+                $"Check-out {_selectedReservation.GuestName} from room(s): {lblRoomNumber.Text}?\n\n" +
+                $"Check-out Time: {dtpActualCheckOut.Value:yyyy-MM-dd HH:mm}\n" +
+                $"Payment Amount: {Helper.FormatCurrency(paymentAmount)}\n" +
+                $"Payment Method: {cmbPaymentMethod.SelectedItem}\n\n" +
+                $"Late Fee: {lblLateFee.Text}",
+                "Confirm Check-out",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question);
+
+            if (confirm != DialogResult.Yes)
+                return;
+
             try
             {
+                // Show processing message
+                Cursor = Cursors.WaitCursor;
+                btnProcessCheckOut.Enabled = false;
+
                 var result = _checkOutManager.ProcessCheckOut(
                     _selectedReservation.BookingReference,
-                    ApplicationContext.CurrentUser.UserId,
+                    currentUser.UserId,
                     dtpActualCheckOut.Value,
                     paymentAmount,
-                    cmbPaymentMethod.SelectedItem.ToString(),
-                    $"Check-out processed by {ApplicationContext.CurrentUser.FullName}");
+                    cmbPaymentMethod.SelectedItem?.ToString() ?? "Cash",
+                    $"Check-out processed by {currentUser.FullName}");
 
                 if (result.Success)
                 {
@@ -261,11 +461,17 @@ namespace Hotel_ManagementIT13.Forms
                 else
                 {
                     Helper.ShowError(result.Message);
+                    btnProcessCheckOut.Enabled = true;
                 }
             }
             catch (Exception ex)
             {
                 Helper.ShowError($"Error processing check-out: {ex.Message}");
+                btnProcessCheckOut.Enabled = true;
+            }
+            finally
+            {
+                Cursor = Cursors.Default;
             }
         }
 
@@ -274,6 +480,12 @@ namespace Hotel_ManagementIT13.Forms
             if (_selectedReservation == null)
             {
                 Helper.ShowError("Please select a reservation");
+                return;
+            }
+
+            if (_selectedReservation.StatusId != 3)
+            {
+                Helper.ShowError("Cannot add charges. Reservation is not checked in.");
                 return;
             }
 
@@ -342,6 +554,14 @@ namespace Hotel_ManagementIT13.Forms
         {
             try
             {
+                if (_selectedReservation == null) return;
+
+                // Get check-in time
+                var checkInTime = _reservationRepo.GetCheckInTime(_selectedReservation.ReservationId);
+                string checkInTimeStr = checkInTime.HasValue
+                    ? checkInTime.Value.ToString("yyyy-MM-dd HH:mm")
+                    : _selectedReservation.CheckInDate.ToString("yyyy-MM-dd");
+
                 // Simple invoice printing (can be enhanced with ReportViewer)
                 string invoiceText = $"========================================\n" +
                                    $"HOTEL MANAGEMENT SYSTEM - INVOICE\n" +
@@ -349,8 +569,9 @@ namespace Hotel_ManagementIT13.Forms
                                    $"Guest: {_selectedReservation.GuestName}\n" +
                                    $"Booking Reference: {_selectedReservation.BookingReference}\n" +
                                    $"Room(s): {string.Join(", ", _selectedReservation.Rooms.Select(r => r.RoomNumber))}\n" +
-                                   $"Check-in: {_selectedReservation.CheckInDate:yyyy-MM-dd}\n" +
+                                   $"Check-in: {checkInTimeStr}\n" +
                                    $"Check-out: {dtpActualCheckOut.Value:yyyy-MM-dd HH:mm}\n" +
+                                   $"Status: {_selectedReservation.StatusName}\n" +
                                    $"----------------------------------------\n" +
                                    $"BILLING ITEMS:\n";
 
@@ -373,7 +594,7 @@ namespace Hotel_ManagementIT13.Forms
                     invoiceText += $"----------------------------------------\n" +
                                  $"Receipt #: {checkOutResult.ReceiptNumber}\n" +
                                  $"Late Fee: {checkOutResult.LateFee:C}\n" +
-                                 $"Processed by: {ApplicationContext.CurrentUser.FullName}\n" +
+                                 $"Processed by: {ApplicationContext.CurrentUser?.FullName}\n" +
                                  $"Date: {DateTime.Now:yyyy-MM-dd HH:mm}\n";
                 }
 
@@ -429,7 +650,7 @@ namespace Hotel_ManagementIT13.Forms
             btnAddCharge.Enabled = false;
             btnPrintInvoice.Enabled = false;
 
-            LoadTodaysDepartures();
+            LoadCurrentlyCheckedIn();
         }
 
         private void dtpActualCheckOut_ValueChanged(object sender, EventArgs e)
@@ -457,8 +678,32 @@ namespace Hotel_ManagementIT13.Forms
 
         private void btnRefresh_Click(object sender, EventArgs e)
         {
-            LoadTodaysDepartures();
+            LoadCurrentlyCheckedIn();
             ResetForm();
+        }
+
+        private void dgvTodayDepartures_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            // Double-click also triggers check-out
+            if (e.RowIndex >= 0 && e.RowIndex < dgvTodayDepartures.Rows.Count)
+            {
+                dgvTodayDepartures_CellClick(sender, e);
+
+                // Auto-process check-out if a reservation is selected
+                if (_selectedReservation != null && btnProcessCheckOut.Enabled)
+                {
+                    btnProcessCheckOut_Click(sender, e);
+                }
+            }
+        }
+
+        private void dgvTodayDepartures_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            // Auto-size columns after data binding
+            foreach (DataGridViewColumn column in dgvTodayDepartures.Columns)
+            {
+                column.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            }
         }
 
         public frmCheckOut(bool designMode = false) : this()
