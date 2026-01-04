@@ -27,6 +27,10 @@ namespace Hotel_ManagementIT13.Forms
         private NumericUpDown nudWalkInDeposit;
         private CheckBox chkPrintKeyCard;
         private Button btnRefresh;
+        private TextBox txtWalkInFirstName;
+        private TextBox txtWalkInLastName;
+        private TextBox txtWalkInPhone;
+        private TextBox txtWalkInEmail;
 
         public frmCheckIn()
         {
@@ -66,57 +70,105 @@ namespace Hotel_ManagementIT13.Forms
                 Text = "0 room(s) available for walk-in"
             };
 
-            // Walk-in controls
+            // Walk-in guest details
+            var lblWalkInGuest = new Label
+            {
+                Text = "Walk-in Guest Details:",
+                Font = new Font("Microsoft Sans Serif", 11F, FontStyle.Bold),
+                Location = new Point(1480, 360),
+                Size = new Size(200, 25)
+            };
+
+            var lblFirstName = new Label { Text = "First Name:", Location = new Point(1480, 400), Size = new Size(100, 25) };
+            txtWalkInFirstName = new TextBox
+            {
+                Location = new Point(1580, 400),
+                Size = new Size(150, 25),
+                Name = "txtWalkInFirstName"
+            };
+
+            var lblLastName = new Label { Text = "Last Name:", Location = new Point(1480, 435), Size = new Size(100, 25) };
+            txtWalkInLastName = new TextBox
+            {
+                Location = new Point(1580, 435),
+                Size = new Size(150, 25),
+                Name = "txtWalkInLastName"
+            };
+
+            var lblPhone = new Label { Text = "Phone:", Location = new Point(1480, 470), Size = new Size(100, 25) };
+            txtWalkInPhone = new TextBox
+            {
+                Location = new Point(1580, 470),
+                Size = new Size(150, 25),
+                Name = "txtWalkInPhone"
+            };
+
+            var lblEmail = new Label { Text = "Email:", Location = new Point(1480, 505), Size = new Size(100, 25) };
+            txtWalkInEmail = new TextBox
+            {
+                Location = new Point(1580, 505),
+                Size = new Size(150, 25),
+                Name = "txtWalkInEmail"
+            };
+
+            // Walk-in reservation controls
+            var lblWalkInCheckOut = new Label { Text = "Check-out Date:", Location = new Point(1480, 550), Size = new Size(150, 25) };
             dtpWalkInCheckOut = new DateTimePicker
             {
-                Font = new Font("Microsoft Sans Serif", 12F),
-                Location = new Point(1480, 500),
+                Font = new Font("Microsoft Sans Serif", 10F),
+                Location = new Point(1630, 550),
                 Name = "dtpWalkInCheckOut",
-                Size = new Size(200, 30),
+                Size = new Size(150, 25),
                 Value = DateTime.Today.AddDays(1)
             };
 
+            var lblWalkInGuests = new Label { Text = "Guests:", Location = new Point(1480, 585), Size = new Size(100, 25) };
             nudWalkInAdults = new NumericUpDown
             {
-                Font = new Font("Microsoft Sans Serif", 12F),
-                Location = new Point(1480, 550),
+                Font = new Font("Microsoft Sans Serif", 10F),
+                Location = new Point(1580, 585),
                 Minimum = 1,
                 Maximum = 10,
                 Value = 2,
                 Name = "nudWalkInAdults",
-                Size = new Size(100, 30)
+                Size = new Size(60, 25)
             };
+
+            var lblAdults = new Label { Text = "Adults", Location = new Point(1645, 588), Size = new Size(50, 20), Font = new Font("Microsoft Sans Serif", 8F) };
 
             nudWalkInChildren = new NumericUpDown
             {
-                Font = new Font("Microsoft Sans Serif", 12F),
-                Location = new Point(1600, 550),
+                Font = new Font("Microsoft Sans Serif", 10F),
+                Location = new Point(1700, 585),
                 Minimum = 0,
                 Maximum = 10,
                 Value = 0,
                 Name = "nudWalkInChildren",
-                Size = new Size(100, 30)
+                Size = new Size(60, 25)
             };
 
+            var lblChildren = new Label { Text = "Children", Location = new Point(1765, 588), Size = new Size(50, 20), Font = new Font("Microsoft Sans Serif", 8F) };
+
+            var lblDeposit = new Label { Text = "Deposit Amount:", Location = new Point(1480, 620), Size = new Size(120, 25) };
             nudWalkInDeposit = new NumericUpDown
             {
-                Font = new Font("Microsoft Sans Serif", 12F),
+                Font = new Font("Microsoft Sans Serif", 10F),
                 DecimalPlaces = 2,
                 Minimum = 0,
                 Maximum = 10000,
                 Value = 0,
-                Location = new Point(1720, 550),
+                Location = new Point(1610, 620),
                 Name = "nudWalkInDeposit",
-                Size = new Size(150, 30)
+                Size = new Size(150, 25)
             };
 
             chkPrintKeyCard = new CheckBox
             {
                 AutoSize = true,
-                Font = new Font("Microsoft Sans Serif", 12F),
-                Location = new Point(1480, 600),
+                Font = new Font("Microsoft Sans Serif", 10F),
+                Location = new Point(1480, 655),
                 Name = "chkPrintKeyCard",
-                Size = new Size(200, 29),
+                Size = new Size(150, 25),
                 Text = "Print Key Card",
                 Checked = true
             };
@@ -135,9 +187,23 @@ namespace Hotel_ManagementIT13.Forms
             // Add controls to form
             this.Controls.Add(lblArrivalsCount);
             this.Controls.Add(lblWalkInRooms);
+            this.Controls.Add(lblWalkInGuest);
+            this.Controls.Add(lblFirstName);
+            this.Controls.Add(txtWalkInFirstName);
+            this.Controls.Add(lblLastName);
+            this.Controls.Add(txtWalkInLastName);
+            this.Controls.Add(lblPhone);
+            this.Controls.Add(txtWalkInPhone);
+            this.Controls.Add(lblEmail);
+            this.Controls.Add(txtWalkInEmail);
+            this.Controls.Add(lblWalkInCheckOut);
             this.Controls.Add(dtpWalkInCheckOut);
+            this.Controls.Add(lblWalkInGuests);
             this.Controls.Add(nudWalkInAdults);
+            this.Controls.Add(lblAdults);
             this.Controls.Add(nudWalkInChildren);
+            this.Controls.Add(lblChildren);
+            this.Controls.Add(lblDeposit);
             this.Controls.Add(nudWalkInDeposit);
             this.Controls.Add(chkPrintKeyCard);
             this.Controls.Add(btnRefresh);
@@ -148,6 +214,10 @@ namespace Hotel_ManagementIT13.Forms
             InitializeDataGridViews();
             LoadTodaysArrivals();
             LoadWalkInAvailableRooms();
+
+            // Wire up events
+            dgvTodayArrivals.CellClick += dgvTodayArrivals_CellClick;
+            dgvTodayArrivals.SelectionChanged += dgvTodayArrivals_SelectionChanged;
         }
 
         private void InitializeForm()
@@ -170,50 +240,103 @@ namespace Hotel_ManagementIT13.Forms
 
         private void InitializeDataGridViews()
         {
-            // Today's arrivals grid - FIXED COLUMNS
+            // Today's arrivals grid
             dgvTodayArrivals.Columns.Clear();
-            dgvTodayArrivals.Columns.Add("colBookingRef", "Booking #");
-            dgvTodayArrivals.Columns.Add("colGuestName", "Guest Name");
-            dgvTodayArrivals.Columns.Add("colRoom", "Room");
-            dgvTodayArrivals.Columns.Add("colType", "Type");
-            dgvTodayArrivals.Columns.Add("colStatus", "Status");
-            dgvTodayArrivals.Columns.Add("colArrivalTime", "Arrival");
 
-            dgvTodayArrivals.Columns["colBookingRef"].Width = 100;
-            dgvTodayArrivals.Columns["colGuestName"].Width = 150;
-            dgvTodayArrivals.Columns["colRoom"].Width = 100;
-            dgvTodayArrivals.Columns["colType"].Width = 100;
-            dgvTodayArrivals.Columns["colStatus"].Width = 120;
-            dgvTodayArrivals.Columns["colArrivalTime"].Width = 80;
+            // Create columns with proper names
+            DataGridViewTextBoxColumn col1 = new DataGridViewTextBoxColumn();
+            col1.Name = "colBookingRef";
+            col1.HeaderText = "Booking #";
+            col1.Width = 100;
+            dgvTodayArrivals.Columns.Add(col1);
 
-            // Walk-in available rooms grid - FIXED COLUMNS
+            DataGridViewTextBoxColumn col2 = new DataGridViewTextBoxColumn();
+            col2.Name = "colGuestName";
+            col2.HeaderText = "Guest Name";
+            col2.Width = 150;
+            dgvTodayArrivals.Columns.Add(col2);
+
+            DataGridViewTextBoxColumn col3 = new DataGridViewTextBoxColumn();
+            col3.Name = "colRoom";
+            col3.HeaderText = "Room";
+            col3.Width = 100;
+            dgvTodayArrivals.Columns.Add(col3);
+
+            DataGridViewTextBoxColumn col4 = new DataGridViewTextBoxColumn();
+            col4.Name = "colType";
+            col4.HeaderText = "Type";
+            col4.Width = 100;
+            dgvTodayArrivals.Columns.Add(col4);
+
+            DataGridViewTextBoxColumn col5 = new DataGridViewTextBoxColumn();
+            col5.Name = "colStatus";
+            col5.HeaderText = "Status";
+            col5.Width = 120;
+            dgvTodayArrivals.Columns.Add(col5);
+
+            DataGridViewTextBoxColumn col6 = new DataGridViewTextBoxColumn();
+            col6.Name = "colArrivalTime";
+            col6.HeaderText = "Arrival";
+            col6.Width = 80;
+            dgvTodayArrivals.Columns.Add(col6);
+
+            // Walk-in available rooms grid
             dgvWalkInAvailable.Columns.Clear();
-            dgvWalkInAvailable.Columns.Add("colRoomNumber", "Room #");
-            dgvWalkInAvailable.Columns.Add("colType", "Type");
-            dgvWalkInAvailable.Columns.Add("colFloor", "Floor");
-            dgvWalkInAvailable.Columns.Add("colView", "View");
-            dgvWalkInAvailable.Columns.Add("colRate", "Rate/Night");
-            dgvWalkInAvailable.Columns.Add("colMaxOccupancy", "Max Guests");
 
-            dgvWalkInAvailable.Columns["colRoomNumber"].Width = 70;
-            dgvWalkInAvailable.Columns["colType"].Width = 100;
-            dgvWalkInAvailable.Columns["colFloor"].Width = 60;
-            dgvWalkInAvailable.Columns["colView"].Width = 100;
-            dgvWalkInAvailable.Columns["colRate"].Width = 100;
-            dgvWalkInAvailable.Columns["colMaxOccupancy"].Width = 90;
+            DataGridViewTextBoxColumn col7 = new DataGridViewTextBoxColumn();
+            col7.Name = "colRoomNumber";
+            col7.HeaderText = "Room #";
+            col7.Width = 70;
+            dgvWalkInAvailable.Columns.Add(col7);
+
+            DataGridViewTextBoxColumn col8 = new DataGridViewTextBoxColumn();
+            col8.Name = "colType";
+            col8.HeaderText = "Type";
+            col8.Width = 100;
+            dgvWalkInAvailable.Columns.Add(col8);
+
+            DataGridViewTextBoxColumn col9 = new DataGridViewTextBoxColumn();
+            col9.Name = "colFloor";
+            col9.HeaderText = "Floor";
+            col9.Width = 60;
+            dgvWalkInAvailable.Columns.Add(col9);
+
+            DataGridViewTextBoxColumn col10 = new DataGridViewTextBoxColumn();
+            col10.Name = "colView";
+            col10.HeaderText = "View";
+            col10.Width = 100;
+            dgvWalkInAvailable.Columns.Add(col10);
+
+            DataGridViewTextBoxColumn col11 = new DataGridViewTextBoxColumn();
+            col11.Name = "colRate";
+            col11.HeaderText = "Rate/Night";
+            col11.Width = 100;
+            dgvWalkInAvailable.Columns.Add(col11);
+
+            DataGridViewTextBoxColumn col12 = new DataGridViewTextBoxColumn();
+            col12.Name = "colMaxOccupancy";
+            col12.HeaderText = "Max Guests";
+            col12.Width = 90;
+            dgvWalkInAvailable.Columns.Add(col12);
 
             // Set selection mode
             dgvWalkInAvailable.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvTodayArrivals.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+
+            // Allow only single selection
+            dgvTodayArrivals.MultiSelect = false;
+            dgvWalkInAvailable.MultiSelect = false;
         }
 
         private void LoadTodaysArrivals()
         {
             dgvTodayArrivals.Rows.Clear();
+            _selectedReservation = null; // Clear current selection
+            btnProcessCheckIn.Enabled = false;
+            btnPrintKeyCard.Enabled = false;
 
             try
             {
-                // Use GetTodaysArrivals method from repository
                 var arrivals = _reservationRepo.GetTodaysArrivals();
 
                 foreach (var arrival in arrivals)
@@ -221,7 +344,7 @@ namespace Hotel_ManagementIT13.Forms
                     string roomNumbers = string.Join(", ",
                         arrival.Rooms.Select(r => r.RoomNumber));
 
-                    dgvTodayArrivals.Rows.Add(
+                    int rowIndex = dgvTodayArrivals.Rows.Add(
                         arrival.BookingReference,
                         arrival.GuestName,
                         roomNumbers,
@@ -229,6 +352,9 @@ namespace Hotel_ManagementIT13.Forms
                         arrival.StatusName,
                         arrival.CheckInDate.ToString("hh:mm tt")
                     );
+
+                    // Store the reservation ID in the row tag for easy access
+                    dgvTodayArrivals.Rows[rowIndex].Tag = arrival;
                 }
 
                 lblArrivalsCount.Text = $"{arrivals.Count} arrival(s) today";
@@ -272,13 +398,43 @@ namespace Hotel_ManagementIT13.Forms
 
         private void dgvTodayArrivals_CellClick(object sender, DataGridViewCellEventArgs e)
         {
+            // Make sure it's a valid row click (not header)
             if (e.RowIndex >= 0 && e.RowIndex < dgvTodayArrivals.Rows.Count)
             {
-                string bookingRef = dgvTodayArrivals.Rows[e.RowIndex].Cells[0].Value?.ToString();
+                string bookingRef = dgvTodayArrivals.Rows[e.RowIndex].Cells["colBookingRef"].Value?.ToString();
+
                 if (!string.IsNullOrEmpty(bookingRef))
                 {
                     LoadReservationDetails(bookingRef, e.RowIndex);
+
+                    // Also store the selected row index
+                    dgvTodayArrivals.Rows[e.RowIndex].Selected = true;
                 }
+                else
+                {
+                    Helper.ShowError("No booking reference found for selected row");
+                }
+            }
+        }
+
+        private void dgvTodayArrivals_SelectionChanged(object sender, EventArgs e)
+        {
+            if (dgvTodayArrivals.SelectedRows.Count > 0)
+            {
+                string bookingRef = dgvTodayArrivals.SelectedRows[0].Cells["colBookingRef"].Value?.ToString();
+                if (!string.IsNullOrEmpty(bookingRef))
+                {
+                    // Find the row index
+                    int rowIndex = dgvTodayArrivals.SelectedRows[0].Index;
+                    LoadReservationDetails(bookingRef, rowIndex);
+                }
+            }
+            else
+            {
+                // Clear selection if nothing is selected
+                _selectedReservation = null;
+                btnProcessCheckIn.Enabled = false;
+                btnPrintKeyCard.Enabled = false;
             }
         }
 
@@ -308,20 +464,51 @@ namespace Hotel_ManagementIT13.Forms
 
                     // Highlight the row
                     Helper.HighlightRow(dgvTodayArrivals, rowIndex);
+
+                    // Set the deposit to a default value (e.g., 20% of total)
+                    decimal defaultDeposit = amountDue * 0.2m;
+                    nudDeposit.Value = Math.Min(defaultDeposit, nudDeposit.Maximum);
+                }
+                else
+                {
+                    Helper.ShowError($"Reservation with reference '{bookingReference}' not found");
+                    _selectedReservation = null;
+                    btnProcessCheckIn.Enabled = false;
+                    btnPrintKeyCard.Enabled = false;
                 }
             }
             catch (Exception ex)
             {
                 Helper.ShowError($"Error loading reservation: {ex.Message}");
+                _selectedReservation = null;
+                btnProcessCheckIn.Enabled = false;
+                btnPrintKeyCard.Enabled = false;
             }
         }
 
         private void btnProcessCheckIn_Click(object sender, EventArgs e)
         {
-            if (_selectedReservation == null)
+            // First, check if a row is selected in the DataGridView
+            if (dgvTodayArrivals.SelectedRows.Count == 0 && _selectedReservation == null)
             {
-                Helper.ShowError("Please select a reservation");
+                Helper.ShowError("Please select a reservation from the list");
                 return;
+            }
+
+            // If _selectedReservation is null but a row is selected, load it
+            if (_selectedReservation == null && dgvTodayArrivals.SelectedRows.Count > 0)
+            {
+                string bookingRef = dgvTodayArrivals.SelectedRows[0].Cells["colBookingRef"].Value?.ToString();
+                if (!string.IsNullOrEmpty(bookingRef))
+                {
+                    LoadReservationDetails(bookingRef, dgvTodayArrivals.SelectedRows[0].Index);
+                }
+
+                if (_selectedReservation == null)
+                {
+                    Helper.ShowError("Please select a valid reservation");
+                    return;
+                }
             }
 
             decimal depositAmount = nudDeposit.Value;
@@ -329,11 +516,28 @@ namespace Hotel_ManagementIT13.Forms
             if (depositAmount < 0)
             {
                 Helper.ShowError("Deposit amount cannot be negative");
+                nudDeposit.Focus();
                 return;
             }
 
+            // Confirm check-in
+            DialogResult confirm = MessageBox.Show(
+                $"Check-in {_selectedReservation.GuestName} to room(s): {lblRoomNumber.Text}?\n\n" +
+                $"Deposit: {Helper.FormatCurrency(depositAmount)}\n" +
+                $"Payment Method: {cmbPaymentMethod.SelectedItem}",
+                "Confirm Check-in",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question);
+
+            if (confirm != DialogResult.Yes)
+                return;
+
             try
             {
+                // Show processing message
+                Cursor = Cursors.WaitCursor;
+                btnProcessCheckIn.Enabled = false;
+
                 var result = _checkInManager.ProcessCheckIn(
                     _selectedReservation.BookingReference,
                     ApplicationContext.CurrentUser?.UserId ?? 1,
@@ -357,11 +561,17 @@ namespace Hotel_ManagementIT13.Forms
                 else
                 {
                     Helper.ShowError(result.Message);
+                    btnProcessCheckIn.Enabled = true;
                 }
             }
             catch (Exception ex)
             {
                 Helper.ShowError($"Error processing check-in: {ex.Message}");
+                btnProcessCheckIn.Enabled = true;
+            }
+            finally
+            {
+                Cursor = Cursors.Default;
             }
         }
 
@@ -370,14 +580,22 @@ namespace Hotel_ManagementIT13.Forms
             // Basic validation
             if (dgvWalkInAvailable.SelectedRows.Count == 0)
             {
-                Helper.ShowError("Please select a room");
+                Helper.ShowError("Please select a room from the available rooms list");
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(txtWalkInFirstName.Text) ||
+                string.IsNullOrWhiteSpace(txtWalkInLastName.Text))
+            {
+                Helper.ShowError("Please enter guest first and last name");
+                txtWalkInFirstName.Focus();
                 return;
             }
 
             try
             {
                 // Get selected room
-                string roomNumber = dgvWalkInAvailable.SelectedRows[0].Cells[0].Value?.ToString();
+                string roomNumber = dgvWalkInAvailable.SelectedRows[0].Cells["colRoomNumber"].Value?.ToString();
                 var room = _roomRepo.GetRoomByNumber(roomNumber);
 
                 if (room == null)
@@ -386,20 +604,40 @@ namespace Hotel_ManagementIT13.Forms
                     return;
                 }
 
-                // Create a simple walk-in guest
+                // Create walk-in guest
                 var walkInGuest = new Guest
                 {
-                    FirstName = "Walk-in",
-                    LastName = "Guest",
-                    Phone = "000-000-0000",
-                    Email = "walkin@hotel.com",
-                    GuestTypeId = 1 // Regular
+                    FirstName = txtWalkInFirstName.Text.Trim(),
+                    LastName = txtWalkInLastName.Text.Trim(),
+                    Phone = string.IsNullOrWhiteSpace(txtWalkInPhone.Text) ? "000-000-0000" : txtWalkInPhone.Text.Trim(),
+                    Email = string.IsNullOrWhiteSpace(txtWalkInEmail.Text) ? "walkin@hotel.com" : txtWalkInEmail.Text.Trim(),
+                    GuestTypeId = 1, // Regular
+                    CreatedAt = DateTime.Now
                 };
+
+                // Confirm walk-in check-in
+                DialogResult confirm = MessageBox.Show(
+                    $"Check-in walk-in guest:\n\n" +
+                    $"Name: {walkInGuest.FirstName} {walkInGuest.LastName}\n" +
+                    $"Room: {room.RoomNumber}\n" +
+                    $"Check-out: {dtpWalkInCheckOut.Value:yyyy-MM-dd}\n" +
+                    $"Guests: {nudWalkInAdults.Value} adults, {nudWalkInChildren.Value} children\n" +
+                    $"Deposit: {Helper.FormatCurrency(nudWalkInDeposit.Value)}",
+                    "Confirm Walk-in Check-in",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question);
+
+                if (confirm != DialogResult.Yes)
+                    return;
+
+                // Show processing message
+                Cursor = Cursors.WaitCursor;
+                btnWalkInCheckIn.Enabled = false;
 
                 // Process walk-in check-in
                 var result = _checkInManager.ProcessWalkInCheckIn(
                     walkInGuest,
-                    dtpActualCheckIn.Value,
+                    DateTime.Now,
                     dtpWalkInCheckOut.Value,
                     room.RoomId,
                     (int)nudWalkInAdults.Value,
@@ -410,6 +648,12 @@ namespace Hotel_ManagementIT13.Forms
                 if (result.Success)
                 {
                     Helper.ShowSuccess(result.Message);
+
+                    // Print key card if requested
+                    if (chkPrintKeyCard.Checked && result.Reservation != null)
+                    {
+                        PrintKeyCard(result.Reservation);
+                    }
 
                     // Reset form
                     ResetWalkInForm();
@@ -427,6 +671,11 @@ namespace Hotel_ManagementIT13.Forms
             {
                 Helper.ShowError($"Error processing walk-in check-in: {ex.Message}");
             }
+            finally
+            {
+                Cursor = Cursors.Default;
+                btnWalkInCheckIn.Enabled = true;
+            }
         }
 
         private void PrintKeyCard(Reservation reservation)
@@ -439,7 +688,8 @@ namespace Hotel_ManagementIT13.Forms
                                $"Guest: {reservation.GuestName}\n" +
                                $"Room(s): {rooms}\n" +
                                $"Check-in: {DateTime.Now:yyyy-MM-dd HH:mm}\n" +
-                               $"Check-out: {reservation.CheckOutDate:yyyy-MM-dd}";
+                               $"Check-out: {reservation.CheckOutDate:yyyy-MM-dd}\n" +
+                               $"Booking Ref: {reservation.BookingReference}";
 
                 MessageBox.Show(message, "Key Card Printed",
                               MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -477,6 +727,10 @@ namespace Hotel_ManagementIT13.Forms
         private void ResetWalkInForm()
         {
             // Reset walk-in form controls
+            txtWalkInFirstName.Clear();
+            txtWalkInLastName.Clear();
+            txtWalkInPhone.Clear();
+            txtWalkInEmail.Clear();
             dtpWalkInCheckOut.Value = DateTime.Today.AddDays(1);
             nudWalkInAdults.Value = 2;
             nudWalkInChildren.Value = 0;
@@ -513,7 +767,18 @@ namespace Hotel_ManagementIT13.Forms
             }
         }
 
-        // Add this if not already in designer
+        private void dgvWalkInAvailable_SelectionChanged(object sender, EventArgs e)
+        {
+            if (dgvWalkInAvailable.SelectedRows.Count > 0)
+            {
+                string roomNumber = dgvWalkInAvailable.SelectedRows[0].Cells["colRoomNumber"].Value?.ToString();
+                if (!string.IsNullOrEmpty(roomNumber))
+                {
+                    Helper.HighlightRow(dgvWalkInAvailable, dgvWalkInAvailable.SelectedRows[0].Index);
+                }
+            }
+        }
+
         private void dgvTodayArrivals_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
         {
             // Auto-size columns after data binding
@@ -529,6 +794,21 @@ namespace Hotel_ManagementIT13.Forms
             foreach (DataGridViewColumn column in dgvWalkInAvailable.Columns)
             {
                 column.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            }
+        }
+
+        private void dgvTodayArrivals_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            // Double-click also triggers check-in
+            if (e.RowIndex >= 0 && e.RowIndex < dgvTodayArrivals.Rows.Count)
+            {
+                dgvTodayArrivals_CellClick(sender, e);
+
+                // Auto-process check-in if a reservation is selected
+                if (_selectedReservation != null && btnProcessCheckIn.Enabled)
+                {
+                    btnProcessCheckIn_Click(sender, e);
+                }
             }
         }
     }

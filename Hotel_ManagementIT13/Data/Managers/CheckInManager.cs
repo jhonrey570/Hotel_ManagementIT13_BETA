@@ -39,34 +39,34 @@ namespace Hotel_ManagementIT13.Data.Managers
                 }
 
                 // Check if already checked in
-                if (reservation.StatusId == 3) // Checked-in
+                if (reservation.StatusId == 3) // Checked-in (reservation_statuses)
                 {
                     result.Success = false;
                     result.Message = "Guest already checked in";
                     return result;
                 }
 
-                // Update reservation status to Checked-in
+                // Update reservation status to Checked-in (reservation_statuses.status_id = 3)
                 _reservationRepo.UpdateReservationStatus(reservation.ReservationId, 3);
 
-                // Update room status to Occupied
+                // Update room status to Occupied (room_statuses.status_id = 2)
                 foreach (var room in reservation.Rooms)
                 {
                     _roomRepo.UpdateRoomStatus(room.RoomId, 2); // Occupied
                 }
 
-                // Record check-in
+                // Record check-in in check_in_out table (check_in_statuses.status_id = 1)
                 _reservationRepo.RecordCheckIn(reservation.ReservationId, processedByUserId, 1); // Status: Checked-in
 
                 // Process deposit payment if any
                 if (depositAmount > 0)
                 {
                     _paymentRepo.ProcessPayment(reservation.ReservationId, depositAmount,
-                                              paymentMethod, "Deposit payment");
+                                              paymentMethod, "Deposit payment at check-in");
                 }
 
                 result.Success = true;
-                result.Message = "Check-in processed successfully";
+                result.Message = $"Check-in processed successfully for {reservation.GuestName}";
                 result.Reservation = reservation;
             }
             catch (Exception ex)
@@ -80,7 +80,7 @@ namespace Hotel_ManagementIT13.Data.Managers
 
         public CheckInResult ProcessWalkInCheckIn(Guest guest, DateTime checkIn, DateTime checkOut,
                                                 int roomId, int adults, int children,
-                                                int processedByUserId, decimal paymentAmount)
+                                                int processedByUserId, decimal depositAmount)
         {
             var result = new CheckInResult();
 
@@ -88,7 +88,7 @@ namespace Hotel_ManagementIT13.Data.Managers
             {
                 // Check room availability
                 var room = _roomRepo.GetRoomById(roomId);
-                if (room == null || room.StatusId != 1) // Not Available
+                if (room == null || room.StatusId != 1) // Not Available (room_statuses.status_id = 1)
                 {
                     result.Success = false;
                     result.Message = $"Room is not available";
@@ -99,6 +99,9 @@ namespace Hotel_ManagementIT13.Data.Managers
                 int guestId;
                 if (guest.GuestId == 0)
                 {
+                    // Set default values for walk-in guest
+                    if (string.IsNullOrEmpty(guest.Phone)) guest.Phone = "000-000-0000";
+                    if (string.IsNullOrEmpty(guest.Email)) guest.Email = "walkin@hotel.com";
                     guestId = _guestRepo.AddGuest(guest);
                 }
                 else
@@ -119,12 +122,15 @@ namespace Hotel_ManagementIT13.Data.Managers
                     int startIndex = reservationResult.IndexOf("Booking Reference:") + "Booking Reference:".Length;
                     bookingRef = reservationResult.Substring(startIndex).Trim();
                 }
+                else if (reservationResult.Contains("RES")) // Check if result is the booking reference itself
+                {
+                    bookingRef = reservationResult;
+                }
 
                 if (!string.IsNullOrEmpty(bookingRef))
                 {
                     // Process immediate check-in
-                    return ProcessCheckIn(bookingRef, processedByUserId,
-                                         paymentAmount, "Cash");
+                    return ProcessCheckIn(bookingRef, processedByUserId, depositAmount, "Cash");
                 }
 
                 result.Success = false;

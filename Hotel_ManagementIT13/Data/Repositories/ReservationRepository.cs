@@ -172,7 +172,7 @@ namespace Hotel_ManagementIT13.Data.Repositories
                     LEFT JOIN companies c ON r.company_id = c.company_id
                     JOIN users u ON r.user_id = u.user_id
                     WHERE DATE(r.check_in_date) = CURDATE()
-                    AND r.status_id IN (1, 2) -- Confirmed, Pending Payment
+                    AND r.status_id IN (1, 2) -- Confirmed, Pending Payment (reservation_statuses)
                     ORDER BY r.check_in_date";
 
                 using (var cmd = new MySqlCommand(query, conn))
@@ -181,7 +181,9 @@ namespace Hotel_ManagementIT13.Data.Repositories
                     {
                         while (reader.Read())
                         {
-                            reservations.Add(CreateReservationFromReader(reader));
+                            var reservation = CreateReservationFromReader(reader);
+                            reservation.Rooms = GetReservationRooms(reservation.ReservationId);
+                            reservations.Add(reservation);
                         }
                     }
                 }
@@ -208,7 +210,7 @@ namespace Hotel_ManagementIT13.Data.Repositories
                     LEFT JOIN companies c ON r.company_id = c.company_id
                     JOIN users u ON r.user_id = u.user_id
                     WHERE DATE(r.check_out_date) = CURDATE()
-                    AND r.status_id = 3 -- Checked-in
+                    AND r.status_id = 3 -- Checked-in (reservation_statuses)
                     ORDER BY r.check_out_date";
 
                 using (var cmd = new MySqlCommand(query, conn))
@@ -217,7 +219,9 @@ namespace Hotel_ManagementIT13.Data.Repositories
                     {
                         while (reader.Read())
                         {
-                            reservations.Add(CreateReservationFromReader(reader));
+                            var reservation = CreateReservationFromReader(reader);
+                            reservation.Rooms = GetReservationRooms(reservation.ReservationId);
+                            reservations.Add(reservation);
                         }
                     }
                 }
@@ -255,7 +259,9 @@ namespace Hotel_ManagementIT13.Data.Repositories
                     {
                         while (reader.Read())
                         {
-                            reservations.Add(CreateReservationFromReader(reader));
+                            var reservation = CreateReservationFromReader(reader);
+                            reservation.Rooms = GetReservationRooms(reservation.ReservationId);
+                            reservations.Add(reservation);
                         }
                     }
                 }
@@ -289,7 +295,9 @@ namespace Hotel_ManagementIT13.Data.Repositories
                     {
                         if (reader.Read())
                         {
-                            return CreateReservationFromReader(reader);
+                            var reservation = CreateReservationFromReader(reader);
+                            reservation.Rooms = GetReservationRooms(reservation.ReservationId);
+                            return reservation;
                         }
                     }
                 }
@@ -336,6 +344,50 @@ namespace Hotel_ManagementIT13.Data.Repositories
             return rooms;
         }
 
+        public List<CheckInOutRecord> GetCheckInOutHistory(int reservationId)
+        {
+            var records = new List<CheckInOutRecord>();
+
+            using (var conn = DatabaseHelper.GetConnection())
+            {
+                conn.Open();
+                string query = @"
+                    SELECT cio.*, u.username as processed_by_name, cis.status_name
+                    FROM check_in_out cio
+                    JOIN users u ON cio.processed_by = u.user_id
+                    JOIN check_in_statuses cis ON cio.status_id = cis.status_id
+                    WHERE cio.reservation_id = @reservationId
+                    ORDER BY cio.check_in_time DESC";
+
+                using (var cmd = new MySqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@reservationId", reservationId);
+
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            records.Add(new CheckInOutRecord
+                            {
+                                CheckId = Convert.ToInt32(reader["check_id"]),
+                                ReservationId = Convert.ToInt32(reader["reservation_id"]),
+                                ProcessedBy = Convert.ToInt32(reader["processed_by"]),
+                                ProcessedByName = reader["processed_by_name"].ToString(),
+                                StatusId = Convert.ToInt32(reader["status_id"]),
+                                StatusName = reader["status_name"].ToString(),
+                                CheckInTime = Convert.ToDateTime(reader["check_in_time"]),
+                                CheckOutTime = reader["check_out_time"] != DBNull.Value
+                                    ? Convert.ToDateTime(reader["check_out_time"])
+                                    : (DateTime?)null
+                            });
+                        }
+                    }
+                }
+            }
+
+            return records;
+        }
+
         private Reservation CreateReservationFromReader(MySqlDataReader reader)
         {
             var reservation = new Reservation
@@ -361,10 +413,19 @@ namespace Hotel_ManagementIT13.Data.Repositories
                 UserName = reader["user_name"].ToString()
             };
 
-            // Load rooms for this reservation
-            reservation.Rooms = GetReservationRooms(reservation.ReservationId);
-
             return reservation;
         }
+    }
+
+    public class CheckInOutRecord
+    {
+        public int CheckId { get; set; }
+        public int ReservationId { get; set; }
+        public int ProcessedBy { get; set; }
+        public string ProcessedByName { get; set; }
+        public int StatusId { get; set; }
+        public string StatusName { get; set; }
+        public DateTime CheckInTime { get; set; }
+        public DateTime? CheckOutTime { get; set; }
     }
 }

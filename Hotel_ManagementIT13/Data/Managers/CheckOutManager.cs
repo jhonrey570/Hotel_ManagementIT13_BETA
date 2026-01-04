@@ -37,7 +37,7 @@ namespace Hotel_ManagementIT13.Data.Managers
                 }
 
                 // Check if already checked out
-                if (reservation.StatusId == 4) // Checked-out
+                if (reservation.StatusId == 4) // Checked-out (reservation_statuses)
                 {
                     result.Success = false;
                     result.Message = "Guest already checked out";
@@ -76,16 +76,16 @@ namespace Hotel_ManagementIT13.Data.Managers
                     updatedBilling = _billingRepo.GetBillingByReservationId(reservation.ReservationId);
                 }
 
-                // Update reservation status to Checked-out
+                // Update reservation status to Checked-out (reservation_statuses.status_id = 4)
                 _reservationRepo.UpdateReservationStatus(reservation.ReservationId, 4);
 
-                // Update room status to Cleaning in Progress
+                // Update room status to Cleaning in Progress (room_statuses.status_id = 6)
                 foreach (var room in reservation.Rooms)
                 {
                     _roomRepo.UpdateRoomStatus(room.RoomId, 6); // Cleaning in Progress
                 }
 
-                // Record check-out
+                // Record check-out in check_in_out table (check_in_statuses.status_id = 2)
                 _reservationRepo.RecordCheckOut(reservation.ReservationId, processedByUserId, 2, actualCheckOut);
 
                 result.Success = true;
