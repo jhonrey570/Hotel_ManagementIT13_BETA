@@ -270,6 +270,7 @@
     <Compile Include="Data\Models\Guest.cs" />
     <Compile Include="Data\Models\Manager.cs" />
     <Compile Include="Data\Models\Payment.cs" />
+    <Compile Include="Data\Models\RateModels.cs" />
     <Compile Include="Data\Models\Reservation.cs" />
     <Compile Include="Data\Models\Room.cs" />
     <Compile Include="Data\Models\StandardRoom.cs" />

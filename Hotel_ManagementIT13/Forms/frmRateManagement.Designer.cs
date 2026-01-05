@@ -61,6 +61,7 @@
             this.dgvRates.RowTemplate.Height = 30;
             this.dgvRates.Size = new System.Drawing.Size(900, 400);
             this.dgvRates.TabIndex = 0;
+            this.dgvRates.SelectionChanged += new System.EventHandler(this.dgvRates_SelectionChanged);
             // 
             // pnlRateForm
             // 
@@ -79,6 +80,8 @@
             this.cmbRoomType.Size = new System.Drawing.Size(400, 37);
             this.cmbRoomType.TabIndex = 2;
             this.cmbRoomType.Text = "Room Type";
+            this.cmbRoomType.Enter += new System.EventHandler(this.cmbRoomType_Enter);
+            this.cmbRoomType.Leave += new System.EventHandler(this.cmbRoomType_Leave);
             // 
             // cmbRatePlan
             // 
@@ -89,6 +92,8 @@
             this.cmbRatePlan.Size = new System.Drawing.Size(400, 37);
             this.cmbRatePlan.TabIndex = 3;
             this.cmbRatePlan.Text = "Rate Plan";
+            this.cmbRatePlan.Enter += new System.EventHandler(this.cmbRatePlan_Enter);
+            this.cmbRatePlan.Leave += new System.EventHandler(this.cmbRatePlan_Leave);
             // 
             // txtRateAmount
             // 
@@ -98,6 +103,8 @@
             this.txtRateAmount.Size = new System.Drawing.Size(400, 34);
             this.txtRateAmount.TabIndex = 4;
             this.txtRateAmount.Text = "Rate Amount";
+            this.txtRateAmount.Enter += new System.EventHandler(this.txtRateAmount_Enter);
+            this.txtRateAmount.Leave += new System.EventHandler(this.txtRateAmount_Leave);
             // 
             // dtpStartDate
             // 
@@ -124,6 +131,7 @@
             this.btnAddRate.TabIndex = 7;
             this.btnAddRate.Text = "ADD RATE";
             this.btnAddRate.UseVisualStyleBackColor = true;
+            this.btnAddRate.Click += new System.EventHandler(this.btnAddRate_Click);
             // 
             // btnEditRate
             // 
@@ -134,6 +142,7 @@
             this.btnEditRate.TabIndex = 8;
             this.btnEditRate.Text = "EDIT RATE";
             this.btnEditRate.UseVisualStyleBackColor = true;
+            this.btnEditRate.Click += new System.EventHandler(this.btnEditRate_Click);
             // 
             // btnDeleteRate
             // 
@@ -144,6 +153,7 @@
             this.btnDeleteRate.TabIndex = 9;
             this.btnDeleteRate.Text = "DELETE RATE";
             this.btnDeleteRate.UseVisualStyleBackColor = true;
+            this.btnDeleteRate.Click += new System.EventHandler(this.btnDeleteRate_Click);
             // 
             // btnSave
             // 
@@ -154,6 +164,7 @@
             this.btnSave.TabIndex = 10;
             this.btnSave.Text = "SAVE RATE";
             this.btnSave.UseVisualStyleBackColor = true;
+            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
             // btnCancel
             // 
@@ -164,6 +175,7 @@
             this.btnCancel.TabIndex = 11;
             this.btnCancel.Text = "CANCEL";
             this.btnCancel.UseVisualStyleBackColor = true;
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
             // dgvRatePlans
             // 
@@ -188,6 +200,8 @@
             this.txtPlanName.Size = new System.Drawing.Size(880, 34);
             this.txtPlanName.TabIndex = 13;
             this.txtPlanName.Text = "Rate Plan Name";
+            this.txtPlanName.Enter += new System.EventHandler(this.txtPlanName_Enter);
+            this.txtPlanName.Leave += new System.EventHandler(this.txtPlanName_Leave);
             // 
             // rtbPlanDescription
             // 
@@ -197,6 +211,8 @@
             this.rtbPlanDescription.Size = new System.Drawing.Size(880, 320);
             this.rtbPlanDescription.TabIndex = 14;
             this.rtbPlanDescription.Text = "Rate Plan Description...";
+            this.rtbPlanDescription.Enter += new System.EventHandler(this.rtbPlanDescription_Enter);
+            this.rtbPlanDescription.Leave += new System.EventHandler(this.rtbPlanDescription_Leave);
             // 
             // frmRateManagement
             // 

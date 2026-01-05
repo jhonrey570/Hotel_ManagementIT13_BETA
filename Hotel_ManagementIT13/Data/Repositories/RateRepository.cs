@@ -30,78 +30,80 @@ namespace Hotel_ManagementIT13.Data.Repositories
                     if (result != null && result != DBNull.Value)
                     {
                         decimal baseRate = Convert.ToDecimal(result);
-
-                        // Apply guest type discount
                         return ApplyGuestTypeDiscount(baseRate, guestTypeId);
                     }
                 }
             }
-
-            // Default rate if none found
             return GetDefaultRate(roomTypeId);
         }
 
         private decimal ApplyGuestTypeDiscount(decimal baseRate, int guestTypeId)
         {
             decimal discount = 0;
-
-            // Use if-else instead of switch for safety
-            if (guestTypeId == 2) // VIP
-                discount = 0.10m;
-            else if (guestTypeId == 3) // Corporate
-                discount = 0.15m;
-            else if (guestTypeId == 4) // Travel Agency
-                discount = 0.20m;
-
+            if (guestTypeId == 2) discount = 0.10m;
+            else if (guestTypeId == 3) discount = 0.15m;
+            else if (guestTypeId == 4) discount = 0.20m;
             return baseRate * (1 - discount);
         }
 
         private decimal GetDefaultRate(int roomTypeId)
         {
-            // Use if-else instead of switch expression for compatibility
-            if (roomTypeId == 1) return 100;     // Single
-            else if (roomTypeId == 2) return 150; // Double
-            else if (roomTypeId == 3) return 200; // Twin
-            else if (roomTypeId == 4) return 300; // Suite
-            else if (roomTypeId == 5) return 400; // Deluxe
-            else if (roomTypeId == 6) return 1000; // Presidential
-            else return 100; // Default
+            if (roomTypeId == 1) return 100;
+            else if (roomTypeId == 2) return 150;
+            else if (roomTypeId == 3) return 200;
+            else if (roomTypeId == 4) return 300;
+            else if (roomTypeId == 5) return 400;
+            else if (roomTypeId == 6) return 1000;
+            else return 100;
         }
 
         public List<RateConfiguration> GetRateConfigurations()
         {
             var rates = new List<RateConfiguration>();
 
-            using (var conn = DatabaseHelper.GetConnection())
+            try
             {
-                conn.Open();
-                string query = @"
-                    SELECT rc.*, rt.type_name, rp.plan_name
-                    FROM rate_configurations rc
-                    JOIN room_types rt ON rc.room_type_id = rt.room_type_id
-                    JOIN rate_plans rp ON rc.rate_plan_id = rp.rate_plan_id
-                    ORDER BY rc.start_date DESC, rt.type_name";
-
-                using (var cmd = new MySqlCommand(query, conn))
+                using (var conn = DatabaseHelper.GetConnection())
                 {
-                    using (var reader = cmd.ExecuteReader())
+                    conn.Open();
+                    string query = @"
+                        SELECT rc.*, rt.type_name, rp.plan_name
+                        FROM rate_configurations rc
+                        JOIN room_types rt ON rc.room_type_id = rt.room_type_id
+                        JOIN rate_plans rp ON rc.rate_plan_id = rp.rate_plan_id
+                        ORDER BY rc.start_date DESC, rt.type_name";
+
+                    Console.WriteLine("DEBUG: Loading rate configurations...");
+
+                    using (var cmd = new MySqlCommand(query, conn))
                     {
-                        while (reader.Read())
+                        using (var reader = cmd.ExecuteReader())
                         {
-                            rates.Add(new RateConfiguration
+                            int count = 0;
+                            while (reader.Read())
                             {
-                                RateId = Convert.ToInt32(reader["rate_id"]),
-                                RoomTypeId = Convert.ToInt32(reader["room_type_id"]),
-                                RatePlanId = Convert.ToInt32(reader["rate_plan_id"]),
-                                RateAmount = Convert.ToDecimal(reader["rate_amount"]),
-                                StartDate = Convert.ToDateTime(reader["start_date"]),
-                                EndDate = Convert.ToDateTime(reader["end_date"]),
-                                RoomTypeName = reader["type_name"].ToString(),
-                                PlanName = reader["plan_name"].ToString()
-                            });
+                                count++;
+                                rates.Add(new RateConfiguration
+                                {
+                                    RateId = Convert.ToInt32(reader["rate_id"]),
+                                    RoomTypeId = Convert.ToInt32(reader["room_type_id"]),
+                                    RatePlanId = Convert.ToInt32(reader["rate_plan_id"]),
+                                    RateAmount = Convert.ToDecimal(reader["rate_amount"]),
+                                    StartDate = Convert.ToDateTime(reader["start_date"]),
+                                    EndDate = Convert.ToDateTime(reader["end_date"]),
+                                    RoomTypeName = reader["type_name"].ToString(),
+                                    PlanName = reader["plan_name"].ToString()
+                                });
+                            }
+                            Console.WriteLine($"DEBUG: Loaded {count} rate configurations");
                         }
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"ERROR in GetRateConfigurations: {ex.Message}");
+                throw;
             }
 
             return rates;
@@ -109,25 +111,37 @@ namespace Hotel_ManagementIT13.Data.Repositories
 
         public bool AddRateConfiguration(RateConfiguration rate)
         {
-            using (var conn = DatabaseHelper.GetConnection())
+            try
             {
-                conn.Open();
-                string query = @"
-                    INSERT INTO rate_configurations 
-                    (room_type_id, rate_plan_id, rate_amount, start_date, end_date)
-                    VALUES 
-                    (@roomTypeId, @ratePlanId, @rateAmount, @startDate, @endDate)";
+                Console.WriteLine($"DEBUG: Adding rate configuration - RoomTypeId: {rate.RoomTypeId}, RatePlanId: {rate.RatePlanId}, Amount: {rate.RateAmount}");
 
-                using (var cmd = new MySqlCommand(query, conn))
+                using (var conn = DatabaseHelper.GetConnection())
                 {
-                    cmd.Parameters.AddWithValue("@roomTypeId", rate.RoomTypeId);
-                    cmd.Parameters.AddWithValue("@ratePlanId", rate.RatePlanId);
-                    cmd.Parameters.AddWithValue("@rateAmount", rate.RateAmount);
-                    cmd.Parameters.AddWithValue("@startDate", rate.StartDate);
-                    cmd.Parameters.AddWithValue("@endDate", rate.EndDate);
+                    conn.Open();
+                    string query = @"
+                        INSERT INTO rate_configurations 
+                        (room_type_id, rate_plan_id, rate_amount, start_date, end_date)
+                        VALUES 
+                        (@roomTypeId, @ratePlanId, @rateAmount, @startDate, @endDate)";
 
-                    return cmd.ExecuteNonQuery() > 0;
+                    using (var cmd = new MySqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@roomTypeId", rate.RoomTypeId);
+                        cmd.Parameters.AddWithValue("@ratePlanId", rate.RatePlanId);
+                        cmd.Parameters.AddWithValue("@rateAmount", rate.RateAmount);
+                        cmd.Parameters.AddWithValue("@startDate", rate.StartDate);
+                        cmd.Parameters.AddWithValue("@endDate", rate.EndDate);
+
+                        int rowsAffected = cmd.ExecuteNonQuery();
+                        Console.WriteLine($"DEBUG: Added rate configuration, rows affected: {rowsAffected}");
+                        return rowsAffected > 0;
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"ERROR in AddRateConfiguration: {ex.Message}");
+                throw;
             }
         }
 
@@ -159,31 +173,97 @@ namespace Hotel_ManagementIT13.Data.Repositories
             }
         }
 
+        public bool DeleteRateConfiguration(int rateId)
+        {
+            using (var conn = DatabaseHelper.GetConnection())
+            {
+                conn.Open();
+                string query = "DELETE FROM rate_configurations WHERE rate_id = @rateId";
+
+                using (var cmd = new MySqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@rateId", rateId);
+                    return cmd.ExecuteNonQuery() > 0;
+                }
+            }
+        }
+
+        public RateConfiguration GetRateConfigurationById(int rateId)
+        {
+            using (var conn = DatabaseHelper.GetConnection())
+            {
+                conn.Open();
+                string query = @"
+                    SELECT rc.*, rt.type_name, rp.plan_name
+                    FROM rate_configurations rc
+                    JOIN room_types rt ON rc.room_type_id = rt.room_type_id
+                    JOIN rate_plans rp ON rc.rate_plan_id = rp.rate_plan_id
+                    WHERE rc.rate_id = @rateId";
+
+                using (var cmd = new MySqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@rateId", rateId);
+
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            return new RateConfiguration
+                            {
+                                RateId = Convert.ToInt32(reader["rate_id"]),
+                                RoomTypeId = Convert.ToInt32(reader["room_type_id"]),
+                                RatePlanId = Convert.ToInt32(reader["rate_plan_id"]),
+                                RateAmount = Convert.ToDecimal(reader["rate_amount"]),
+                                StartDate = Convert.ToDateTime(reader["start_date"]),
+                                EndDate = Convert.ToDateTime(reader["end_date"]),
+                                RoomTypeName = reader["type_name"].ToString(),
+                                PlanName = reader["plan_name"].ToString()
+                            };
+                        }
+                    }
+                }
+            }
+            return null;
+        }
+
         public List<RoomType> GetRoomTypes()
         {
             var roomTypes = new List<RoomType>();
 
-            using (var conn = DatabaseHelper.GetConnection())
+            try
             {
-                conn.Open();
-                string query = "SELECT * FROM room_types ORDER BY type_name";
+                Console.WriteLine("DEBUG: Loading room types...");
 
-                using (var cmd = new MySqlCommand(query, conn))
+                using (var conn = DatabaseHelper.GetConnection())
                 {
-                    using (var reader = cmd.ExecuteReader())
+                    conn.Open();
+                    string query = "SELECT * FROM room_types ORDER BY type_name";
+
+                    using (var cmd = new MySqlCommand(query, conn))
                     {
-                        while (reader.Read())
+                        using (var reader = cmd.ExecuteReader())
                         {
-                            roomTypes.Add(new RoomType
+                            int count = 0;
+                            while (reader.Read())
                             {
-                                RoomTypeId = Convert.ToInt32(reader["room_type_id"]),
-                                TypeName = reader["type_name"].ToString(),
-                                BaseRate = Convert.ToDecimal(reader["base_rate"]),
-                                MaxOccupancy = Convert.ToInt32(reader["max_occupancy"])
-                            });
+                                count++;
+                                roomTypes.Add(new RoomType
+                                {
+                                    RoomTypeId = Convert.ToInt32(reader["room_type_id"]),
+                                    TypeName = reader["type_name"].ToString(),
+                                    BaseRate = Convert.ToDecimal(reader["base_rate"]),
+                                    MaxOccupancy = Convert.ToInt32(reader["max_occupancy"])
+                                });
+                            }
+                            Console.WriteLine($"DEBUG: Loaded {count} room types");
                         }
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"ERROR in GetRoomTypes: {ex.Message}");
+                throw;
             }
 
             return roomTypes;
@@ -193,62 +273,74 @@ namespace Hotel_ManagementIT13.Data.Repositories
         {
             var ratePlans = new List<RatePlan>();
 
-            using (var conn = DatabaseHelper.GetConnection())
+            try
             {
-                conn.Open();
-                string query = "SELECT * FROM rate_plans ORDER BY plan_name";
+                Console.WriteLine("DEBUG: Loading rate plans...");
 
-                using (var cmd = new MySqlCommand(query, conn))
+                using (var conn = DatabaseHelper.GetConnection())
                 {
-                    using (var reader = cmd.ExecuteReader())
+                    conn.Open();
+                    string query = "SELECT * FROM rate_plans ORDER BY plan_name";
+
+                    using (var cmd = new MySqlCommand(query, conn))
                     {
-                        while (reader.Read())
+                        using (var reader = cmd.ExecuteReader())
                         {
-                            ratePlans.Add(new RatePlan
+                            int count = 0;
+                            while (reader.Read())
                             {
-                                RatePlanId = Convert.ToInt32(reader["rate_plan_id"]),
-                                PlanName = reader["plan_name"].ToString(),
-                                Description = reader["description"].ToString()
-                            });
+                                count++;
+                                Console.WriteLine($"DEBUG: Found rate plan: {reader["plan_name"]}");
+
+                                ratePlans.Add(new RatePlan
+                                {
+                                    RatePlanId = Convert.ToInt32(reader["rate_plan_id"]),
+                                    PlanName = reader["plan_name"].ToString(),
+                                    Description = reader["description"].ToString()
+                                });
+                            }
+                            Console.WriteLine($"DEBUG: Loaded {count} rate plans");
                         }
                     }
                 }
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"ERROR in GetRatePlans: {ex.Message}");
+                throw;
+            }
 
             return ratePlans;
         }
-    }
 
-    public class RateConfiguration
-    {
-        public int RateId { get; set; }
-        public int RoomTypeId { get; set; }
-        public int RatePlanId { get; set; }
-        public decimal RateAmount { get; set; }
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
-        public string RoomTypeName { get; set; }
-        public string PlanName { get; set; }
-
-        public bool IsActive()
+        // NEW METHOD: Update room type base rate
+        public bool UpdateRoomTypeBaseRate(int roomTypeId, decimal newBaseRate)
         {
-            DateTime today = DateTime.Today;
-            return StartDate <= today && EndDate >= today;
+            try
+            {
+                Console.WriteLine($"DEBUG: Updating room type {roomTypeId} base rate to {newBaseRate}");
+
+                using (var conn = DatabaseHelper.GetConnection())
+                {
+                    conn.Open();
+                    string query = "UPDATE room_types SET base_rate = @baseRate WHERE room_type_id = @roomTypeId";
+
+                    using (var cmd = new MySqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@roomTypeId", roomTypeId);
+                        cmd.Parameters.AddWithValue("@baseRate", newBaseRate);
+
+                        int rowsAffected = cmd.ExecuteNonQuery();
+                        Console.WriteLine($"DEBUG: Updated base rate, rows affected: {rowsAffected}");
+                        return rowsAffected > 0;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"ERROR in UpdateRoomTypeBaseRate: {ex.Message}");
+                return false;
+            }
         }
-    }
-
-    public class RoomType
-    {
-        public int RoomTypeId { get; set; }
-        public string TypeName { get; set; }
-        public decimal BaseRate { get; set; }
-        public int MaxOccupancy { get; set; }
-    }
-
-    public class RatePlan
-    {
-        public int RatePlanId { get; set; }
-        public string PlanName { get; set; }
-        public string Description { get; set; }
     }
 }

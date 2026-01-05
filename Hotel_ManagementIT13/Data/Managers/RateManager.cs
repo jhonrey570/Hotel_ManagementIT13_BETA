@@ -18,50 +18,38 @@ namespace Hotel_ManagementIT13.Data.Managers
         {
             try
             {
-                // First try to get rate configuration for specific date
                 decimal rate = GetConfiguredRate(roomTypeId, date);
-
-                // Apply guest type discount
                 rate = ApplyGuestDiscount(rate, guestTypeId);
-
                 return rate;
             }
             catch (Exception)
             {
-                // Fallback to default rate
                 return GetDefaultRate(roomTypeId);
             }
         }
 
         private decimal GetConfiguredRate(int roomTypeId, DateTime date)
         {
-            // In real implementation, query database for rate on specific date
-            // For now, use current rate
             return _rateRepo.GetCurrentRate(roomTypeId);
         }
 
         private decimal ApplyGuestDiscount(decimal rate, int guestTypeId)
         {
-            if (guestTypeId == 2) // VIP
-                return rate * 0.9m; // 10% discount
-            else if (guestTypeId == 3) // Corporate
-                return rate * 0.85m; // 15% discount
-            else if (guestTypeId == 4) // Travel Agency
-                return rate * 0.8m; // 20% discount
-
-            return rate; // No discount for regular guests
+            if (guestTypeId == 2) return rate * 0.9m;
+            else if (guestTypeId == 3) return rate * 0.85m;
+            else if (guestTypeId == 4) return rate * 0.8m;
+            return rate;
         }
 
         private decimal GetDefaultRate(int roomTypeId)
         {
-            // Use simple if-else for compatibility
-            if (roomTypeId == 1) return 100;     // Single
-            else if (roomTypeId == 2) return 150; // Double
-            else if (roomTypeId == 3) return 200; // Twin
-            else if (roomTypeId == 4) return 300; // Suite
-            else if (roomTypeId == 5) return 400; // Deluxe
-            else if (roomTypeId == 6) return 1000; // Presidential
-            else return 100; // Default
+            if (roomTypeId == 1) return 100;
+            else if (roomTypeId == 2) return 150;
+            else if (roomTypeId == 3) return 200;
+            else if (roomTypeId == 4) return 300;
+            else if (roomTypeId == 5) return 400;
+            else if (roomTypeId == 6) return 1000;
+            else return 100;
         }
 
         public RateResult AddRateConfiguration(RateConfiguration rate)
@@ -70,43 +58,114 @@ namespace Hotel_ManagementIT13.Data.Managers
 
             try
             {
+                Console.WriteLine($"DEBUG [RateManager]: Validating rate configuration...");
+
                 // Validate rate
                 if (!ValidateRateConfiguration(rate, out string errorMessage))
                 {
                     result.Success = false;
                     result.Message = errorMessage;
+                    Console.WriteLine($"DEBUG [RateManager]: Validation failed: {errorMessage}");
                     return result;
                 }
 
-                // Check for overlapping rates
-                if (HasOverlappingRates(rate))
-                {
-                    result.Success = false;
-                    result.Message = "Rate configuration overlaps with existing rates for this room type";
-                    return result;
-                }
-
+                Console.WriteLine($"DEBUG [RateManager]: Calling repository to add rate...");
                 bool success = _rateRepo.AddRateConfiguration(rate);
 
                 if (success)
                 {
-                    result.Success = true;
-                    result.Message = "Rate configuration added successfully";
+                    // UPDATE THE BASE RATE IN ROOM_TYPES TABLE
+                    Console.WriteLine($"DEBUG [RateManager]: Updating base rate for room type {rate.RoomTypeId} to {rate.RateAmount}");
+                    bool baseRateUpdated = _rateRepo.UpdateRoomTypeBaseRate(rate.RoomTypeId, rate.RateAmount);
+
+                    if (baseRateUpdated)
+                    {
+                        result.Success = true;
+                        result.Message = "Rate configuration added successfully AND base rate updated";
+                        Console.WriteLine($"DEBUG [RateManager]: Base rate updated successfully");
+                    }
+                    else
+                    {
+                        result.Success = true;
+                        result.Message = "Rate configuration added but base rate update failed";
+                        Console.WriteLine($"DEBUG [RateManager]: Base rate update failed");
+                    }
                     result.RateConfiguration = rate;
                 }
                 else
                 {
                     result.Success = false;
                     result.Message = "Failed to add rate configuration";
+                    Console.WriteLine($"DEBUG [RateManager]: Repository returned false - rate not added");
                 }
             }
             catch (Exception ex)
             {
+                Console.WriteLine($"DEBUG [RateManager]: Exception: {ex.Message}");
+                Console.WriteLine($"DEBUG [RateManager]: Stack Trace: {ex.StackTrace}");
                 result.Success = false;
                 result.Message = $"Error adding rate configuration: {ex.Message}";
             }
 
             return result;
+        }
+
+        public bool UpdateRateConfiguration(RateConfiguration rate)
+        {
+            try
+            {
+                // Validate rate
+                if (!ValidateRateConfiguration(rate, out string errorMessage))
+                {
+                    Console.WriteLine($"DEBUG [RateManager]: Update validation failed: {errorMessage}");
+                    return false;
+                }
+
+                // Update the rate configuration
+                bool success = _rateRepo.UpdateRateConfiguration(rate);
+
+                if (success)
+                {
+                    // ALSO UPDATE THE BASE RATE IN ROOM_TYPES TABLE
+                    Console.WriteLine($"DEBUG [RateManager]: Updating base rate for room type {rate.RoomTypeId} to {rate.RateAmount}");
+                    _rateRepo.UpdateRoomTypeBaseRate(rate.RoomTypeId, rate.RateAmount);
+                }
+
+                return success;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"DEBUG [RateManager]: Update exception: {ex.Message}");
+                return false;
+            }
+        }
+
+        public bool DeleteRateConfiguration(int rateId)
+        {
+            try
+            {
+                Console.WriteLine($"DEBUG [RateManager]: Deleting rate configuration {rateId}");
+                return _rateRepo.DeleteRateConfiguration(rateId);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"DEBUG [RateManager]: Delete exception: {ex.Message}");
+                return false;
+            }
+        }
+
+        public RateConfiguration GetRateConfigurationById(int rateId)
+        {
+            try
+            {
+                Console.WriteLine($"DEBUG [RateManager]: Getting rate configuration {rateId}");
+                return _rateRepo.GetRateConfigurationById(rateId);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"DEBUG [RateManager]: GetById exception: {ex.Message}");
+                return null;
+            }
         }
 
         private bool ValidateRateConfiguration(RateConfiguration rate, out string errorMessage)
@@ -137,19 +196,11 @@ namespace Hotel_ManagementIT13.Data.Managers
                 return false;
             }
 
-            if (rate.StartDate < DateTime.Today)
-            {
-                errorMessage = "Start date cannot be in the past";
-                return false;
-            }
-
             return true;
         }
 
         private bool HasOverlappingRates(RateConfiguration newRate)
         {
-            // Implementation to check for overlapping rate configurations
-            // This would query the database for existing rates
             return false; // Simplified for now
         }
 
@@ -184,12 +235,5 @@ namespace Hotel_ManagementIT13.Data.Managers
             decimal nightlyRate = GetRoomRate(roomTypeId, guestTypeId, checkIn);
             return nightlyRate * nights;
         }
-    }
-
-    public class RateResult
-    {
-        public bool Success { get; set; }
-        public string Message { get; set; }
-        public RateConfiguration RateConfiguration { get; set; }
     }
 }
