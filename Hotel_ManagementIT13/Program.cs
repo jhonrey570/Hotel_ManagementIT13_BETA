@@ -23,6 +23,7 @@ namespace Hotel_ManagementIT13
             }
 
             Application.Run(new Forms.frmLogin());
+            Application.Run(new Forms.frmSearch());
             //Application.Run(new Forms.frmMainDashboard());
         }
     }

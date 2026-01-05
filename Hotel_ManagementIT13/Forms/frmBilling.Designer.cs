@@ -39,8 +39,6 @@
             this.rtbPaymentNotes = new System.Windows.Forms.RichTextBox();
             this.dtpPaymentDate = new System.Windows.Forms.DateTimePicker();
             this.lblTotalAmount = new System.Windows.Forms.Label();
-            this.lblPaidAmount = new System.Windows.Forms.Label();
-            this.lblBalance = new System.Windows.Forms.Label();
             this.txtSearchBill = new System.Windows.Forms.TextBox();
             this.btnSearch = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvBills)).BeginInit();
@@ -54,12 +52,12 @@
             this.dgvBills.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgvBills.BackgroundColor = System.Drawing.SystemColors.Control;
             this.dgvBills.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvBills.Location = new System.Drawing.Point(40, 160);
+            this.dgvBills.Location = new System.Drawing.Point(40, 86);
             this.dgvBills.Name = "dgvBills";
             this.dgvBills.ReadOnly = true;
             this.dgvBills.RowHeadersWidth = 51;
             this.dgvBills.RowTemplate.Height = 30;
-            this.dgvBills.Size = new System.Drawing.Size(900, 400);
+            this.dgvBills.Size = new System.Drawing.Size(900, 257);
             this.dgvBills.TabIndex = 0;
             // 
             // dgvBillItems
@@ -69,18 +67,18 @@
             this.dgvBillItems.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgvBillItems.BackgroundColor = System.Drawing.SystemColors.Control;
             this.dgvBillItems.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvBillItems.Location = new System.Drawing.Point(40, 600);
+            this.dgvBillItems.Location = new System.Drawing.Point(40, 403);
             this.dgvBillItems.Name = "dgvBillItems";
             this.dgvBillItems.ReadOnly = true;
             this.dgvBillItems.RowHeadersWidth = 51;
             this.dgvBillItems.RowTemplate.Height = 30;
-            this.dgvBillItems.Size = new System.Drawing.Size(900, 300);
+            this.dgvBillItems.Size = new System.Drawing.Size(900, 257);
             this.dgvBillItems.TabIndex = 1;
             // 
             // pnlPayment
             // 
             this.pnlPayment.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.pnlPayment.Location = new System.Drawing.Point(1000, 160);
+            this.pnlPayment.Location = new System.Drawing.Point(1007, 86);
             this.pnlPayment.Name = "pnlPayment";
             this.pnlPayment.Size = new System.Drawing.Size(880, 200);
             this.pnlPayment.TabIndex = 2;
@@ -162,28 +160,6 @@
             this.lblTotalAmount.TabIndex = 10;
             this.lblTotalAmount.Text = "Total Amount:";
             // 
-            // lblPaidAmount
-            // 
-            this.lblPaidAmount.AutoSize = true;
-            this.lblPaidAmount.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblPaidAmount.ForeColor = System.Drawing.Color.Green;
-            this.lblPaidAmount.Location = new System.Drawing.Point(1000, 100);
-            this.lblPaidAmount.Name = "lblPaidAmount";
-            this.lblPaidAmount.Size = new System.Drawing.Size(194, 36);
-            this.lblPaidAmount.TabIndex = 11;
-            this.lblPaidAmount.Text = "Paid Amount:";
-            // 
-            // lblBalance
-            // 
-            this.lblBalance.AutoSize = true;
-            this.lblBalance.Font = new System.Drawing.Font("Microsoft Sans Serif", 22F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblBalance.ForeColor = System.Drawing.Color.Purple;
-            this.lblBalance.Location = new System.Drawing.Point(1480, 40);
-            this.lblBalance.Name = "lblBalance";
-            this.lblBalance.Size = new System.Drawing.Size(172, 42);
-            this.lblBalance.TabIndex = 12;
-            this.lblBalance.Text = "Balance:";
-            // 
             // txtSearchBill
             // 
             this.txtSearchBill.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -198,7 +174,7 @@
             this.btnSearch.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnSearch.Location = new System.Drawing.Point(760, 40);
             this.btnSearch.Name = "btnSearch";
-            this.btnSearch.Size = new System.Drawing.Size(180, 40);
+            this.btnSearch.Size = new System.Drawing.Size(180, 34);
             this.btnSearch.TabIndex = 14;
             this.btnSearch.Text = "SEARCH";
             this.btnSearch.UseVisualStyleBackColor = true;
@@ -208,10 +184,9 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1920, 960);
+            this.Controls.Add(this.dgvBillItems);
             this.Controls.Add(this.btnSearch);
             this.Controls.Add(this.txtSearchBill);
-            this.Controls.Add(this.lblBalance);
-            this.Controls.Add(this.lblPaidAmount);
             this.Controls.Add(this.lblTotalAmount);
             this.Controls.Add(this.dtpPaymentDate);
             this.Controls.Add(this.rtbPaymentNotes);
@@ -221,7 +196,6 @@
             this.Controls.Add(this.btnProcessPayment);
             this.Controls.Add(this.txtAmountToPay);
             this.Controls.Add(this.pnlPayment);
-            this.Controls.Add(this.dgvBillItems);
             this.Controls.Add(this.dgvBills);
             this.Name = "frmBilling";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -248,8 +222,6 @@
         private System.Windows.Forms.RichTextBox rtbPaymentNotes;
         private System.Windows.Forms.DateTimePicker dtpPaymentDate;
         private System.Windows.Forms.Label lblTotalAmount;
-        private System.Windows.Forms.Label lblPaidAmount;
-        private System.Windows.Forms.Label lblBalance;
         private System.Windows.Forms.TextBox txtSearchBill;
         private System.Windows.Forms.Button btnSearch;
     }
