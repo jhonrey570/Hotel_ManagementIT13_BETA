@@ -4,6 +4,7 @@ using Hotel_ManagementIT13.Data.Repositories;
 using System;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -17,10 +18,13 @@ namespace Hotel_ManagementIT13.Forms
         private RoomManager _roomManager;
         private ReportManager _reportManager;
         private Timer _dashboardTimer;
+        private CultureInfo _phCulture;
 
         public frmMainDashboard()
         {
             InitializeComponent();
+            // Create Philippine culture for Peso formatting
+            _phCulture = CultureInfo.CreateSpecificCulture("en-PH");
             InitializeManagers();
             SetupMenu();
             SetupQuickActions();
@@ -330,7 +334,7 @@ namespace Hotel_ManagementIT13.Forms
             lblAvailableRoomsValue.Text = "0";
             lblOccupiedRoomsValue.Text = "0";
             lblPendingValue.Text = "0";
-            lblRevenueValue.Text = "$0.00";
+            lblRevenueValue.Text = "₱0.00"; // Changed from "$0.00" to "₱0.00"
             lblOccupancyRate.Text = "0%";
             lblOccupancyRate.ForeColor = Color.Gray;
         }
@@ -340,12 +344,13 @@ namespace Hotel_ManagementIT13.Forms
             try
             {
                 decimal todaysRevenue = _paymentRepo.GetTotalRevenue(today, today);
-                lblRevenueValue.Text = $"${todaysRevenue:N2}";
+                // Changed from $"${todaysRevenue:N2}" to use Peso sign with proper formatting
+                lblRevenueValue.Text = todaysRevenue.ToString("₱#,##0.00", _phCulture);
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error loading revenue data: {ex.Message}");
-                lblRevenueValue.Text = "$0.00";
+                lblRevenueValue.Text = "₱0.00"; // Changed from "$0.00"
             }
         }
 
@@ -632,7 +637,8 @@ namespace Hotel_ManagementIT13.Forms
                     ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Column,
                     Color = Color.FromArgb(52, 152, 219),
                     IsValueShownAsLabel = true,
-                    LabelFormat = "C0",
+                    // Changed from "C0" to custom formatting with Peso sign
+                    LabelFormat = "₱#,##0",
                     ChartArea = "ChartArea1"
                 };
 
@@ -648,7 +654,7 @@ namespace Hotel_ManagementIT13.Forms
                 chartRevenue.Series.Add(revenueSeries);
 
                 // Configure chart
-                chartRevenue.ChartAreas[0].AxisY.Title = "Amount ($)";
+                chartRevenue.ChartAreas[0].AxisY.Title = "Amount (₱)"; // Changed from "Amount ($)"
                 chartRevenue.ChartAreas[0].AxisY.TitleFont = new Font("Microsoft Sans Serif", 10, FontStyle.Bold);
                 chartRevenue.ChartAreas[0].AxisX.LabelStyle.Angle = -45;
 
@@ -823,6 +829,16 @@ namespace Hotel_ManagementIT13.Forms
                 _dashboardTimer.Stop();
                 _dashboardTimer.Dispose();
             }
+        }
+
+        private void lblRevenueToday_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void mainMenu_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+
         }
     }
 }

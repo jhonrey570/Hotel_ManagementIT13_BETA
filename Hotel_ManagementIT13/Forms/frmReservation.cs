@@ -77,7 +77,7 @@ namespace Hotel_ManagementIT13.Forms
 
             lblSelectedGuest.Text = "No guest selected";
             lblSelectedGuest.ForeColor = Color.Red;
-            lblTotalAmount.Text = "$0.00";
+            lblTotalAmount.Text = "₱0.00"; // Changed from $ to ₱
             lblSearchResults.Text = "Found 0 guest(s)";
             lblAvailableRooms.Text = "Available: 0 room(s)";
 
@@ -303,30 +303,78 @@ namespace Hotel_ManagementIT13.Forms
 
         private void SetupRoomsGrid()
         {
+            // Clear existing columns
+            dgvAvailableRooms.Columns.Clear();
+            dgvAvailableRooms.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgvAvailableRooms.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dgvAvailableRooms.RowHeadersVisible = false;
+            dgvAvailableRooms.ReadOnly = false; // IMPORTANT: Make the grid editable
+            dgvAvailableRooms.AllowUserToAddRows = false;
+            dgvAvailableRooms.AllowUserToDeleteRows = false;
+            dgvAvailableRooms.EditMode = DataGridViewEditMode.EditOnEnter; // Allow editing
+
+            // Create columns with proper FillWeight for equal sizing
             DataGridViewCheckBoxColumn checkCol = new DataGridViewCheckBoxColumn();
             checkCol.Name = "Select";
             checkCol.HeaderText = "Select";
-            checkCol.Width = 50;
+            checkCol.FillWeight = 8; // 8% of total width
+            checkCol.ReadOnly = false; // Make checkbox editable
+            checkCol.TrueValue = true;
+            checkCol.FalseValue = false;
             dgvAvailableRooms.Columns.Add(checkCol);
 
-            dgvAvailableRooms.Columns.Add("RoomId", "ID");
-            dgvAvailableRooms.Columns["RoomId"].Visible = false;
-            dgvAvailableRooms.Columns.Add("RoomNumber", "Room #");
-            dgvAvailableRooms.Columns["RoomNumber"].Width = 70;
-            dgvAvailableRooms.Columns.Add("Type", "Type");
-            dgvAvailableRooms.Columns["Type"].Width = 80;
-            dgvAvailableRooms.Columns.Add("Floor", "Floor");
-            dgvAvailableRooms.Columns["Floor"].Width = 50;
-            dgvAvailableRooms.Columns.Add("View", "View");
-            dgvAvailableRooms.Columns["View"].Width = 80;
-            dgvAvailableRooms.Columns.Add("Status", "Status");
-            dgvAvailableRooms.Columns["Status"].Width = 100;
-            dgvAvailableRooms.Columns.Add("Rate", "Rate/Night");
-            dgvAvailableRooms.Columns["Rate"].Width = 90;
+            DataGridViewTextBoxColumn roomIdCol = new DataGridViewTextBoxColumn();
+            roomIdCol.Name = "RoomId";
+            roomIdCol.HeaderText = "ID";
+            roomIdCol.Visible = false;
+            roomIdCol.ReadOnly = true;
+            dgvAvailableRooms.Columns.Add(roomIdCol);
 
+            DataGridViewTextBoxColumn roomNumCol = new DataGridViewTextBoxColumn();
+            roomNumCol.Name = "RoomNumber";
+            roomNumCol.HeaderText = "Room #";
+            roomNumCol.FillWeight = 12; // 12% of total width
+            roomNumCol.ReadOnly = true;
+            dgvAvailableRooms.Columns.Add(roomNumCol);
+
+            DataGridViewTextBoxColumn typeCol = new DataGridViewTextBoxColumn();
+            typeCol.Name = "Type";
+            typeCol.HeaderText = "Type";
+            typeCol.FillWeight = 15; // 15% of total width
+            typeCol.ReadOnly = true;
+            dgvAvailableRooms.Columns.Add(typeCol);
+
+            DataGridViewTextBoxColumn floorCol = new DataGridViewTextBoxColumn();
+            floorCol.Name = "Floor";
+            floorCol.HeaderText = "Floor";
+            floorCol.FillWeight = 10; // 10% of total width
+            floorCol.ReadOnly = true;
+            dgvAvailableRooms.Columns.Add(floorCol);
+
+            DataGridViewTextBoxColumn viewCol = new DataGridViewTextBoxColumn();
+            viewCol.Name = "View";
+            viewCol.HeaderText = "View";
+            viewCol.FillWeight = 15; // 15% of total width
+            viewCol.ReadOnly = true;
+            dgvAvailableRooms.Columns.Add(viewCol);
+
+            DataGridViewTextBoxColumn statusCol = new DataGridViewTextBoxColumn();
+            statusCol.Name = "Status";
+            statusCol.HeaderText = "Status";
+            statusCol.FillWeight = 20; // 20% of total width
+            statusCol.ReadOnly = true;
+            dgvAvailableRooms.Columns.Add(statusCol);
+
+            DataGridViewTextBoxColumn rateCol = new DataGridViewTextBoxColumn();
+            rateCol.Name = "Rate";
+            rateCol.HeaderText = "Rate/Night";
+            rateCol.FillWeight = 20; // 20% of total width
+            rateCol.ReadOnly = true;
+            dgvAvailableRooms.Columns.Add(rateCol);
+
+            // Subscribe to events
             dgvAvailableRooms.CurrentCellDirtyStateChanged += dgvAvailableRooms_CurrentCellDirtyStateChanged;
             dgvAvailableRooms.CellValueChanged += dgvAvailableRooms_CellValueChanged;
-            dgvGuestResults.CellClick += dgvGuestResults_CellClick;
         }
 
         private void btnSearchGuest_Click(object sender, EventArgs e)
@@ -553,7 +601,7 @@ namespace Hotel_ManagementIT13.Forms
                         room.Floor,
                         room.ViewName ?? "",
                         statusDisplay,
-                        room.BaseRate.ToString("C")
+                        room.BaseRate.ToString("C").Replace("$", "₱") // Changed from $ to ₱
                     );
 
                     if (rowIndex >= 0)
@@ -614,7 +662,7 @@ namespace Hotel_ManagementIT13.Forms
             {
                 if (_selectedGuest == null || _selectedRoomIds.Count == 0)
                 {
-                    lblTotalAmount.Text = "$0.00";
+                    lblTotalAmount.Text = "₱0.00"; // Changed from $ to ₱
                     return;
                 }
 
@@ -623,7 +671,7 @@ namespace Hotel_ManagementIT13.Forms
 
                 if (checkOut <= checkIn)
                 {
-                    lblTotalAmount.Text = "$0.00";
+                    lblTotalAmount.Text = "₱0.00"; // Changed from $ to ₱
                     return;
                 }
 
@@ -645,13 +693,13 @@ namespace Hotel_ManagementIT13.Forms
                     totalAmount = totalAmount * 0.95m;
                 }
 
-                lblTotalAmount.Text = totalAmount.ToString("C");
+                lblTotalAmount.Text = totalAmount.ToString("₱0.00"); // Changed from C to ₱ format
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Error calculating total: {ex.Message}", "Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
-                lblTotalAmount.Text = "$0.00";
+                lblTotalAmount.Text = "₱0.00"; // Changed from $ to ₱
             }
         }
 
@@ -676,7 +724,7 @@ namespace Hotel_ManagementIT13.Forms
                     Adults = (int)nudAdults.Value,
                     Children = (int)nudChildren.Value,
                     SpecialRequests = specialRequests,
-                    TotalAmount = decimal.Parse(lblTotalAmount.Text.Replace("$", "").Replace(",", "")),
+                    TotalAmount = decimal.Parse(lblTotalAmount.Text.Replace("₱", "").Replace(",", "")), // Changed from $ to ₱
                     CreatedAt = DateTime.Now
                 };
 
@@ -863,7 +911,7 @@ namespace Hotel_ManagementIT13.Forms
 
                 lblSelectedGuest.Text = "No guest selected";
                 lblSelectedGuest.ForeColor = Color.Red;
-                lblTotalAmount.Text = "$0.00";
+                lblTotalAmount.Text = "₱0.00"; // Changed from $ to ₱
                 lblAvailableRooms.Text = "Available: 0 room(s)";
 
                 dtpCheckIn.Value = DateTime.Today;
@@ -929,13 +977,22 @@ namespace Hotel_ManagementIT13.Forms
 
         private void dgvAvailableRooms_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.ColumnIndex == 0 && e.RowIndex >= 0)
+            // Check if the changed cell is the Select checkbox column
+            if (e.RowIndex >= 0 && e.ColumnIndex == 0) // Column 0 is the Select checkbox
             {
                 try
                 {
                     var row = dgvAvailableRooms.Rows[e.RowIndex];
-                    bool isChecked = Convert.ToBoolean(row.Cells[0].Value);
-                    int roomId = Convert.ToInt32(row.Cells[1].Value);
+                    bool isChecked = false;
+
+                    // Safely get the checkbox value
+                    if (row.Cells["Select"].Value != null)
+                    {
+                        isChecked = Convert.ToBoolean(row.Cells["Select"].Value);
+                    }
+
+                    // Get the RoomId from the "RoomId" column (column 1)
+                    int roomId = Convert.ToInt32(row.Cells["RoomId"].Value);
 
                     if (isChecked)
                     {
@@ -959,7 +1016,7 @@ namespace Hotel_ManagementIT13.Forms
 
         private void dgvAvailableRooms_CurrentCellDirtyStateChanged(object sender, EventArgs e)
         {
-            if (dgvAvailableRooms.IsCurrentCellDirty)
+            if (dgvAvailableRooms.IsCurrentCellDirty && dgvAvailableRooms.CurrentCell is DataGridViewCheckBoxCell)
             {
                 dgvAvailableRooms.CommitEdit(DataGridViewDataErrorContexts.Commit);
             }
@@ -1400,6 +1457,21 @@ namespace Hotel_ManagementIT13.Forms
         private void BtnFilterHistory_Click(object sender, EventArgs e)
         {
             LoadReservationHistory();
+        }
+
+        private void lblChckOut_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lblchckIn_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void pnlGuestInfo_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 }

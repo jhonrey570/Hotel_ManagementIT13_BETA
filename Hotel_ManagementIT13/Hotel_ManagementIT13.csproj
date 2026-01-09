@@ -413,6 +413,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -433,6 +434,13 @@
     <Folder Include="Resources\Images\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\imagenikuyacg.png" />
+    <None Include="Resources\imagenikuyacg1.png" />
+    <None Include="Resources\logosaIT13.png" />
+    <None Include="Resources\logosaIT131.png" />
+    <None Include="Resources\Smart-Hotel-Room.jpg" />
+    <None Include="Resources\people.png" />
+    <None Include="Resources\exit.png" />
     <Content Include="SqlServerTypes\readme.htm" />
     <Content Include="SqlServerTypes\x64\msvcr120.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

@@ -28,12 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend4 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.mainMenu = new System.Windows.Forms.MenuStrip();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.tabMain = new System.Windows.Forms.TabControl();
@@ -56,32 +56,38 @@
             this.lblOccupiedRoomsValue = new System.Windows.Forms.Label();
             this.lblRevenueValue = new System.Windows.Forms.Label();
             this.lblPendingValue = new System.Windows.Forms.Label();
+            this.pnlStats = new System.Windows.Forms.Panel();
+            this.lblSts = new System.Windows.Forms.Label();
+            this.pnlRightSidebar = new System.Windows.Forms.Panel();
+            this.pnlCharts = new System.Windows.Forms.Panel();
+            this.lblGrps = new System.Windows.Forms.Label();
             this.tabMain.SuspendLayout();
             this.pnlHeader.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvTodaysArrivals)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvTodaysDepartures)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chartOccupancy)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chartRevenue)).BeginInit();
+            this.pnlStats.SuspendLayout();
+            this.pnlRightSidebar.SuspendLayout();
+            this.pnlCharts.SuspendLayout();
             this.SuspendLayout();
             // 
             // mainMenu
             // 
-            this.mainMenu.BackColor = System.Drawing.Color.FromArgb(52, 73, 94);
-            this.mainMenu.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.mainMenu.BackColor = System.Drawing.Color.Plum;
             this.mainMenu.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.mainMenu.Location = new System.Drawing.Point(0, 0);
             this.mainMenu.Name = "mainMenu";
-            this.mainMenu.Padding = new System.Windows.Forms.Padding(8, 2, 0, 2);
-            this.mainMenu.Size = new System.Drawing.Size(1920, 36);
+            this.mainMenu.Size = new System.Drawing.Size(1920, 30);
             this.mainMenu.TabIndex = 0;
             this.mainMenu.Text = "menuStrip1";
+            this.mainMenu.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.mainMenu_ItemClicked);
             // 
             // statusStrip
             // 
-            this.statusStrip.BackColor = System.Drawing.Color.FromArgb(236, 240, 241);
-            this.statusStrip.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.statusStrip.BackColor = System.Drawing.Color.Plum;
             this.statusStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
-            this.statusStrip.Location = new System.Drawing.Point(0, 938);
+            this.statusStrip.Location = new System.Drawing.Point(0, 928);
             this.statusStrip.Name = "statusStrip";
             this.statusStrip.Size = new System.Drawing.Size(1920, 22);
             this.statusStrip.TabIndex = 1;
@@ -91,74 +97,83 @@
             // 
             this.tabMain.Controls.Add(this.tabPage1);
             this.tabMain.Controls.Add(this.tabPage2);
-            this.tabMain.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tabMain.Location = new System.Drawing.Point(1450, 160);
+            this.tabMain.Dock = System.Windows.Forms.DockStyle.Top;
+            this.tabMain.Location = new System.Drawing.Point(10, 255);
             this.tabMain.Name = "tabMain";
             this.tabMain.SelectedIndex = 0;
-            this.tabMain.Size = new System.Drawing.Size(440, 400);
+            this.tabMain.Size = new System.Drawing.Size(450, 400);
             this.tabMain.TabIndex = 2;
             // 
             // tabPage1
             // 
             this.tabPage1.BackColor = System.Drawing.Color.White;
-            this.tabPage1.Location = new System.Drawing.Point(4, 34);
+            this.tabPage1.Location = new System.Drawing.Point(4, 25);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(432, 362);
+            this.tabPage1.Size = new System.Drawing.Size(442, 371);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Upcoming Events";
             // 
             // tabPage2
             // 
             this.tabPage2.BackColor = System.Drawing.Color.White;
-            this.tabPage2.Location = new System.Drawing.Point(4, 34);
+            this.tabPage2.Location = new System.Drawing.Point(4, 25);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(432, 362);
+            this.tabPage2.Size = new System.Drawing.Size(442, 371);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Notifications";
             // 
             // pnlHeader
             // 
+            this.pnlHeader.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.pnlHeader.BackColor = System.Drawing.Color.White;
             this.pnlHeader.Controls.Add(this.lblWelcome);
             this.pnlHeader.Controls.Add(this.btnLogout);
-            this.pnlHeader.Location = new System.Drawing.Point(0, 36);
+            this.pnlHeader.Location = new System.Drawing.Point(12, 27);
             this.pnlHeader.Name = "pnlHeader";
-            this.pnlHeader.Size = new System.Drawing.Size(1920, 80);
+            this.pnlHeader.Size = new System.Drawing.Size(1896, 65);
             this.pnlHeader.TabIndex = 3;
             // 
             // lblWelcome
             // 
             this.lblWelcome.AutoSize = true;
-            this.lblWelcome.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblWelcome.ForeColor = System.Drawing.Color.FromArgb(44, 62, 80);
-            this.lblWelcome.Location = new System.Drawing.Point(40, 22);
+            this.lblWelcome.Font = new System.Drawing.Font("Georgia", 28.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblWelcome.ForeColor = System.Drawing.Color.DarkGoldenrod;
+            this.lblWelcome.Location = new System.Drawing.Point(9, 3);
             this.lblWelcome.Name = "lblWelcome";
-            this.lblWelcome.Size = new System.Drawing.Size(145, 36);
+            this.lblWelcome.Size = new System.Drawing.Size(315, 54);
             this.lblWelcome.TabIndex = 0;
-            this.lblWelcome.Text = "Welcome";
+            this.lblWelcome.Text = "WELCOME!";
             // 
             // btnLogout
             // 
-            this.btnLogout.BackColor = System.Drawing.Color.FromArgb(231, 76, 60);
+            this.btnLogout.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnLogout.BackColor = System.Drawing.Color.White;
+            this.btnLogout.BackgroundImage = global::Hotel_ManagementIT13.Properties.Resources.exit;
+            this.btnLogout.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btnLogout.FlatAppearance.BorderSize = 0;
             this.btnLogout.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnLogout.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnLogout.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnLogout.ForeColor = System.Drawing.Color.White;
-            this.btnLogout.Location = new System.Drawing.Point(1680, 15);
+            this.btnLogout.Location = new System.Drawing.Point(1850, 17);
             this.btnLogout.Name = "btnLogout";
-            this.btnLogout.Size = new System.Drawing.Size(200, 50);
+            this.btnLogout.Padding = new System.Windows.Forms.Padding(12, 6, 12, 6);
+            this.btnLogout.Size = new System.Drawing.Size(30, 30);
             this.btnLogout.TabIndex = 1;
-            this.btnLogout.Text = "LOGOUT";
             this.btnLogout.UseVisualStyleBackColor = false;
             // 
             // flpQuickActions
             // 
+            this.flpQuickActions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.flpQuickActions.BackColor = System.Drawing.Color.White;
-            this.flpQuickActions.Location = new System.Drawing.Point(40, 140);
+            this.flpQuickActions.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.flpQuickActions.Location = new System.Drawing.Point(12, 98);
             this.flpQuickActions.Name = "flpQuickActions";
-            this.flpQuickActions.Size = new System.Drawing.Size(1400, 100);
+            this.flpQuickActions.Padding = new System.Windows.Forms.Padding(10, 8, 10, 8);
+            this.flpQuickActions.Size = new System.Drawing.Size(1896, 142);
             this.flpQuickActions.TabIndex = 6;
             // 
             // dgvTodaysArrivals
@@ -169,14 +184,15 @@
             this.dgvTodaysArrivals.BackgroundColor = System.Drawing.Color.White;
             this.dgvTodaysArrivals.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.dgvTodaysArrivals.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvTodaysArrivals.GridColor = System.Drawing.Color.FromArgb(236, 240, 241);
-            this.dgvTodaysArrivals.Location = new System.Drawing.Point(1450, 580);
+            this.dgvTodaysArrivals.Dock = System.Windows.Forms.DockStyle.Top;
+            this.dgvTodaysArrivals.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(236)))), ((int)(((byte)(240)))), ((int)(((byte)(241)))));
+            this.dgvTodaysArrivals.Location = new System.Drawing.Point(10, 10);
             this.dgvTodaysArrivals.Name = "dgvTodaysArrivals";
             this.dgvTodaysArrivals.ReadOnly = true;
             this.dgvTodaysArrivals.RowHeadersVisible = false;
             this.dgvTodaysArrivals.RowHeadersWidth = 51;
             this.dgvTodaysArrivals.RowTemplate.Height = 30;
-            this.dgvTodaysArrivals.Size = new System.Drawing.Size(440, 150);
+            this.dgvTodaysArrivals.Size = new System.Drawing.Size(450, 245);
             this.dgvTodaysArrivals.TabIndex = 7;
             // 
             // dgvTodaysDepartures
@@ -187,186 +203,245 @@
             this.dgvTodaysDepartures.BackgroundColor = System.Drawing.Color.White;
             this.dgvTodaysDepartures.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.dgvTodaysDepartures.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvTodaysDepartures.GridColor = System.Drawing.Color.FromArgb(236, 240, 241);
-            this.dgvTodaysDepartures.Location = new System.Drawing.Point(1450, 750);
+            this.dgvTodaysDepartures.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgvTodaysDepartures.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(236)))), ((int)(((byte)(240)))), ((int)(((byte)(241)))));
+            this.dgvTodaysDepartures.Location = new System.Drawing.Point(10, 10);
             this.dgvTodaysDepartures.Name = "dgvTodaysDepartures";
             this.dgvTodaysDepartures.ReadOnly = true;
             this.dgvTodaysDepartures.RowHeadersVisible = false;
             this.dgvTodaysDepartures.RowHeadersWidth = 51;
             this.dgvTodaysDepartures.RowTemplate.Height = 30;
-            this.dgvTodaysDepartures.Size = new System.Drawing.Size(440, 150);
+            this.dgvTodaysDepartures.Size = new System.Drawing.Size(450, 659);
             this.dgvTodaysDepartures.TabIndex = 8;
             // 
             // lblAvailableRooms
             // 
             this.lblAvailableRooms.AutoSize = true;
-            this.lblAvailableRooms.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblAvailableRooms.ForeColor = System.Drawing.Color.FromArgb(44, 62, 80);
-            this.lblAvailableRooms.Location = new System.Drawing.Point(40, 260);
+            this.lblAvailableRooms.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblAvailableRooms.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.lblAvailableRooms.Location = new System.Drawing.Point(13, 65);
             this.lblAvailableRooms.Name = "lblAvailableRooms";
-            this.lblAvailableRooms.Size = new System.Drawing.Size(192, 29);
+            this.lblAvailableRooms.Size = new System.Drawing.Size(169, 28);
             this.lblAvailableRooms.TabIndex = 9;
-            this.lblAvailableRooms.Text = "Available Rooms";
+            this.lblAvailableRooms.Text = "Available Rooms:";
             // 
             // lblOccupiedRooms
             // 
             this.lblOccupiedRooms.AutoSize = true;
-            this.lblOccupiedRooms.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblOccupiedRooms.ForeColor = System.Drawing.Color.FromArgb(44, 62, 80);
-            this.lblOccupiedRooms.Location = new System.Drawing.Point(40, 330);
+            this.lblOccupiedRooms.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblOccupiedRooms.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.lblOccupiedRooms.Location = new System.Drawing.Point(13, 121);
             this.lblOccupiedRooms.Name = "lblOccupiedRooms";
-            this.lblOccupiedRooms.Size = new System.Drawing.Size(200, 29);
+            this.lblOccupiedRooms.Size = new System.Drawing.Size(173, 28);
             this.lblOccupiedRooms.TabIndex = 10;
-            this.lblOccupiedRooms.Text = "Occupied Rooms";
+            this.lblOccupiedRooms.Text = "Occupied Rooms:";
             // 
             // lblRevenueToday
             // 
             this.lblRevenueToday.AutoSize = true;
-            this.lblRevenueToday.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblRevenueToday.ForeColor = System.Drawing.Color.FromArgb(44, 62, 80);
-            this.lblRevenueToday.Location = new System.Drawing.Point(40, 400);
+            this.lblRevenueToday.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblRevenueToday.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.lblRevenueToday.Location = new System.Drawing.Point(13, 177);
             this.lblRevenueToday.Name = "lblRevenueToday";
-            this.lblRevenueToday.Size = new System.Drawing.Size(173, 29);
+            this.lblRevenueToday.Size = new System.Drawing.Size(156, 28);
             this.lblRevenueToday.TabIndex = 11;
-            this.lblRevenueToday.Text = "Revenue Today";
+            this.lblRevenueToday.Text = "Revenue Today:";
+            this.lblRevenueToday.Click += new System.EventHandler(this.lblRevenueToday_Click);
             // 
             // lblPendingReservations
             // 
             this.lblPendingReservations.AutoSize = true;
-            this.lblPendingReservations.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblPendingReservations.ForeColor = System.Drawing.Color.FromArgb(44, 62, 80);
-            this.lblPendingReservations.Location = new System.Drawing.Point(40, 470);
+            this.lblPendingReservations.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblPendingReservations.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.lblPendingReservations.Location = new System.Drawing.Point(13, 233);
             this.lblPendingReservations.Name = "lblPendingReservations";
-            this.lblPendingReservations.Size = new System.Drawing.Size(237, 29);
+            this.lblPendingReservations.Size = new System.Drawing.Size(216, 28);
             this.lblPendingReservations.TabIndex = 12;
-            this.lblPendingReservations.Text = "Pending Reservations";
+            this.lblPendingReservations.Text = "Pending Reservations:";
             // 
             // chartOccupancy
             // 
+            this.chartOccupancy.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.chartOccupancy.BackColor = System.Drawing.Color.Transparent;
-            chartArea1.AxisX.LabelStyle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            chartArea1.AxisY.LabelStyle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            chartArea1.Name = "ChartArea1";
-            this.chartOccupancy.ChartAreas.Add(chartArea1);
-            legend1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            legend1.IsTextAutoFit = false;
-            legend1.Name = "Legend1";
-            this.chartOccupancy.Legends.Add(legend1);
-            this.chartOccupancy.Location = new System.Drawing.Point(500, 260);
+            chartArea3.Name = "ChartArea1";
+            this.chartOccupancy.ChartAreas.Add(chartArea3);
+            legend3.Name = "Legend1";
+            this.chartOccupancy.Legends.Add(legend3);
+            this.chartOccupancy.Location = new System.Drawing.Point(13, 40);
             this.chartOccupancy.Name = "chartOccupancy";
-            series1.ChartArea = "ChartArea1";
-            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Pie;
-            series1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            series1.IsValueShownAsLabel = true;
-            series1.Legend = "Legend1";
-            series1.Name = "Room Status";
-            this.chartOccupancy.Series.Add(series1);
-            this.chartOccupancy.Size = new System.Drawing.Size(900, 300);
+            this.chartOccupancy.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.None;
+            series3.ChartArea = "ChartArea1";
+            series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Pie;
+            series3.IsValueShownAsLabel = true;
+            series3.Legend = "Legend1";
+            series3.Name = "Room Status";
+            this.chartOccupancy.Series.Add(series3);
+            this.chartOccupancy.Size = new System.Drawing.Size(948, 289);
             this.chartOccupancy.TabIndex = 13;
             this.chartOccupancy.Text = "chart1";
             // 
             // chartRevenue
             // 
+            this.chartRevenue.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.chartRevenue.BackColor = System.Drawing.Color.Transparent;
-            chartArea2.AxisX.LabelStyle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            chartArea2.AxisY.LabelStyle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            chartArea2.Name = "ChartArea1";
-            this.chartRevenue.ChartAreas.Add(chartArea2);
-            legend2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            legend2.IsTextAutoFit = false;
-            legend2.Name = "Legend1";
-            this.chartRevenue.Legends.Add(legend2);
-            this.chartRevenue.Location = new System.Drawing.Point(500, 580);
+            chartArea4.Name = "ChartArea1";
+            this.chartRevenue.ChartAreas.Add(chartArea4);
+            legend4.Name = "Legend1";
+            this.chartRevenue.Legends.Add(legend4);
+            this.chartRevenue.Location = new System.Drawing.Point(13, 378);
             this.chartRevenue.Name = "chartRevenue";
-            series2.ChartArea = "ChartArea1";
-            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Column;
-            series2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            series2.IsValueShownAsLabel = true;
-            series2.LabelFormat = "C0";
-            series2.Legend = "Legend1";
-            series2.Name = "Revenue";
-            this.chartRevenue.Series.Add(series2);
-            this.chartRevenue.Size = new System.Drawing.Size(900, 320);
+            this.chartRevenue.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.None;
+            series4.ChartArea = "ChartArea1";
+            series4.IsValueShownAsLabel = true;
+            series4.LabelFormat = "C0";
+            series4.Legend = "Legend1";
+            series4.Name = "Revenue";
+            this.chartRevenue.Series.Add(series4);
+            this.chartRevenue.Size = new System.Drawing.Size(948, 288);
             this.chartRevenue.TabIndex = 14;
             this.chartRevenue.Text = "chart2";
             // 
             // lblOccupancyRate
             // 
             this.lblOccupancyRate.AutoSize = true;
-            this.lblOccupancyRate.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblOccupancyRate.ForeColor = System.Drawing.Color.FromArgb(39, 174, 96);
-            this.lblOccupancyRate.Location = new System.Drawing.Point(40, 530);
+            this.lblOccupancyRate.Font = new System.Drawing.Font("Calibri", 22.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblOccupancyRate.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.lblOccupancyRate.Location = new System.Drawing.Point(13, 317);
             this.lblOccupancyRate.Name = "lblOccupancyRate";
-            this.lblOccupancyRate.Size = new System.Drawing.Size(180, 69);
+            this.lblOccupancyRate.Size = new System.Drawing.Size(93, 45);
             this.lblOccupancyRate.TabIndex = 15;
             this.lblOccupancyRate.Text = "0.0%";
             // 
             // lblAvailableRoomsValue
             // 
             this.lblAvailableRoomsValue.AutoSize = true;
-            this.lblAvailableRoomsValue.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblAvailableRoomsValue.ForeColor = System.Drawing.Color.FromArgb(39, 174, 96);
-            this.lblAvailableRoomsValue.Location = new System.Drawing.Point(300, 250);
+            this.lblAvailableRoomsValue.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblAvailableRoomsValue.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.lblAvailableRoomsValue.Location = new System.Drawing.Point(300, 65);
             this.lblAvailableRoomsValue.Name = "lblAvailableRoomsValue";
-            this.lblAvailableRoomsValue.Size = new System.Drawing.Size(45, 46);
+            this.lblAvailableRoomsValue.Size = new System.Drawing.Size(24, 28);
             this.lblAvailableRoomsValue.TabIndex = 16;
             this.lblAvailableRoomsValue.Text = "0";
             // 
             // lblOccupiedRoomsValue
             // 
             this.lblOccupiedRoomsValue.AutoSize = true;
-            this.lblOccupiedRoomsValue.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblOccupiedRoomsValue.ForeColor = System.Drawing.Color.FromArgb(192, 57, 43);
-            this.lblOccupiedRoomsValue.Location = new System.Drawing.Point(300, 320);
+            this.lblOccupiedRoomsValue.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblOccupiedRoomsValue.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.lblOccupiedRoomsValue.Location = new System.Drawing.Point(300, 121);
             this.lblOccupiedRoomsValue.Name = "lblOccupiedRoomsValue";
-            this.lblOccupiedRoomsValue.Size = new System.Drawing.Size(45, 46);
+            this.lblOccupiedRoomsValue.Size = new System.Drawing.Size(24, 28);
             this.lblOccupiedRoomsValue.TabIndex = 17;
             this.lblOccupiedRoomsValue.Text = "0";
             // 
             // lblRevenueValue
             // 
             this.lblRevenueValue.AutoSize = true;
-            this.lblRevenueValue.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblRevenueValue.ForeColor = System.Drawing.Color.FromArgb(52, 152, 219);
-            this.lblRevenueValue.Location = new System.Drawing.Point(300, 390);
+            this.lblRevenueValue.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblRevenueValue.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.lblRevenueValue.Location = new System.Drawing.Point(300, 177);
             this.lblRevenueValue.Name = "lblRevenueValue";
-            this.lblRevenueValue.Size = new System.Drawing.Size(45, 46);
+            this.lblRevenueValue.Size = new System.Drawing.Size(24, 28);
             this.lblRevenueValue.TabIndex = 18;
             this.lblRevenueValue.Text = "0";
             // 
             // lblPendingValue
             // 
             this.lblPendingValue.AutoSize = true;
-            this.lblPendingValue.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblPendingValue.ForeColor = System.Drawing.Color.FromArgb(243, 156, 18);
-            this.lblPendingValue.Location = new System.Drawing.Point(300, 460);
+            this.lblPendingValue.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblPendingValue.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.lblPendingValue.Location = new System.Drawing.Point(300, 232);
             this.lblPendingValue.Name = "lblPendingValue";
-            this.lblPendingValue.Size = new System.Drawing.Size(45, 46);
+            this.lblPendingValue.Size = new System.Drawing.Size(26, 29);
             this.lblPendingValue.TabIndex = 19;
             this.lblPendingValue.Text = "0";
+            // 
+            // pnlStats
+            // 
+            this.pnlStats.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.pnlStats.BackColor = System.Drawing.Color.White;
+            this.pnlStats.Controls.Add(this.lblSts);
+            this.pnlStats.Controls.Add(this.lblAvailableRooms);
+            this.pnlStats.Controls.Add(this.lblPendingValue);
+            this.pnlStats.Controls.Add(this.lblOccupiedRooms);
+            this.pnlStats.Controls.Add(this.lblRevenueValue);
+            this.pnlStats.Controls.Add(this.lblRevenueToday);
+            this.pnlStats.Controls.Add(this.lblOccupiedRoomsValue);
+            this.pnlStats.Controls.Add(this.lblPendingReservations);
+            this.pnlStats.Controls.Add(this.lblOccupancyRate);
+            this.pnlStats.Controls.Add(this.lblAvailableRoomsValue);
+            this.pnlStats.Location = new System.Drawing.Point(12, 246);
+            this.pnlStats.Name = "pnlStats";
+            this.pnlStats.Padding = new System.Windows.Forms.Padding(10);
+            this.pnlStats.Size = new System.Drawing.Size(440, 382);
+            this.pnlStats.TabIndex = 20;
+            // 
+            // lblSts
+            // 
+            this.lblSts.AutoSize = true;
+            this.lblSts.Font = new System.Drawing.Font("Georgia", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblSts.ForeColor = System.Drawing.Color.DarkGoldenrod;
+            this.lblSts.Location = new System.Drawing.Point(13, 10);
+            this.lblSts.Name = "lblSts";
+            this.lblSts.Size = new System.Drawing.Size(87, 27);
+            this.lblSts.TabIndex = 15;
+            this.lblSts.Text = "Status";
+            // 
+            // pnlRightSidebar
+            // 
+            this.pnlRightSidebar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.pnlRightSidebar.BackColor = System.Drawing.Color.White;
+            this.pnlRightSidebar.Controls.Add(this.tabMain);
+            this.pnlRightSidebar.Controls.Add(this.dgvTodaysArrivals);
+            this.pnlRightSidebar.Controls.Add(this.dgvTodaysDepartures);
+            this.pnlRightSidebar.Location = new System.Drawing.Point(1438, 246);
+            this.pnlRightSidebar.Name = "pnlRightSidebar";
+            this.pnlRightSidebar.Padding = new System.Windows.Forms.Padding(10);
+            this.pnlRightSidebar.Size = new System.Drawing.Size(470, 679);
+            this.pnlRightSidebar.TabIndex = 21;
+            // 
+            // pnlCharts
+            // 
+            this.pnlCharts.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pnlCharts.BackColor = System.Drawing.Color.White;
+            this.pnlCharts.Controls.Add(this.lblGrps);
+            this.pnlCharts.Controls.Add(this.chartOccupancy);
+            this.pnlCharts.Controls.Add(this.chartRevenue);
+            this.pnlCharts.Location = new System.Drawing.Point(458, 246);
+            this.pnlCharts.Name = "pnlCharts";
+            this.pnlCharts.Padding = new System.Windows.Forms.Padding(10);
+            this.pnlCharts.Size = new System.Drawing.Size(974, 679);
+            this.pnlCharts.TabIndex = 22;
+            // 
+            // lblGrps
+            // 
+            this.lblGrps.AutoSize = true;
+            this.lblGrps.Font = new System.Drawing.Font("Georgia", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblGrps.ForeColor = System.Drawing.Color.DarkGoldenrod;
+            this.lblGrps.Location = new System.Drawing.Point(13, 10);
+            this.lblGrps.Name = "lblGrps";
+            this.lblGrps.Size = new System.Drawing.Size(100, 27);
+            this.lblGrps.TabIndex = 20;
+            this.lblGrps.Text = "Graphs";
             // 
             // frmMainDashboard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.FromArgb(236, 240, 241);
-            this.ClientSize = new System.Drawing.Size(1920, 960);
-            this.Controls.Add(this.lblPendingValue);
-            this.Controls.Add(this.lblRevenueValue);
-            this.Controls.Add(this.lblOccupiedRoomsValue);
-            this.Controls.Add(this.lblAvailableRoomsValue);
-            this.Controls.Add(this.lblOccupancyRate);
-            this.Controls.Add(this.chartRevenue);
-            this.Controls.Add(this.chartOccupancy);
-            this.Controls.Add(this.lblPendingReservations);
-            this.Controls.Add(this.lblRevenueToday);
-            this.Controls.Add(this.lblOccupiedRooms);
-            this.Controls.Add(this.lblAvailableRooms);
-            this.Controls.Add(this.dgvTodaysDepartures);
-            this.Controls.Add(this.dgvTodaysArrivals);
+            this.BackColor = System.Drawing.Color.Thistle;
+            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.ClientSize = new System.Drawing.Size(1920, 950);
+            this.Controls.Add(this.pnlCharts);
+            this.Controls.Add(this.pnlRightSidebar);
+            this.Controls.Add(this.pnlStats);
             this.Controls.Add(this.flpQuickActions);
             this.Controls.Add(this.pnlHeader);
-            this.Controls.Add(this.tabMain);
             this.Controls.Add(this.statusStrip);
             this.Controls.Add(this.mainMenu);
             this.MainMenuStrip = this.mainMenu;
@@ -382,6 +457,11 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgvTodaysDepartures)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.chartOccupancy)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.chartRevenue)).EndInit();
+            this.pnlStats.ResumeLayout(false);
+            this.pnlStats.PerformLayout();
+            this.pnlRightSidebar.ResumeLayout(false);
+            this.pnlCharts.ResumeLayout(false);
+            this.pnlCharts.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -411,5 +491,10 @@
         private System.Windows.Forms.Label lblOccupiedRoomsValue;
         private System.Windows.Forms.Label lblRevenueValue;
         private System.Windows.Forms.Label lblPendingValue;
+        private System.Windows.Forms.Panel pnlStats;
+        private System.Windows.Forms.Panel pnlRightSidebar;
+        private System.Windows.Forms.Panel pnlCharts;
+        private System.Windows.Forms.Label lblSts;
+        private System.Windows.Forms.Label lblGrps;
     }
 }

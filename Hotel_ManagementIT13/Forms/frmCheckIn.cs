@@ -18,24 +18,9 @@ namespace Hotel_ManagementIT13.Forms
 
         private Reservation _selectedReservation;
 
-        // Missing controls
-        private Label lblArrivalsCount;
-        private Label lblWalkInRooms;
-        private DateTimePicker dtpWalkInCheckOut;
-        private NumericUpDown nudWalkInAdults;
-        private NumericUpDown nudWalkInChildren;
-        private NumericUpDown nudWalkInDeposit;
-        private CheckBox chkPrintKeyCard;
-        private Button btnRefresh;
-        private TextBox txtWalkInFirstName;
-        private TextBox txtWalkInLastName;
-        private TextBox txtWalkInPhone;
-        private TextBox txtWalkInEmail;
-
         public frmCheckIn()
         {
             InitializeComponent();
-            InitializeMissingControls();
 
             _checkInManager = new CheckInManager();
             _reservationRepo = new ReservationRepository();
@@ -43,170 +28,6 @@ namespace Hotel_ManagementIT13.Forms
             _guestManager = new GuestManager();
 
             InitializeForm();
-        }
-
-        private void InitializeMissingControls()
-        {
-            // Labels for counts
-            lblArrivalsCount = new Label
-            {
-                AutoSize = true,
-                Font = new Font("Microsoft Sans Serif", 10F, FontStyle.Bold),
-                ForeColor = Color.DarkBlue,
-                Location = new Point(40, 20),
-                Name = "lblArrivalsCount",
-                Size = new Size(150, 20),
-                Text = "0 arrival(s) today"
-            };
-
-            lblWalkInRooms = new Label
-            {
-                AutoSize = true,
-                Font = new Font("Microsoft Sans Serif", 10F, FontStyle.Bold),
-                ForeColor = Color.DarkGreen,
-                Location = new Point(40, 460),
-                Name = "lblWalkInRooms",
-                Size = new Size(200, 20),
-                Text = "0 room(s) available for walk-in"
-            };
-
-            // Walk-in guest details
-            var lblWalkInGuest = new Label
-            {
-                Text = "Walk-in Guest Details:",
-                Font = new Font("Microsoft Sans Serif", 11F, FontStyle.Bold),
-                Location = new Point(1480, 360),
-                Size = new Size(200, 25)
-            };
-
-            var lblFirstName = new Label { Text = "First Name:", Location = new Point(1480, 400), Size = new Size(100, 25) };
-            txtWalkInFirstName = new TextBox
-            {
-                Location = new Point(1580, 400),
-                Size = new Size(150, 25),
-                Name = "txtWalkInFirstName"
-            };
-
-            var lblLastName = new Label { Text = "Last Name:", Location = new Point(1480, 435), Size = new Size(100, 25) };
-            txtWalkInLastName = new TextBox
-            {
-                Location = new Point(1580, 435),
-                Size = new Size(150, 25),
-                Name = "txtWalkInLastName"
-            };
-
-            var lblPhone = new Label { Text = "Phone:", Location = new Point(1480, 470), Size = new Size(100, 25) };
-            txtWalkInPhone = new TextBox
-            {
-                Location = new Point(1580, 470),
-                Size = new Size(150, 25),
-                Name = "txtWalkInPhone"
-            };
-
-            var lblEmail = new Label { Text = "Email:", Location = new Point(1480, 505), Size = new Size(100, 25) };
-            txtWalkInEmail = new TextBox
-            {
-                Location = new Point(1580, 505),
-                Size = new Size(150, 25),
-                Name = "txtWalkInEmail"
-            };
-
-            // Walk-in reservation controls
-            var lblWalkInCheckOut = new Label { Text = "Check-out Date:", Location = new Point(1480, 550), Size = new Size(150, 25) };
-            dtpWalkInCheckOut = new DateTimePicker
-            {
-                Font = new Font("Microsoft Sans Serif", 10F),
-                Location = new Point(1630, 550),
-                Name = "dtpWalkInCheckOut",
-                Size = new Size(150, 25),
-                Value = DateTime.Today.AddDays(1)
-            };
-
-            var lblWalkInGuests = new Label { Text = "Guests:", Location = new Point(1480, 585), Size = new Size(100, 25) };
-            nudWalkInAdults = new NumericUpDown
-            {
-                Font = new Font("Microsoft Sans Serif", 10F),
-                Location = new Point(1580, 585),
-                Minimum = 1,
-                Maximum = 10,
-                Value = 2,
-                Name = "nudWalkInAdults",
-                Size = new Size(60, 25)
-            };
-
-            var lblAdults = new Label { Text = "Adults", Location = new Point(1645, 588), Size = new Size(50, 20), Font = new Font("Microsoft Sans Serif", 8F) };
-
-            nudWalkInChildren = new NumericUpDown
-            {
-                Font = new Font("Microsoft Sans Serif", 10F),
-                Location = new Point(1700, 585),
-                Minimum = 0,
-                Maximum = 10,
-                Value = 0,
-                Name = "nudWalkInChildren",
-                Size = new Size(60, 25)
-            };
-
-            var lblChildren = new Label { Text = "Children", Location = new Point(1765, 588), Size = new Size(50, 20), Font = new Font("Microsoft Sans Serif", 8F) };
-
-            var lblDeposit = new Label { Text = "Deposit Amount:", Location = new Point(1480, 620), Size = new Size(120, 25) };
-            nudWalkInDeposit = new NumericUpDown
-            {
-                Font = new Font("Microsoft Sans Serif", 10F),
-                DecimalPlaces = 2,
-                Minimum = 0,
-                Maximum = 10000,
-                Value = 0,
-                Location = new Point(1610, 620),
-                Name = "nudWalkInDeposit",
-                Size = new Size(150, 25)
-            };
-
-            chkPrintKeyCard = new CheckBox
-            {
-                AutoSize = true,
-                Font = new Font("Microsoft Sans Serif", 10F),
-                Location = new Point(1480, 655),
-                Name = "chkPrintKeyCard",
-                Size = new Size(150, 25),
-                Text = "Print Key Card",
-                Checked = true
-            };
-
-            btnRefresh = new Button
-            {
-                Font = new Font("Microsoft Sans Serif", 10F, FontStyle.Bold),
-                Location = new Point(1700, 20),
-                Name = "btnRefresh",
-                Size = new Size(150, 40),
-                Text = "REFRESH",
-                BackColor = Color.LightBlue
-            };
-            btnRefresh.Click += btnRefresh_Click;
-
-            // Add controls to form
-            this.Controls.Add(lblArrivalsCount);
-            this.Controls.Add(lblWalkInRooms);
-            this.Controls.Add(lblWalkInGuest);
-            this.Controls.Add(lblFirstName);
-            this.Controls.Add(txtWalkInFirstName);
-            this.Controls.Add(lblLastName);
-            this.Controls.Add(txtWalkInLastName);
-            this.Controls.Add(lblPhone);
-            this.Controls.Add(txtWalkInPhone);
-            this.Controls.Add(lblEmail);
-            this.Controls.Add(txtWalkInEmail);
-            this.Controls.Add(lblWalkInCheckOut);
-            this.Controls.Add(dtpWalkInCheckOut);
-            this.Controls.Add(lblWalkInGuests);
-            this.Controls.Add(nudWalkInAdults);
-            this.Controls.Add(lblAdults);
-            this.Controls.Add(nudWalkInChildren);
-            this.Controls.Add(lblChildren);
-            this.Controls.Add(lblDeposit);
-            this.Controls.Add(nudWalkInDeposit);
-            this.Controls.Add(chkPrintKeyCard);
-            this.Controls.Add(btnRefresh);
         }
 
         private void frmCheckIn_Load(object sender, EventArgs e)
@@ -218,12 +39,15 @@ namespace Hotel_ManagementIT13.Forms
             // Wire up events
             dgvTodayArrivals.CellClick += dgvTodayArrivals_CellClick;
             dgvTodayArrivals.SelectionChanged += dgvTodayArrivals_SelectionChanged;
+            dgvWalkInAvailable.CellClick += dgvWalkInAvailable_CellClick;
+            dgvWalkInAvailable.SelectionChanged += dgvWalkInAvailable_SelectionChanged;
         }
 
         private void InitializeForm()
         {
             // Set current date/time
             dtpActualCheckIn.Value = DateTime.Now;
+            dtpWalkInCheckOut.Value = DateTime.Today.AddDays(1);
 
             // Initialize payment method dropdown
             if (cmbPaymentMethod.Items.Count == 0)
@@ -234,6 +58,12 @@ namespace Hotel_ManagementIT13.Forms
                 });
                 cmbPaymentMethod.SelectedIndex = 0;
             }
+
+            // Initialize walk-in controls
+            nudWalkInAdults.Value = 1;
+            nudWalkInChildren.Value = 0;
+            nudWalkInDeposit.Value = 0;
+            chkPrintWalkInKeyCard.Checked = true;
 
             InitializeDataGridViews();
         }
@@ -388,7 +218,7 @@ namespace Hotel_ManagementIT13.Forms
                     );
                 }
 
-                lblWalkInRooms.Text = $"{availableRooms.Count} room(s) available for walk-in";
+                lblWalkInRoomsCount.Text = $"{availableRooms.Count} room(s) available for walk-in";
             }
             catch (Exception ex)
             {
@@ -550,7 +380,7 @@ namespace Hotel_ManagementIT13.Forms
                     Helper.ShowSuccess(result.Message);
 
                     // Print key card if requested
-                    if (chkPrintKeyCard.Checked)
+                    if (true) // You can add another checkbox for regular check-ins
                     {
                         PrintKeyCard(result.Reservation);
                     }
@@ -650,7 +480,7 @@ namespace Hotel_ManagementIT13.Forms
                     Helper.ShowSuccess(result.Message);
 
                     // Print key card if requested
-                    if (chkPrintKeyCard.Checked && result.Reservation != null)
+                    if (chkPrintWalkInKeyCard.Checked && result.Reservation != null)
                     {
                         PrintKeyCard(result.Reservation);
                     }
@@ -712,7 +542,6 @@ namespace Hotel_ManagementIT13.Forms
             nudDeposit.Value = 0;
             cmbPaymentMethod.SelectedIndex = 0;
             rtbCheckInNotes.Clear();
-            chkPrintKeyCard.Checked = true;
 
             btnProcessCheckIn.Enabled = false;
             btnPrintKeyCard.Enabled = false;
@@ -732,7 +561,7 @@ namespace Hotel_ManagementIT13.Forms
             txtWalkInPhone.Clear();
             txtWalkInEmail.Clear();
             dtpWalkInCheckOut.Value = DateTime.Today.AddDays(1);
-            nudWalkInAdults.Value = 2;
+            nudWalkInAdults.Value = 1;
             nudWalkInChildren.Value = 0;
             nudWalkInDeposit.Value = 0;
 
@@ -810,6 +639,21 @@ namespace Hotel_ManagementIT13.Forms
                     btnProcessCheckIn_Click(sender, e);
                 }
             }
+        }
+
+        private void pnlReservationDetails_Paint(object sender, PaintEventArgs e)
+        {
+            // Optional: Add custom painting if needed
+        }
+
+        private void lblDate_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void pnlWalkIn_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 }
