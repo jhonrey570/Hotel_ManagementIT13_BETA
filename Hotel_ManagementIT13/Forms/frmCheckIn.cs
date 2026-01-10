@@ -49,20 +49,22 @@ namespace Hotel_ManagementIT13.Forms
             dtpActualCheckIn.Value = DateTime.Now;
             dtpWalkInCheckOut.Value = DateTime.Today.AddDays(1);
 
-            // Initialize payment method dropdown
+            // Initialize payment method dropdowns
             if (cmbPaymentMethod.Items.Count == 0)
             {
-                cmbPaymentMethod.Items.AddRange(new string[]
-                {
-                    "Cash", "Credit Card", "Debit Card", "Bank Transfer", "Check"
-                });
+                string[] paymentMethods = { "Cash", "Credit Card", "Debit Card", "Bank Transfer", "Check" };
+                cmbPaymentMethod.Items.AddRange(paymentMethods);
                 cmbPaymentMethod.SelectedIndex = 0;
+
+                cmbWalkInPaymentMethod.Items.AddRange(paymentMethods);
+                cmbWalkInPaymentMethod.SelectedIndex = 0;
             }
 
             // Initialize walk-in controls
             nudWalkInAdults.Value = 1;
             nudWalkInChildren.Value = 0;
             nudWalkInDeposit.Value = 0;
+            nudWalkInPaymentAmount.Value = 0;
             chkPrintWalkInKeyCard.Checked = true;
 
             InitializeDataGridViews();
@@ -208,12 +210,15 @@ namespace Hotel_ManagementIT13.Forms
 
                 foreach (var room in availableRooms)
                 {
+                    // Format room rate with peso sign
+                    string formattedRate = FormatCurrencyPeso(room.BaseRate);
+
                     dgvWalkInAvailable.Rows.Add(
                         room.RoomNumber,
                         room.RoomTypeName,
                         room.Floor,
                         room.ViewName,
-                        Helper.FormatCurrency(room.BaseRate),
+                        formattedRate,
                         room.MaxOccupancy
                     );
                 }
@@ -284,9 +289,9 @@ namespace Hotel_ManagementIT13.Forms
                         _selectedReservation.Rooms.Select(r => r.RoomNumber));
                     lblRoomNumber.Text = roomNumbers;
 
-                    // Calculate amount due
+                    // Calculate amount due - format with peso sign
                     decimal amountDue = _selectedReservation.TotalAmount;
-                    lblAmountDue.Text = Helper.FormatCurrency(amountDue);
+                    lblAmountDue.Text = FormatCurrencyPeso(amountDue);
 
                     // Enable check-in button
                     btnProcessCheckIn.Enabled = true;
@@ -350,10 +355,13 @@ namespace Hotel_ManagementIT13.Forms
                 return;
             }
 
+            // Format deposit amount with peso sign
+            string formattedDeposit = FormatCurrencyPeso(depositAmount);
+
             // Confirm check-in
             DialogResult confirm = MessageBox.Show(
                 $"Check-in {_selectedReservation.GuestName} to room(s): {lblRoomNumber.Text}?\n\n" +
-                $"Deposit: {Helper.FormatCurrency(depositAmount)}\n" +
+                $"Deposit: {formattedDeposit}\n" +
                 $"Payment Method: {cmbPaymentMethod.SelectedItem}",
                 "Confirm Check-in",
                 MessageBoxButtons.YesNo,
@@ -422,6 +430,23 @@ namespace Hotel_ManagementIT13.Forms
                 return;
             }
 
+            decimal depositAmount = nudWalkInDeposit.Value;
+            decimal paymentAmount = nudWalkInPaymentAmount.Value;
+
+            if (depositAmount < 0)
+            {
+                Helper.ShowError("Deposit amount cannot be negative");
+                nudWalkInDeposit.Focus();
+                return;
+            }
+
+            if (paymentAmount < 0)
+            {
+                Helper.ShowError("Payment amount cannot be negative");
+                nudWalkInPaymentAmount.Focus();
+                return;
+            }
+
             try
             {
                 // Get selected room
@@ -445,6 +470,13 @@ namespace Hotel_ManagementIT13.Forms
                     CreatedAt = DateTime.Now
                 };
 
+                // Get payment method
+                string paymentMethod = cmbWalkInPaymentMethod.SelectedItem?.ToString() ?? "Cash";
+
+                // Format amounts with peso sign
+                string formattedDeposit = FormatCurrencyPeso(depositAmount);
+                string formattedPayment = FormatCurrencyPeso(paymentAmount);
+
                 // Confirm walk-in check-in
                 DialogResult confirm = MessageBox.Show(
                     $"Check-in walk-in guest:\n\n" +
@@ -452,7 +484,8 @@ namespace Hotel_ManagementIT13.Forms
                     $"Room: {room.RoomNumber}\n" +
                     $"Check-out: {dtpWalkInCheckOut.Value:yyyy-MM-dd}\n" +
                     $"Guests: {nudWalkInAdults.Value} adults, {nudWalkInChildren.Value} children\n" +
-                    $"Deposit: {Helper.FormatCurrency(nudWalkInDeposit.Value)}",
+                    $"Deposit: {formattedDeposit}\n" +
+                    $"Payment: {formattedPayment} ({paymentMethod})",
                     "Confirm Walk-in Check-in",
                     MessageBoxButtons.YesNo,
                     MessageBoxIcon.Question);
@@ -473,7 +506,9 @@ namespace Hotel_ManagementIT13.Forms
                     (int)nudWalkInAdults.Value,
                     (int)nudWalkInChildren.Value,
                     ApplicationContext.CurrentUser?.UserId ?? 1,
-                    nudWalkInDeposit.Value);
+                    depositAmount,
+                    paymentAmount,
+                    paymentMethod);
 
                 if (result.Success)
                 {
@@ -514,12 +549,15 @@ namespace Hotel_ManagementIT13.Forms
             {
                 // Simple key card printing simulation
                 string rooms = string.Join(", ", reservation.Rooms.Select(r => r.RoomNumber));
+                string formattedTotal = FormatCurrencyPeso(reservation.TotalAmount);
+
                 string message = $"KEY CARD PRINTED\n\n" +
                                $"Guest: {reservation.GuestName}\n" +
                                $"Room(s): {rooms}\n" +
                                $"Check-in: {DateTime.Now:yyyy-MM-dd HH:mm}\n" +
                                $"Check-out: {reservation.CheckOutDate:yyyy-MM-dd}\n" +
-                               $"Booking Ref: {reservation.BookingReference}";
+                               $"Booking Ref: {reservation.BookingReference}\n" +
+                               $"Total Amount: {formattedTotal}";
 
                 MessageBox.Show(message, "Key Card Printed",
                               MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -537,7 +575,7 @@ namespace Hotel_ManagementIT13.Forms
             lblGuestName.Text = "---";
             lblBookingRef.Text = "---";
             lblRoomNumber.Text = "---";
-            lblAmountDue.Text = "$0.00";
+            lblAmountDue.Text = "₱0.00";
 
             nudDeposit.Value = 0;
             cmbPaymentMethod.SelectedIndex = 0;
@@ -564,6 +602,8 @@ namespace Hotel_ManagementIT13.Forms
             nudWalkInAdults.Value = 1;
             nudWalkInChildren.Value = 0;
             nudWalkInDeposit.Value = 0;
+            nudWalkInPaymentAmount.Value = 0;
+            cmbWalkInPaymentMethod.SelectedIndex = 0;
 
             // Clear selection
             dgvWalkInAvailable.ClearSelection();
@@ -654,6 +694,17 @@ namespace Hotel_ManagementIT13.Forms
         private void pnlWalkIn_Paint(object sender, PaintEventArgs e)
         {
 
+        }
+
+        private void lblWalkInEmail_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        // Helper method to format currency with peso sign
+        private string FormatCurrencyPeso(decimal amount)
+        {
+            return amount.ToString("₱0.00");
         }
     }
 }

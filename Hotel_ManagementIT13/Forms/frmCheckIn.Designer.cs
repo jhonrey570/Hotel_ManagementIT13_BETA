@@ -48,15 +48,16 @@
             this.lblRoomNumber = new System.Windows.Forms.Label();
             this.txtPayment = new System.Windows.Forms.TextBox();
             this.lblAmountDue = new System.Windows.Forms.Label();
-            this.btnWalkInCheckIn = new System.Windows.Forms.Button();
             this.lblChck = new System.Windows.Forms.Label();
             this.pnlDetails = new System.Windows.Forms.Panel();
             this.lblWalkInRoomsCount = new System.Windows.Forms.Label();
             this.lblArrivalsCount = new System.Windows.Forms.Label();
-            this.lblSel = new System.Windows.Forms.Label();
-            this.lblArrivals = new System.Windows.Forms.Label();
             this.pnlWalkIn = new System.Windows.Forms.Panel();
+            this.cmbWalkInPaymentMethod = new System.Windows.Forms.ComboBox();
+            this.lblWalkInPaymentMethod = new System.Windows.Forms.Label();
+            this.nudWalkInPaymentAmount = new System.Windows.Forms.NumericUpDown();
             this.btnRefresh = new System.Windows.Forms.Button();
+            this.lblWalkInPaymentAmount = new System.Windows.Forms.Label();
             this.chkPrintWalkInKeyCard = new System.Windows.Forms.CheckBox();
             this.nudWalkInDeposit = new System.Windows.Forms.NumericUpDown();
             this.nudWalkInChildren = new System.Windows.Forms.NumericUpDown();
@@ -75,24 +76,17 @@
             this.txtWalkInFirstName = new System.Windows.Forms.TextBox();
             this.lblWalkInFirstName = new System.Windows.Forms.Label();
             this.lblWalkInGuestDetails = new System.Windows.Forms.Label();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
-            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
+            this.btnWalkInCheckIn = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvTodayArrivals)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvWalkInAvailable)).BeginInit();
             this.pnlReservationDetails.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudDeposit)).BeginInit();
             this.pnlDetails.SuspendLayout();
             this.pnlWalkIn.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudWalkInPaymentAmount)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudWalkInDeposit)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudWalkInChildren)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudWalkInAdults)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.SuspendLayout();
             // 
             // dgvTodayArrivals
@@ -203,16 +197,15 @@
             // 
             // btnProcessCheckIn
             // 
-            this.btnProcessCheckIn.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnProcessCheckIn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnProcessCheckIn.BackColor = System.Drawing.Color.Green;
             this.btnProcessCheckIn.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnProcessCheckIn.ForeColor = System.Drawing.Color.White;
-            this.btnProcessCheckIn.Location = new System.Drawing.Point(314, 425);
+            this.btnProcessCheckIn.Location = new System.Drawing.Point(352, 425);
             this.btnProcessCheckIn.Name = "btnProcessCheckIn";
             this.btnProcessCheckIn.Size = new System.Drawing.Size(200, 50);
             this.btnProcessCheckIn.TabIndex = 8;
-            this.btnProcessCheckIn.Text = "PROCESS CHECK-IN";
+            this.btnProcessCheckIn.Text = "PROCESS";
             this.btnProcessCheckIn.UseVisualStyleBackColor = false;
             this.btnProcessCheckIn.Click += new System.EventHandler(this.btnProcessCheckIn_Click);
             // 
@@ -270,7 +263,6 @@
             this.nudDeposit.Name = "nudDeposit";
             this.nudDeposit.Size = new System.Drawing.Size(300, 36);
             this.nudDeposit.TabIndex = 12;
-            this.nudDeposit.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // lblGuestDetails
             // 
@@ -293,7 +285,7 @@
             this.rtbCheckInNotes.Name = "rtbCheckInNotes";
             this.rtbCheckInNotes.Size = new System.Drawing.Size(444, 260);
             this.rtbCheckInNotes.TabIndex = 14;
-            this.rtbCheckInNotes.Text = "Check-in Notes...";
+            this.rtbCheckInNotes.Text = "";
             // 
             // lblGuestName
             // 
@@ -334,7 +326,6 @@
             this.txtPayment.Name = "txtPayment";
             this.txtPayment.Size = new System.Drawing.Size(300, 36);
             this.txtPayment.TabIndex = 7;
-            this.txtPayment.Text = "0.00";
             // 
             // lblAmountDue
             // 
@@ -346,20 +337,6 @@
             this.lblAmountDue.Size = new System.Drawing.Size(135, 28);
             this.lblAmountDue.TabIndex = 6;
             this.lblAmountDue.Text = "Amount Due:";
-            // 
-            // btnWalkInCheckIn
-            // 
-            this.btnWalkInCheckIn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnWalkInCheckIn.BackColor = System.Drawing.Color.Orange;
-            this.btnWalkInCheckIn.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnWalkInCheckIn.ForeColor = System.Drawing.Color.White;
-            this.btnWalkInCheckIn.Location = new System.Drawing.Point(342, 309);
-            this.btnWalkInCheckIn.Name = "btnWalkInCheckIn";
-            this.btnWalkInCheckIn.Size = new System.Drawing.Size(250, 50);
-            this.btnWalkInCheckIn.TabIndex = 9;
-            this.btnWalkInCheckIn.Text = "WALK-IN CHECK-IN";
-            this.btnWalkInCheckIn.UseVisualStyleBackColor = false;
-            this.btnWalkInCheckIn.Click += new System.EventHandler(this.btnWalkInCheckIn_Click);
             // 
             // lblChck
             // 
@@ -377,8 +354,6 @@
             this.pnlDetails.BackColor = System.Drawing.Color.White;
             this.pnlDetails.Controls.Add(this.lblWalkInRoomsCount);
             this.pnlDetails.Controls.Add(this.lblArrivalsCount);
-            this.pnlDetails.Controls.Add(this.lblSel);
-            this.pnlDetails.Controls.Add(this.lblArrivals);
             this.pnlDetails.Controls.Add(this.lblChck);
             this.pnlDetails.Controls.Add(this.dgvTodayArrivals);
             this.pnlDetails.Controls.Add(this.dgvWalkInAvailable);
@@ -390,61 +365,35 @@
             // lblWalkInRoomsCount
             // 
             this.lblWalkInRoomsCount.AutoSize = true;
-            this.lblWalkInRoomsCount.Font = new System.Drawing.Font("Calibri", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblWalkInRoomsCount.ForeColor = System.Drawing.Color.DarkGreen;
-            this.lblWalkInRoomsCount.Location = new System.Drawing.Point(3, 513);
+            this.lblWalkInRoomsCount.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblWalkInRoomsCount.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.lblWalkInRoomsCount.Location = new System.Drawing.Point(3, 501);
             this.lblWalkInRoomsCount.Name = "lblWalkInRoomsCount";
-            this.lblWalkInRoomsCount.Size = new System.Drawing.Size(220, 21);
+            this.lblWalkInRoomsCount.Size = new System.Drawing.Size(290, 28);
             this.lblWalkInRoomsCount.TabIndex = 33;
             this.lblWalkInRoomsCount.Text = "0 room(s) available for walk-in";
             // 
             // lblArrivalsCount
             // 
             this.lblArrivalsCount.AutoSize = true;
-            this.lblArrivalsCount.Font = new System.Drawing.Font("Calibri", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblArrivalsCount.ForeColor = System.Drawing.Color.DarkBlue;
-            this.lblArrivalsCount.Location = new System.Drawing.Point(3, 70);
+            this.lblArrivalsCount.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblArrivalsCount.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.lblArrivalsCount.Location = new System.Drawing.Point(3, 58);
             this.lblArrivalsCount.Name = "lblArrivalsCount";
-            this.lblArrivalsCount.Size = new System.Drawing.Size(128, 21);
+            this.lblArrivalsCount.Size = new System.Drawing.Size(168, 28);
             this.lblArrivalsCount.TabIndex = 32;
             this.lblArrivalsCount.Text = "0 arrival(s) today";
-            // 
-            // lblSel
-            // 
-            this.lblSel.AutoSize = true;
-            this.lblSel.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblSel.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.lblSel.Location = new System.Drawing.Point(3, 501);
-            this.lblSel.Name = "lblSel";
-            this.lblSel.Size = new System.Drawing.Size(242, 28);
-            this.lblSel.TabIndex = 31;
-            this.lblSel.Text = "Available Walk-In Rooms ";
-            // 
-            // lblArrivals
-            // 
-            this.lblArrivals.AutoSize = true;
-            this.lblArrivals.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblArrivals.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.lblArrivals.Location = new System.Drawing.Point(3, 58);
-            this.lblArrivals.Name = "lblArrivals";
-            this.lblArrivals.Size = new System.Drawing.Size(216, 28);
-            this.lblArrivals.TabIndex = 30;
-            this.lblArrivals.Text = "Arrivals, and Reserved";
             // 
             // pnlWalkIn
             // 
             this.pnlWalkIn.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.pnlWalkIn.BackColor = System.Drawing.Color.White;
-            this.pnlWalkIn.Controls.Add(this.label6);
-            this.pnlWalkIn.Controls.Add(this.label5);
-            this.pnlWalkIn.Controls.Add(this.label4);
-            this.pnlWalkIn.Controls.Add(this.label3);
-            this.pnlWalkIn.Controls.Add(this.label2);
-            this.pnlWalkIn.Controls.Add(this.label1);
-            this.pnlWalkIn.Controls.Add(this.numericUpDown1);
-            this.pnlWalkIn.Controls.Add(this.comboBox1);
+            this.pnlWalkIn.Controls.Add(this.cmbWalkInPaymentMethod);
+            this.pnlWalkIn.Controls.Add(this.lblWalkInPaymentMethod);
+            this.pnlWalkIn.Controls.Add(this.nudWalkInPaymentAmount);
             this.pnlWalkIn.Controls.Add(this.btnRefresh);
+            this.pnlWalkIn.Controls.Add(this.lblWalkInPaymentAmount);
             this.pnlWalkIn.Controls.Add(this.chkPrintWalkInKeyCard);
             this.pnlWalkIn.Controls.Add(this.nudWalkInDeposit);
             this.pnlWalkIn.Controls.Add(this.nudWalkInChildren);
@@ -470,26 +419,76 @@
             this.pnlWalkIn.TabIndex = 27;
             this.pnlWalkIn.Paint += new System.Windows.Forms.PaintEventHandler(this.pnlWalkIn_Paint);
             // 
+            // cmbWalkInPaymentMethod
+            // 
+            this.cmbWalkInPaymentMethod.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.cmbWalkInPaymentMethod.BackColor = System.Drawing.Color.White;
+            this.cmbWalkInPaymentMethod.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cmbWalkInPaymentMethod.FormattingEnabled = true;
+            this.cmbWalkInPaymentMethod.Location = new System.Drawing.Point(332, 302);
+            this.cmbWalkInPaymentMethod.Name = "cmbWalkInPaymentMethod";
+            this.cmbWalkInPaymentMethod.Size = new System.Drawing.Size(300, 36);
+            this.cmbWalkInPaymentMethod.TabIndex = 50;
+            // 
+            // lblWalkInPaymentMethod
+            // 
+            this.lblWalkInPaymentMethod.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblWalkInPaymentMethod.AutoSize = true;
+            this.lblWalkInPaymentMethod.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblWalkInPaymentMethod.Location = new System.Drawing.Point(331, 271);
+            this.lblWalkInPaymentMethod.Name = "lblWalkInPaymentMethod";
+            this.lblWalkInPaymentMethod.Size = new System.Drawing.Size(174, 28);
+            this.lblWalkInPaymentMethod.TabIndex = 49;
+            this.lblWalkInPaymentMethod.Text = "Payment Method";
+            // 
+            // nudWalkInPaymentAmount
+            // 
+            this.nudWalkInPaymentAmount.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.nudWalkInPaymentAmount.BackColor = System.Drawing.Color.White;
+            this.nudWalkInPaymentAmount.DecimalPlaces = 2;
+            this.nudWalkInPaymentAmount.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.nudWalkInPaymentAmount.Location = new System.Drawing.Point(332, 373);
+            this.nudWalkInPaymentAmount.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+            this.nudWalkInPaymentAmount.Name = "nudWalkInPaymentAmount";
+            this.nudWalkInPaymentAmount.Size = new System.Drawing.Size(300, 36);
+            this.nudWalkInPaymentAmount.TabIndex = 48;
+            // 
             // btnRefresh
             // 
             this.btnRefresh.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnRefresh.BackColor = System.Drawing.Color.Violet;
+            this.btnRefresh.BackgroundImage = global::Hotel_ManagementIT13.Properties.Resources.refresh_page_option;
+            this.btnRefresh.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btnRefresh.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnRefresh.ForeColor = System.Drawing.Color.White;
-            this.btnRefresh.Location = new System.Drawing.Point(592, 309);
+            this.btnRefresh.Location = new System.Drawing.Point(694, 364);
             this.btnRefresh.Name = "btnRefresh";
-            this.btnRefresh.Size = new System.Drawing.Size(150, 50);
+            this.btnRefresh.Size = new System.Drawing.Size(50, 50);
             this.btnRefresh.TabIndex = 46;
-            this.btnRefresh.Text = "REFRESH";
             this.btnRefresh.UseVisualStyleBackColor = false;
             this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
+            // 
+            // lblWalkInPaymentAmount
+            // 
+            this.lblWalkInPaymentAmount.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblWalkInPaymentAmount.AutoSize = true;
+            this.lblWalkInPaymentAmount.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblWalkInPaymentAmount.Location = new System.Drawing.Point(331, 341);
+            this.lblWalkInPaymentAmount.Name = "lblWalkInPaymentAmount";
+            this.lblWalkInPaymentAmount.Size = new System.Drawing.Size(180, 28);
+            this.lblWalkInPaymentAmount.TabIndex = 47;
+            this.lblWalkInPaymentAmount.Text = "Payment Amount:";
             // 
             // chkPrintWalkInKeyCard
             // 
             this.chkPrintWalkInKeyCard.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.chkPrintWalkInKeyCard.AutoSize = true;
             this.chkPrintWalkInKeyCard.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.chkPrintWalkInKeyCard.Location = new System.Drawing.Point(364, 271);
+            this.chkPrintWalkInKeyCard.Location = new System.Drawing.Point(593, 3);
             this.chkPrintWalkInKeyCard.Name = "chkPrintWalkInKeyCard";
             this.chkPrintWalkInKeyCard.Size = new System.Drawing.Size(165, 32);
             this.chkPrintWalkInKeyCard.TabIndex = 26;
@@ -502,7 +501,7 @@
             this.nudWalkInDeposit.BackColor = System.Drawing.Color.White;
             this.nudWalkInDeposit.DecimalPlaces = 2;
             this.nudWalkInDeposit.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.nudWalkInDeposit.Location = new System.Drawing.Point(342, 159);
+            this.nudWalkInDeposit.Location = new System.Drawing.Point(332, 159);
             this.nudWalkInDeposit.Maximum = new decimal(new int[] {
             10000,
             0,
@@ -511,13 +510,12 @@
             this.nudWalkInDeposit.Name = "nudWalkInDeposit";
             this.nudWalkInDeposit.Size = new System.Drawing.Size(300, 36);
             this.nudWalkInDeposit.TabIndex = 25;
-            this.nudWalkInDeposit.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // nudWalkInChildren
             // 
             this.nudWalkInChildren.BackColor = System.Drawing.Color.White;
             this.nudWalkInChildren.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.nudWalkInChildren.Location = new System.Drawing.Point(18, 369);
+            this.nudWalkInChildren.Location = new System.Drawing.Point(17, 373);
             this.nudWalkInChildren.Name = "nudWalkInChildren";
             this.nudWalkInChildren.Size = new System.Drawing.Size(300, 36);
             this.nudWalkInChildren.TabIndex = 24;
@@ -527,7 +525,7 @@
             this.nudWalkInAdults.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.nudWalkInAdults.BackColor = System.Drawing.Color.White;
             this.nudWalkInAdults.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.nudWalkInAdults.Location = new System.Drawing.Point(342, 89);
+            this.nudWalkInAdults.Location = new System.Drawing.Point(332, 89);
             this.nudWalkInAdults.Minimum = new decimal(new int[] {
             1,
             0,
@@ -546,7 +544,7 @@
             // 
             this.dtpWalkInCheckOut.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.dtpWalkInCheckOut.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.dtpWalkInCheckOut.Location = new System.Drawing.Point(342, 229);
+            this.dtpWalkInCheckOut.Location = new System.Drawing.Point(332, 229);
             this.dtpWalkInCheckOut.Name = "dtpWalkInCheckOut";
             this.dtpWalkInCheckOut.Size = new System.Drawing.Size(400, 36);
             this.dtpWalkInCheckOut.TabIndex = 22;
@@ -556,7 +554,7 @@
             this.lblWalkInDeposit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lblWalkInDeposit.AutoSize = true;
             this.lblWalkInDeposit.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblWalkInDeposit.Location = new System.Drawing.Point(341, 128);
+            this.lblWalkInDeposit.Location = new System.Drawing.Point(331, 128);
             this.lblWalkInDeposit.Name = "lblWalkInDeposit";
             this.lblWalkInDeposit.Size = new System.Drawing.Size(169, 28);
             this.lblWalkInDeposit.TabIndex = 21;
@@ -566,7 +564,7 @@
             // 
             this.lblWalkInChildren.AutoSize = true;
             this.lblWalkInChildren.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblWalkInChildren.Location = new System.Drawing.Point(21, 338);
+            this.lblWalkInChildren.Location = new System.Drawing.Point(17, 342);
             this.lblWalkInChildren.Name = "lblWalkInChildren";
             this.lblWalkInChildren.Size = new System.Drawing.Size(200, 28);
             this.lblWalkInChildren.TabIndex = 20;
@@ -577,7 +575,7 @@
             this.lblWalkInAdults.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lblWalkInAdults.AutoSize = true;
             this.lblWalkInAdults.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblWalkInAdults.Location = new System.Drawing.Point(341, 58);
+            this.lblWalkInAdults.Location = new System.Drawing.Point(331, 58);
             this.lblWalkInAdults.Name = "lblWalkInAdults";
             this.lblWalkInAdults.Size = new System.Drawing.Size(77, 28);
             this.lblWalkInAdults.TabIndex = 19;
@@ -588,7 +586,7 @@
             this.lblWalkInCheckOut.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lblWalkInCheckOut.AutoSize = true;
             this.lblWalkInCheckOut.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblWalkInCheckOut.Location = new System.Drawing.Point(341, 198);
+            this.lblWalkInCheckOut.Location = new System.Drawing.Point(331, 198);
             this.lblWalkInCheckOut.Name = "lblWalkInCheckOut";
             this.lblWalkInCheckOut.Size = new System.Drawing.Size(160, 28);
             this.lblWalkInCheckOut.TabIndex = 17;
@@ -598,7 +596,7 @@
             // 
             this.txtWalkInEmail.BackColor = System.Drawing.Color.White;
             this.txtWalkInEmail.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtWalkInEmail.Location = new System.Drawing.Point(18, 299);
+            this.txtWalkInEmail.Location = new System.Drawing.Point(17, 303);
             this.txtWalkInEmail.Name = "txtWalkInEmail";
             this.txtWalkInEmail.Size = new System.Drawing.Size(300, 36);
             this.txtWalkInEmail.TabIndex = 16;
@@ -607,17 +605,18 @@
             // 
             this.lblWalkInEmail.AutoSize = true;
             this.lblWalkInEmail.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblWalkInEmail.Location = new System.Drawing.Point(21, 268);
+            this.lblWalkInEmail.Location = new System.Drawing.Point(17, 271);
             this.lblWalkInEmail.Name = "lblWalkInEmail";
             this.lblWalkInEmail.Size = new System.Drawing.Size(68, 28);
             this.lblWalkInEmail.TabIndex = 15;
             this.lblWalkInEmail.Text = "Email:";
+            this.lblWalkInEmail.Click += new System.EventHandler(this.lblWalkInEmail_Click);
             // 
             // txtWalkInPhone
             // 
             this.txtWalkInPhone.BackColor = System.Drawing.Color.White;
             this.txtWalkInPhone.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtWalkInPhone.Location = new System.Drawing.Point(18, 229);
+            this.txtWalkInPhone.Location = new System.Drawing.Point(17, 232);
             this.txtWalkInPhone.Name = "txtWalkInPhone";
             this.txtWalkInPhone.Size = new System.Drawing.Size(300, 36);
             this.txtWalkInPhone.TabIndex = 14;
@@ -626,7 +625,7 @@
             // 
             this.lblWalkInPhone.AutoSize = true;
             this.lblWalkInPhone.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblWalkInPhone.Location = new System.Drawing.Point(21, 198);
+            this.lblWalkInPhone.Location = new System.Drawing.Point(17, 198);
             this.lblWalkInPhone.Name = "lblWalkInPhone";
             this.lblWalkInPhone.Size = new System.Drawing.Size(77, 28);
             this.lblWalkInPhone.TabIndex = 13;
@@ -636,7 +635,7 @@
             // 
             this.txtWalkInLastName.BackColor = System.Drawing.Color.White;
             this.txtWalkInLastName.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtWalkInLastName.Location = new System.Drawing.Point(18, 159);
+            this.txtWalkInLastName.Location = new System.Drawing.Point(17, 159);
             this.txtWalkInLastName.Name = "txtWalkInLastName";
             this.txtWalkInLastName.Size = new System.Drawing.Size(300, 36);
             this.txtWalkInLastName.TabIndex = 12;
@@ -645,7 +644,7 @@
             // 
             this.lblWalkInLastName.AutoSize = true;
             this.lblWalkInLastName.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblWalkInLastName.Location = new System.Drawing.Point(21, 128);
+            this.lblWalkInLastName.Location = new System.Drawing.Point(17, 128);
             this.lblWalkInLastName.Name = "lblWalkInLastName";
             this.lblWalkInLastName.Size = new System.Drawing.Size(116, 28);
             this.lblWalkInLastName.TabIndex = 11;
@@ -655,7 +654,7 @@
             // 
             this.txtWalkInFirstName.BackColor = System.Drawing.Color.White;
             this.txtWalkInFirstName.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtWalkInFirstName.Location = new System.Drawing.Point(18, 89);
+            this.txtWalkInFirstName.Location = new System.Drawing.Point(17, 89);
             this.txtWalkInFirstName.Name = "txtWalkInFirstName";
             this.txtWalkInFirstName.Size = new System.Drawing.Size(300, 36);
             this.txtWalkInFirstName.TabIndex = 10;
@@ -664,7 +663,7 @@
             // 
             this.lblWalkInFirstName.AutoSize = true;
             this.lblWalkInFirstName.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblWalkInFirstName.Location = new System.Drawing.Point(18, 58);
+            this.lblWalkInFirstName.Location = new System.Drawing.Point(17, 58);
             this.lblWalkInFirstName.Name = "lblWalkInFirstName";
             this.lblWalkInFirstName.Size = new System.Drawing.Size(119, 28);
             this.lblWalkInFirstName.TabIndex = 9;
@@ -681,74 +680,20 @@
             this.lblWalkInGuestDetails.TabIndex = 8;
             this.lblWalkInGuestDetails.Text = "Walk-In Guest Details";
             // 
-            // comboBox1
+            // btnWalkInCheckIn
             // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(419, 380);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(121, 24);
-            this.comboBox1.TabIndex = 47;
-            // 
-            // numericUpDown1
-            // 
-            this.numericUpDown1.Location = new System.Drawing.Point(432, 380);
-            this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(120, 22);
-            this.numericUpDown1.TabIndex = 48;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(592, 385);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(44, 16);
-            this.label1.TabIndex = 49;
-            this.label1.Text = "label1";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(358, 208);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(44, 16);
-            this.label2.TabIndex = 50;
-            this.label2.Text = "label2";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(366, 216);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(44, 16);
-            this.label3.TabIndex = 51;
-            this.label3.Text = "label3";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(374, 224);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(44, 16);
-            this.label4.TabIndex = 52;
-            this.label4.Text = "label4";
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(382, 232);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(44, 16);
-            this.label5.TabIndex = 53;
-            this.label5.Text = "label5";
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(390, 240);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(44, 16);
-            this.label6.TabIndex = 54;
-            this.label6.Text = "label6";
+            this.btnWalkInCheckIn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnWalkInCheckIn.BackColor = System.Drawing.Color.Orange;
+            this.btnWalkInCheckIn.BackgroundImage = global::Hotel_ManagementIT13.Properties.Resources.check;
+            this.btnWalkInCheckIn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnWalkInCheckIn.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnWalkInCheckIn.ForeColor = System.Drawing.Color.White;
+            this.btnWalkInCheckIn.Location = new System.Drawing.Point(638, 364);
+            this.btnWalkInCheckIn.Name = "btnWalkInCheckIn";
+            this.btnWalkInCheckIn.Size = new System.Drawing.Size(50, 50);
+            this.btnWalkInCheckIn.TabIndex = 9;
+            this.btnWalkInCheckIn.UseVisualStyleBackColor = false;
+            this.btnWalkInCheckIn.Click += new System.EventHandler(this.btnWalkInCheckIn_Click);
             // 
             // frmCheckIn
             // 
@@ -773,10 +718,10 @@
             this.pnlDetails.PerformLayout();
             this.pnlWalkIn.ResumeLayout(false);
             this.pnlWalkIn.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudWalkInPaymentAmount)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudWalkInDeposit)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudWalkInChildren)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudWalkInAdults)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -806,8 +751,6 @@
         private System.Windows.Forms.Label lblNotes;
         private System.Windows.Forms.Label lblDate;
         private System.Windows.Forms.Label lblDeposit;
-        private System.Windows.Forms.Label lblArrivals;
-        private System.Windows.Forms.Label lblSel;
         private System.Windows.Forms.Panel pnlWalkIn;
         private System.Windows.Forms.CheckBox chkPrintWalkInKeyCard;
         private System.Windows.Forms.NumericUpDown nudWalkInDeposit;
@@ -830,13 +773,9 @@
         private System.Windows.Forms.Button btnRefresh;
         private System.Windows.Forms.Label lblArrivalsCount;
         private System.Windows.Forms.Label lblWalkInRoomsCount;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.NumericUpDown numericUpDown1;
-        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.NumericUpDown nudWalkInPaymentAmount;
+        private System.Windows.Forms.Label lblWalkInPaymentAmount;
+        private System.Windows.Forms.ComboBox cmbWalkInPaymentMethod;
+        private System.Windows.Forms.Label lblWalkInPaymentMethod;
     }
 }

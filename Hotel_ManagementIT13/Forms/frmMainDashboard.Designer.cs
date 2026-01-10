@@ -28,12 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend4 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea5 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend5 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series5 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea6 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend6 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series6 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.mainMenu = new System.Windows.Forms.MenuStrip();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.tabMain = new System.Windows.Forms.TabControl();
@@ -61,6 +61,7 @@
             this.pnlRightSidebar = new System.Windows.Forms.Panel();
             this.pnlCharts = new System.Windows.Forms.Panel();
             this.lblGrps = new System.Windows.Forms.Label();
+            this.btnRefreshDashboard = new System.Windows.Forms.Button();
             this.tabMain.SuspendLayout();
             this.pnlHeader.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvTodaysArrivals)).BeginInit();
@@ -78,7 +79,7 @@
             this.mainMenu.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.mainMenu.Location = new System.Drawing.Point(0, 0);
             this.mainMenu.Name = "mainMenu";
-            this.mainMenu.Size = new System.Drawing.Size(1920, 30);
+            this.mainMenu.Size = new System.Drawing.Size(1920, 24);
             this.mainMenu.TabIndex = 0;
             this.mainMenu.Text = "menuStrip1";
             this.mainMenu.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.mainMenu_ItemClicked);
@@ -129,6 +130,7 @@
             this.pnlHeader.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.pnlHeader.BackColor = System.Drawing.Color.White;
+            this.pnlHeader.Controls.Add(this.btnRefreshDashboard);
             this.pnlHeader.Controls.Add(this.lblWelcome);
             this.pnlHeader.Controls.Add(this.btnLogout);
             this.pnlHeader.Location = new System.Drawing.Point(12, 27);
@@ -173,7 +175,7 @@
             this.flpQuickActions.Location = new System.Drawing.Point(12, 98);
             this.flpQuickActions.Name = "flpQuickActions";
             this.flpQuickActions.Padding = new System.Windows.Forms.Padding(10, 8, 10, 8);
-            this.flpQuickActions.Size = new System.Drawing.Size(1896, 142);
+            this.flpQuickActions.Size = new System.Drawing.Size(1896, 110);
             this.flpQuickActions.TabIndex = 6;
             // 
             // dgvTodaysArrivals
@@ -211,7 +213,7 @@
             this.dgvTodaysDepartures.RowHeadersVisible = false;
             this.dgvTodaysDepartures.RowHeadersWidth = 51;
             this.dgvTodaysDepartures.RowTemplate.Height = 30;
-            this.dgvTodaysDepartures.Size = new System.Drawing.Size(450, 659);
+            this.dgvTodaysDepartures.Size = new System.Drawing.Size(450, 691);
             this.dgvTodaysDepartures.TabIndex = 8;
             // 
             // lblAvailableRooms
@@ -265,20 +267,20 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.chartOccupancy.BackColor = System.Drawing.Color.Transparent;
-            chartArea3.Name = "ChartArea1";
-            this.chartOccupancy.ChartAreas.Add(chartArea3);
-            legend3.Name = "Legend1";
-            this.chartOccupancy.Legends.Add(legend3);
+            chartArea5.Name = "ChartArea1";
+            this.chartOccupancy.ChartAreas.Add(chartArea5);
+            legend5.Name = "Legend1";
+            this.chartOccupancy.Legends.Add(legend5);
             this.chartOccupancy.Location = new System.Drawing.Point(13, 40);
             this.chartOccupancy.Name = "chartOccupancy";
             this.chartOccupancy.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.None;
-            series3.ChartArea = "ChartArea1";
-            series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Pie;
-            series3.IsValueShownAsLabel = true;
-            series3.Legend = "Legend1";
-            series3.Name = "Room Status";
-            this.chartOccupancy.Series.Add(series3);
-            this.chartOccupancy.Size = new System.Drawing.Size(948, 289);
+            series5.ChartArea = "ChartArea1";
+            series5.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Pie;
+            series5.IsValueShownAsLabel = true;
+            series5.Legend = "Legend1";
+            series5.Name = "Room Status";
+            this.chartOccupancy.Series.Add(series5);
+            this.chartOccupancy.Size = new System.Drawing.Size(948, 321);
             this.chartOccupancy.TabIndex = 13;
             this.chartOccupancy.Text = "chart1";
             // 
@@ -288,20 +290,20 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.chartRevenue.BackColor = System.Drawing.Color.Transparent;
-            chartArea4.Name = "ChartArea1";
-            this.chartRevenue.ChartAreas.Add(chartArea4);
-            legend4.Name = "Legend1";
-            this.chartRevenue.Legends.Add(legend4);
+            chartArea6.Name = "ChartArea1";
+            this.chartRevenue.ChartAreas.Add(chartArea6);
+            legend6.Name = "Legend1";
+            this.chartRevenue.Legends.Add(legend6);
             this.chartRevenue.Location = new System.Drawing.Point(13, 378);
             this.chartRevenue.Name = "chartRevenue";
             this.chartRevenue.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.None;
-            series4.ChartArea = "ChartArea1";
-            series4.IsValueShownAsLabel = true;
-            series4.LabelFormat = "C0";
-            series4.Legend = "Legend1";
-            series4.Name = "Revenue";
-            this.chartRevenue.Series.Add(series4);
-            this.chartRevenue.Size = new System.Drawing.Size(948, 288);
+            series6.ChartArea = "ChartArea1";
+            series6.IsValueShownAsLabel = true;
+            series6.LabelFormat = "C0";
+            series6.Legend = "Legend1";
+            series6.Name = "Revenue";
+            this.chartRevenue.Series.Add(series6);
+            this.chartRevenue.Size = new System.Drawing.Size(948, 320);
             this.chartRevenue.TabIndex = 14;
             this.chartRevenue.Text = "chart2";
             // 
@@ -375,7 +377,7 @@
             this.pnlStats.Controls.Add(this.lblPendingReservations);
             this.pnlStats.Controls.Add(this.lblOccupancyRate);
             this.pnlStats.Controls.Add(this.lblAvailableRoomsValue);
-            this.pnlStats.Location = new System.Drawing.Point(12, 246);
+            this.pnlStats.Location = new System.Drawing.Point(12, 214);
             this.pnlStats.Name = "pnlStats";
             this.pnlStats.Padding = new System.Windows.Forms.Padding(10);
             this.pnlStats.Size = new System.Drawing.Size(440, 382);
@@ -399,10 +401,10 @@
             this.pnlRightSidebar.Controls.Add(this.tabMain);
             this.pnlRightSidebar.Controls.Add(this.dgvTodaysArrivals);
             this.pnlRightSidebar.Controls.Add(this.dgvTodaysDepartures);
-            this.pnlRightSidebar.Location = new System.Drawing.Point(1438, 246);
+            this.pnlRightSidebar.Location = new System.Drawing.Point(1438, 214);
             this.pnlRightSidebar.Name = "pnlRightSidebar";
             this.pnlRightSidebar.Padding = new System.Windows.Forms.Padding(10);
-            this.pnlRightSidebar.Size = new System.Drawing.Size(470, 679);
+            this.pnlRightSidebar.Size = new System.Drawing.Size(470, 711);
             this.pnlRightSidebar.TabIndex = 21;
             // 
             // pnlCharts
@@ -413,10 +415,10 @@
             this.pnlCharts.Controls.Add(this.lblGrps);
             this.pnlCharts.Controls.Add(this.chartOccupancy);
             this.pnlCharts.Controls.Add(this.chartRevenue);
-            this.pnlCharts.Location = new System.Drawing.Point(458, 246);
+            this.pnlCharts.Location = new System.Drawing.Point(458, 214);
             this.pnlCharts.Name = "pnlCharts";
             this.pnlCharts.Padding = new System.Windows.Forms.Padding(10);
-            this.pnlCharts.Size = new System.Drawing.Size(974, 679);
+            this.pnlCharts.Size = new System.Drawing.Size(974, 711);
             this.pnlCharts.TabIndex = 22;
             // 
             // lblGrps
@@ -429,6 +431,18 @@
             this.lblGrps.Size = new System.Drawing.Size(100, 27);
             this.lblGrps.TabIndex = 20;
             this.lblGrps.Text = "Graphs";
+            // 
+            // btnRefreshDashboard
+            // 
+            this.btnRefreshDashboard.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnRefreshDashboard.BackgroundImage = global::Hotel_ManagementIT13.Properties.Resources.refresh_page_option;
+            this.btnRefreshDashboard.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnRefreshDashboard.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnRefreshDashboard.Location = new System.Drawing.Point(1814, 17);
+            this.btnRefreshDashboard.Name = "btnRefreshDashboard";
+            this.btnRefreshDashboard.Size = new System.Drawing.Size(30, 30);
+            this.btnRefreshDashboard.TabIndex = 9;
+            this.btnRefreshDashboard.UseVisualStyleBackColor = true;
             // 
             // frmMainDashboard
             // 
@@ -496,5 +510,6 @@
         private System.Windows.Forms.Panel pnlCharts;
         private System.Windows.Forms.Label lblSts;
         private System.Windows.Forms.Label lblGrps;
+        private System.Windows.Forms.Button btnRefreshDashboard;
     }
 }

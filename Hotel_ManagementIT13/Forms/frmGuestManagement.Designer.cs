@@ -55,7 +55,22 @@
             this.btnSaveGuest = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.lblGuestCount = new System.Windows.Forms.Label();
+            this.pnlGuestList = new System.Windows.Forms.Panel();
+            this.lblGuestDetails = new System.Windows.Forms.Label();
+            this.lblGuestList = new System.Windows.Forms.Label();
+            this.lblFirstNm = new System.Windows.Forms.Label();
+            this.lblLastNm = new System.Windows.Forms.Label();
+            this.lblPhone = new System.Windows.Forms.Label();
+            this.lblEmail = new System.Windows.Forms.Label();
+            this.lblAddress = new System.Windows.Forms.Label();
+            this.lblDOB = new System.Windows.Forms.Label();
+            this.lblNationality = new System.Windows.Forms.Label();
+            this.lblIDType = new System.Windows.Forms.Label();
+            this.lblIDNum = new System.Windows.Forms.Label();
+            this.lblGuestType = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dgvGuests)).BeginInit();
+            this.pnlGuestForm.SuspendLayout();
+            this.pnlGuestList.SuspendLayout();
             this.SuspendLayout();
             // 
             // dgvGuests
@@ -63,7 +78,7 @@
             this.dgvGuests.AllowUserToAddRows = false;
             this.dgvGuests.AllowUserToDeleteRows = false;
             this.dgvGuests.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dgvGuests.BackgroundColor = System.Drawing.SystemColors.Control;
+            this.dgvGuests.BackgroundColor = System.Drawing.Color.GhostWhite;
             this.dgvGuests.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvGuests.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colGuestId,
@@ -73,12 +88,12 @@
             this.colNationality,
             this.colGuestType,
             this.colCreatedAt});
-            this.dgvGuests.Location = new System.Drawing.Point(40, 160);
+            this.dgvGuests.Location = new System.Drawing.Point(3, 131);
             this.dgvGuests.Name = "dgvGuests";
             this.dgvGuests.ReadOnly = true;
             this.dgvGuests.RowHeadersWidth = 51;
             this.dgvGuests.RowTemplate.Height = 30;
-            this.dgvGuests.Size = new System.Drawing.Size(900, 700);
+            this.dgvGuests.Size = new System.Drawing.Size(1123, 802);
             this.dgvGuests.TabIndex = 0;
             this.dgvGuests.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvGuests_CellClick);
             // 
@@ -89,7 +104,6 @@
             this.colGuestId.MinimumWidth = 6;
             this.colGuestId.Name = "colGuestId";
             this.colGuestId.ReadOnly = true;
-            this.colGuestId.Width = 50;
             // 
             // colFullName
             // 
@@ -141,75 +155,115 @@
             // 
             // btnAddGuest
             // 
-            this.btnAddGuest.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnAddGuest.Location = new System.Drawing.Point(40, 90);
+            this.btnAddGuest.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnAddGuest.BackColor = System.Drawing.Color.Green;
+            this.btnAddGuest.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnAddGuest.ForeColor = System.Drawing.Color.White;
+            this.btnAddGuest.Location = new System.Drawing.Point(352, 441);
             this.btnAddGuest.Name = "btnAddGuest";
             this.btnAddGuest.Size = new System.Drawing.Size(200, 50);
             this.btnAddGuest.TabIndex = 1;
             this.btnAddGuest.Text = "ADD GUEST";
-            this.btnAddGuest.UseVisualStyleBackColor = true;
+            this.btnAddGuest.UseVisualStyleBackColor = false;
             this.btnAddGuest.Click += new System.EventHandler(this.btnAddGuest_Click);
             // 
             // btnEditGuest
             // 
-            this.btnEditGuest.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnEditGuest.Location = new System.Drawing.Point(260, 90);
+            this.btnEditGuest.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnEditGuest.BackColor = System.Drawing.Color.Blue;
+            this.btnEditGuest.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnEditGuest.ForeColor = System.Drawing.Color.White;
+            this.btnEditGuest.Location = new System.Drawing.Point(352, 497);
             this.btnEditGuest.Name = "btnEditGuest";
             this.btnEditGuest.Size = new System.Drawing.Size(200, 50);
             this.btnEditGuest.TabIndex = 2;
             this.btnEditGuest.Text = "EDIT GUEST";
-            this.btnEditGuest.UseVisualStyleBackColor = true;
+            this.btnEditGuest.UseVisualStyleBackColor = false;
             this.btnEditGuest.Click += new System.EventHandler(this.btnEditGuest_Click);
             // 
             // btnDeleteGuest
             // 
-            this.btnDeleteGuest.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnDeleteGuest.Location = new System.Drawing.Point(480, 90);
+            this.btnDeleteGuest.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnDeleteGuest.BackColor = System.Drawing.Color.Red;
+            this.btnDeleteGuest.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnDeleteGuest.ForeColor = System.Drawing.Color.White;
+            this.btnDeleteGuest.Location = new System.Drawing.Point(558, 497);
             this.btnDeleteGuest.Name = "btnDeleteGuest";
             this.btnDeleteGuest.Size = new System.Drawing.Size(200, 50);
             this.btnDeleteGuest.TabIndex = 3;
             this.btnDeleteGuest.Text = "DELETE GUEST";
-            this.btnDeleteGuest.UseVisualStyleBackColor = true;
+            this.btnDeleteGuest.UseVisualStyleBackColor = false;
             this.btnDeleteGuest.Click += new System.EventHandler(this.btnDeleteGuest_Click);
             // 
             // btnSearch
             // 
-            this.btnSearch.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnSearch.Location = new System.Drawing.Point(700, 90);
+            this.btnSearch.BackgroundImage = global::Hotel_ManagementIT13.Properties.Resources.people;
+            this.btnSearch.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnSearch.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSearch.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnSearch.Location = new System.Drawing.Point(1096, 64);
             this.btnSearch.Name = "btnSearch";
-            this.btnSearch.Size = new System.Drawing.Size(200, 50);
+            this.btnSearch.Size = new System.Drawing.Size(30, 30);
             this.btnSearch.TabIndex = 4;
-            this.btnSearch.Text = "SEARCH";
             this.btnSearch.UseVisualStyleBackColor = true;
             this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
             // 
             // txtSearch
             // 
-            this.txtSearch.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtSearch.Location = new System.Drawing.Point(40, 40);
+            this.txtSearch.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtSearch.Location = new System.Drawing.Point(3, 61);
             this.txtSearch.Name = "txtSearch";
-            this.txtSearch.Size = new System.Drawing.Size(860, 34);
+            this.txtSearch.Size = new System.Drawing.Size(1123, 36);
             this.txtSearch.TabIndex = 0;
             this.txtSearch.Text = "Search guests by name, email, or phone...";
             this.txtSearch.Enter += new System.EventHandler(this.txtSearch_Enter);
-            this.txtSearch.Leave += new System.EventHandler(this.txtSearch_Leave);
             this.txtSearch.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtSearch_KeyPress);
+            this.txtSearch.Leave += new System.EventHandler(this.txtSearch_Leave);
             // 
             // pnlGuestForm
             // 
-            this.pnlGuestForm.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.pnlGuestForm.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pnlGuestForm.Location = new System.Drawing.Point(1000, 40);
+            this.pnlGuestForm.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pnlGuestForm.BackColor = System.Drawing.Color.White;
+            this.pnlGuestForm.Controls.Add(this.lblGuestType);
+            this.pnlGuestForm.Controls.Add(this.lblIDNum);
+            this.pnlGuestForm.Controls.Add(this.lblIDType);
+            this.pnlGuestForm.Controls.Add(this.lblNationality);
+            this.pnlGuestForm.Controls.Add(this.lblDOB);
+            this.pnlGuestForm.Controls.Add(this.txtIDNumber);
+            this.pnlGuestForm.Controls.Add(this.lblAddress);
+            this.pnlGuestForm.Controls.Add(this.dtpDOB);
+            this.pnlGuestForm.Controls.Add(this.lblEmail);
+            this.pnlGuestForm.Controls.Add(this.lblPhone);
+            this.pnlGuestForm.Controls.Add(this.lblLastNm);
+            this.pnlGuestForm.Controls.Add(this.txtPhone);
+            this.pnlGuestForm.Controls.Add(this.btnCancel);
+            this.pnlGuestForm.Controls.Add(this.lblFirstNm);
+            this.pnlGuestForm.Controls.Add(this.txtAddress);
+            this.pnlGuestForm.Controls.Add(this.txtLastName);
+            this.pnlGuestForm.Controls.Add(this.btnSaveGuest);
+            this.pnlGuestForm.Controls.Add(this.lblGuestDetails);
+            this.pnlGuestForm.Controls.Add(this.cmbGuestType);
+            this.pnlGuestForm.Controls.Add(this.txtFirstName);
+            this.pnlGuestForm.Controls.Add(this.btnDeleteGuest);
+            this.pnlGuestForm.Controls.Add(this.cmbIDType);
+            this.pnlGuestForm.Controls.Add(this.btnAddGuest);
+            this.pnlGuestForm.Controls.Add(this.btnEditGuest);
+            this.pnlGuestForm.Controls.Add(this.cmbNationality);
+            this.pnlGuestForm.Controls.Add(this.txtEmail);
+            this.pnlGuestForm.Location = new System.Drawing.Point(1147, 12);
             this.pnlGuestForm.Name = "pnlGuestForm";
-            this.pnlGuestForm.Size = new System.Drawing.Size(880, 300);
+            this.pnlGuestForm.Size = new System.Drawing.Size(761, 685);
             this.pnlGuestForm.TabIndex = 6;
             // 
             // txtFirstName
             // 
-            this.txtFirstName.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtFirstName.Location = new System.Drawing.Point(1000, 360);
+            this.txtFirstName.BackColor = System.Drawing.Color.White;
+            this.txtFirstName.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtFirstName.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.txtFirstName.Location = new System.Drawing.Point(3, 91);
             this.txtFirstName.Name = "txtFirstName";
-            this.txtFirstName.Size = new System.Drawing.Size(400, 34);
+            this.txtFirstName.Size = new System.Drawing.Size(300, 36);
             this.txtFirstName.TabIndex = 7;
             this.txtFirstName.Text = "First Name";
             this.txtFirstName.Enter += new System.EventHandler(this.TextBox_Enter);
@@ -217,10 +271,12 @@
             // 
             // txtLastName
             // 
-            this.txtLastName.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtLastName.Location = new System.Drawing.Point(1480, 360);
+            this.txtLastName.BackColor = System.Drawing.Color.White;
+            this.txtLastName.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtLastName.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.txtLastName.Location = new System.Drawing.Point(3, 161);
             this.txtLastName.Name = "txtLastName";
-            this.txtLastName.Size = new System.Drawing.Size(400, 34);
+            this.txtLastName.Size = new System.Drawing.Size(300, 36);
             this.txtLastName.TabIndex = 8;
             this.txtLastName.Text = "Last Name";
             this.txtLastName.Enter += new System.EventHandler(this.TextBox_Enter);
@@ -228,10 +284,12 @@
             // 
             // txtEmail
             // 
-            this.txtEmail.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtEmail.Location = new System.Drawing.Point(1000, 420);
+            this.txtEmail.BackColor = System.Drawing.Color.White;
+            this.txtEmail.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtEmail.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.txtEmail.Location = new System.Drawing.Point(3, 301);
             this.txtEmail.Name = "txtEmail";
-            this.txtEmail.Size = new System.Drawing.Size(400, 34);
+            this.txtEmail.Size = new System.Drawing.Size(300, 36);
             this.txtEmail.TabIndex = 9;
             this.txtEmail.Text = "Email Address";
             this.txtEmail.Enter += new System.EventHandler(this.TextBox_Enter);
@@ -239,10 +297,12 @@
             // 
             // txtPhone
             // 
-            this.txtPhone.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtPhone.Location = new System.Drawing.Point(1480, 420);
+            this.txtPhone.BackColor = System.Drawing.Color.White;
+            this.txtPhone.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtPhone.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.txtPhone.Location = new System.Drawing.Point(3, 231);
             this.txtPhone.Name = "txtPhone";
-            this.txtPhone.Size = new System.Drawing.Size(400, 34);
+            this.txtPhone.Size = new System.Drawing.Size(300, 36);
             this.txtPhone.TabIndex = 10;
             this.txtPhone.Text = "Phone Number";
             this.txtPhone.Enter += new System.EventHandler(this.TextBox_Enter);
@@ -250,11 +310,13 @@
             // 
             // txtAddress
             // 
-            this.txtAddress.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtAddress.Location = new System.Drawing.Point(1000, 480);
+            this.txtAddress.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtAddress.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtAddress.Location = new System.Drawing.Point(3, 441);
             this.txtAddress.Multiline = true;
             this.txtAddress.Name = "txtAddress";
-            this.txtAddress.Size = new System.Drawing.Size(880, 100);
+            this.txtAddress.Size = new System.Drawing.Size(343, 241);
             this.txtAddress.TabIndex = 11;
             this.txtAddress.Text = "Address";
             this.txtAddress.Enter += new System.EventHandler(this.TextBox_Enter);
@@ -262,39 +324,43 @@
             // 
             // cmbNationality
             // 
+            this.cmbNationality.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.cmbNationality.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbNationality.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cmbNationality.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmbNationality.FormattingEnabled = true;
-            this.cmbNationality.Location = new System.Drawing.Point(1000, 600);
+            this.cmbNationality.Location = new System.Drawing.Point(311, 161);
             this.cmbNationality.Name = "cmbNationality";
-            this.cmbNationality.Size = new System.Drawing.Size(400, 37);
+            this.cmbNationality.Size = new System.Drawing.Size(300, 36);
             this.cmbNationality.TabIndex = 12;
             // 
             // dtpDOB
             // 
-            this.dtpDOB.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dtpDOB.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.dtpDOB.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.dtpDOB.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.dtpDOB.Location = new System.Drawing.Point(1480, 600);
+            this.dtpDOB.Location = new System.Drawing.Point(311, 91);
             this.dtpDOB.Name = "dtpDOB";
-            this.dtpDOB.Size = new System.Drawing.Size(400, 34);
+            this.dtpDOB.Size = new System.Drawing.Size(400, 36);
             this.dtpDOB.TabIndex = 13;
             // 
             // cmbIDType
             // 
+            this.cmbIDType.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.cmbIDType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbIDType.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cmbIDType.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmbIDType.FormattingEnabled = true;
-            this.cmbIDType.Location = new System.Drawing.Point(1000, 660);
+            this.cmbIDType.Location = new System.Drawing.Point(309, 231);
             this.cmbIDType.Name = "cmbIDType";
-            this.cmbIDType.Size = new System.Drawing.Size(400, 37);
+            this.cmbIDType.Size = new System.Drawing.Size(300, 36);
             this.cmbIDType.TabIndex = 14;
             // 
             // txtIDNumber
             // 
-            this.txtIDNumber.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtIDNumber.Location = new System.Drawing.Point(1480, 660);
+            this.txtIDNumber.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtIDNumber.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtIDNumber.Location = new System.Drawing.Point(309, 301);
             this.txtIDNumber.Name = "txtIDNumber";
-            this.txtIDNumber.Size = new System.Drawing.Size(400, 34);
+            this.txtIDNumber.Size = new System.Drawing.Size(300, 36);
             this.txtIDNumber.TabIndex = 15;
             this.txtIDNumber.Text = "ID Number";
             this.txtIDNumber.Enter += new System.EventHandler(this.TextBox_Enter);
@@ -303,80 +369,220 @@
             // cmbGuestType
             // 
             this.cmbGuestType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbGuestType.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cmbGuestType.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmbGuestType.FormattingEnabled = true;
-            this.cmbGuestType.Location = new System.Drawing.Point(1000, 720);
+            this.cmbGuestType.Location = new System.Drawing.Point(3, 371);
             this.cmbGuestType.Name = "cmbGuestType";
-            this.cmbGuestType.Size = new System.Drawing.Size(400, 37);
+            this.cmbGuestType.Size = new System.Drawing.Size(300, 36);
             this.cmbGuestType.TabIndex = 16;
             // 
             // btnSaveGuest
             // 
-            this.btnSaveGuest.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnSaveGuest.Location = new System.Drawing.Point(1000, 800);
+            this.btnSaveGuest.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnSaveGuest.BackColor = System.Drawing.Color.Orange;
+            this.btnSaveGuest.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnSaveGuest.ForeColor = System.Drawing.Color.White;
+            this.btnSaveGuest.Location = new System.Drawing.Point(558, 441);
             this.btnSaveGuest.Name = "btnSaveGuest";
-            this.btnSaveGuest.Size = new System.Drawing.Size(400, 60);
+            this.btnSaveGuest.Size = new System.Drawing.Size(200, 50);
             this.btnSaveGuest.TabIndex = 17;
             this.btnSaveGuest.Text = "SAVE GUEST";
-            this.btnSaveGuest.UseVisualStyleBackColor = true;
+            this.btnSaveGuest.UseVisualStyleBackColor = false;
             this.btnSaveGuest.Click += new System.EventHandler(this.btnSaveGuest_Click);
             // 
             // btnCancel
             // 
-            this.btnCancel.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnCancel.Location = new System.Drawing.Point(1480, 800);
+            this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnCancel.BackColor = System.Drawing.Color.Red;
+            this.btnCancel.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnCancel.ForeColor = System.Drawing.Color.White;
+            this.btnCancel.Location = new System.Drawing.Point(558, 553);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(400, 60);
+            this.btnCancel.Size = new System.Drawing.Size(200, 50);
             this.btnCancel.TabIndex = 18;
             this.btnCancel.Text = "CANCEL";
-            this.btnCancel.UseVisualStyleBackColor = true;
+            this.btnCancel.UseVisualStyleBackColor = false;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
             // lblGuestCount
             // 
             this.lblGuestCount.AutoSize = true;
-            this.lblGuestCount.BackColor = System.Drawing.SystemColors.Control;
-            this.lblGuestCount.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblGuestCount.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.lblGuestCount.Location = new System.Drawing.Point(40, 870);
+            this.lblGuestCount.BackColor = System.Drawing.Color.White;
+            this.lblGuestCount.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblGuestCount.Location = new System.Drawing.Point(3, 100);
             this.lblGuestCount.Name = "lblGuestCount";
-            this.lblGuestCount.Size = new System.Drawing.Size(107, 20);
+            this.lblGuestCount.Size = new System.Drawing.Size(163, 28);
             this.lblGuestCount.TabIndex = 19;
             this.lblGuestCount.Text = "0 guest(s) found";
+            // 
+            // pnlGuestList
+            // 
+            this.pnlGuestList.BackColor = System.Drawing.Color.White;
+            this.pnlGuestList.Controls.Add(this.lblGuestCount);
+            this.pnlGuestList.Controls.Add(this.btnSearch);
+            this.pnlGuestList.Controls.Add(this.lblGuestList);
+            this.pnlGuestList.Controls.Add(this.txtSearch);
+            this.pnlGuestList.Controls.Add(this.dgvGuests);
+            this.pnlGuestList.Location = new System.Drawing.Point(12, 12);
+            this.pnlGuestList.Name = "pnlGuestList";
+            this.pnlGuestList.Size = new System.Drawing.Size(1129, 936);
+            this.pnlGuestList.TabIndex = 20;
+            // 
+            // lblGuestDetails
+            // 
+            this.lblGuestDetails.AutoSize = true;
+            this.lblGuestDetails.Font = new System.Drawing.Font("Georgia", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblGuestDetails.ForeColor = System.Drawing.Color.DarkGoldenrod;
+            this.lblGuestDetails.Location = new System.Drawing.Point(2, 2);
+            this.lblGuestDetails.Name = "lblGuestDetails";
+            this.lblGuestDetails.Size = new System.Drawing.Size(176, 27);
+            this.lblGuestDetails.TabIndex = 32;
+            this.lblGuestDetails.Text = "Guest Details ";
+            // 
+            // lblGuestList
+            // 
+            this.lblGuestList.AutoSize = true;
+            this.lblGuestList.Font = new System.Drawing.Font("Georgia", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblGuestList.ForeColor = System.Drawing.Color.DarkGoldenrod;
+            this.lblGuestList.Location = new System.Drawing.Point(3, 3);
+            this.lblGuestList.Name = "lblGuestList";
+            this.lblGuestList.Size = new System.Drawing.Size(150, 27);
+            this.lblGuestList.TabIndex = 33;
+            this.lblGuestList.Text = "Guest Lists ";
+            // 
+            // lblFirstNm
+            // 
+            this.lblFirstNm.AutoSize = true;
+            this.lblFirstNm.BackColor = System.Drawing.Color.White;
+            this.lblFirstNm.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblFirstNm.Location = new System.Drawing.Point(3, 60);
+            this.lblFirstNm.Name = "lblFirstNm";
+            this.lblFirstNm.Size = new System.Drawing.Size(119, 28);
+            this.lblFirstNm.TabIndex = 33;
+            this.lblFirstNm.Text = "First Name:";
+            // 
+            // lblLastNm
+            // 
+            this.lblLastNm.AutoSize = true;
+            this.lblLastNm.BackColor = System.Drawing.Color.White;
+            this.lblLastNm.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblLastNm.Location = new System.Drawing.Point(3, 130);
+            this.lblLastNm.Name = "lblLastNm";
+            this.lblLastNm.Size = new System.Drawing.Size(116, 28);
+            this.lblLastNm.TabIndex = 34;
+            this.lblLastNm.Text = "Last Name:";
+            // 
+            // lblPhone
+            // 
+            this.lblPhone.AutoSize = true;
+            this.lblPhone.BackColor = System.Drawing.Color.White;
+            this.lblPhone.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblPhone.Location = new System.Drawing.Point(3, 200);
+            this.lblPhone.Name = "lblPhone";
+            this.lblPhone.Size = new System.Drawing.Size(158, 28);
+            this.lblPhone.TabIndex = 35;
+            this.lblPhone.Text = "Phone Number:";
+            // 
+            // lblEmail
+            // 
+            this.lblEmail.AutoSize = true;
+            this.lblEmail.BackColor = System.Drawing.Color.White;
+            this.lblEmail.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblEmail.Location = new System.Drawing.Point(3, 270);
+            this.lblEmail.Name = "lblEmail";
+            this.lblEmail.Size = new System.Drawing.Size(147, 28);
+            this.lblEmail.TabIndex = 36;
+            this.lblEmail.Text = "Email Address:";
+            // 
+            // lblAddress
+            // 
+            this.lblAddress.AutoSize = true;
+            this.lblAddress.BackColor = System.Drawing.Color.White;
+            this.lblAddress.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblAddress.Location = new System.Drawing.Point(3, 410);
+            this.lblAddress.Name = "lblAddress";
+            this.lblAddress.Size = new System.Drawing.Size(92, 28);
+            this.lblAddress.TabIndex = 37;
+            this.lblAddress.Text = "Address:";
+            // 
+            // lblDOB
+            // 
+            this.lblDOB.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblDOB.AutoSize = true;
+            this.lblDOB.BackColor = System.Drawing.Color.White;
+            this.lblDOB.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDOB.Location = new System.Drawing.Point(314, 60);
+            this.lblDOB.Name = "lblDOB";
+            this.lblDOB.Size = new System.Drawing.Size(137, 28);
+            this.lblDOB.TabIndex = 38;
+            this.lblDOB.Text = "Date of Birth:";
+            // 
+            // lblNationality
+            // 
+            this.lblNationality.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblNationality.AutoSize = true;
+            this.lblNationality.BackColor = System.Drawing.Color.White;
+            this.lblNationality.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblNationality.Location = new System.Drawing.Point(314, 130);
+            this.lblNationality.Name = "lblNationality";
+            this.lblNationality.Size = new System.Drawing.Size(120, 28);
+            this.lblNationality.TabIndex = 39;
+            this.lblNationality.Text = "Nationality:";
+            // 
+            // lblIDType
+            // 
+            this.lblIDType.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblIDType.AutoSize = true;
+            this.lblIDType.BackColor = System.Drawing.Color.White;
+            this.lblIDType.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblIDType.Location = new System.Drawing.Point(314, 200);
+            this.lblIDType.Name = "lblIDType";
+            this.lblIDType.Size = new System.Drawing.Size(86, 28);
+            this.lblIDType.TabIndex = 40;
+            this.lblIDType.Text = "ID Type:";
+            // 
+            // lblIDNum
+            // 
+            this.lblIDNum.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblIDNum.AutoSize = true;
+            this.lblIDNum.BackColor = System.Drawing.Color.White;
+            this.lblIDNum.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblIDNum.Location = new System.Drawing.Point(314, 270);
+            this.lblIDNum.Name = "lblIDNum";
+            this.lblIDNum.Size = new System.Drawing.Size(119, 28);
+            this.lblIDNum.TabIndex = 41;
+            this.lblIDNum.Text = "ID Number:";
+            // 
+            // lblGuestType
+            // 
+            this.lblGuestType.AutoSize = true;
+            this.lblGuestType.BackColor = System.Drawing.Color.White;
+            this.lblGuestType.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblGuestType.Location = new System.Drawing.Point(3, 340);
+            this.lblGuestType.Name = "lblGuestType";
+            this.lblGuestType.Size = new System.Drawing.Size(121, 28);
+            this.lblGuestType.TabIndex = 42;
+            this.lblGuestType.Text = "Guest Type:";
             // 
             // frmGuestManagement
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.Thistle;
             this.ClientSize = new System.Drawing.Size(1920, 960);
-            this.Controls.Add(this.lblGuestCount);
-            this.Controls.Add(this.btnCancel);
-            this.Controls.Add(this.btnSaveGuest);
-            this.Controls.Add(this.cmbGuestType);
-            this.Controls.Add(this.txtIDNumber);
-            this.Controls.Add(this.cmbIDType);
-            this.Controls.Add(this.dtpDOB);
-            this.Controls.Add(this.cmbNationality);
-            this.Controls.Add(this.txtAddress);
-            this.Controls.Add(this.txtPhone);
-            this.Controls.Add(this.txtEmail);
-            this.Controls.Add(this.txtLastName);
-            this.Controls.Add(this.txtFirstName);
             this.Controls.Add(this.pnlGuestForm);
-            this.Controls.Add(this.txtSearch);
-            this.Controls.Add(this.btnSearch);
-            this.Controls.Add(this.btnDeleteGuest);
-            this.Controls.Add(this.btnEditGuest);
-            this.Controls.Add(this.btnAddGuest);
-            this.Controls.Add(this.dgvGuests);
+            this.Controls.Add(this.pnlGuestList);
             this.Name = "frmGuestManagement";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Hotel Management System - Guest Management";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.frmGuestManagement_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgvGuests)).EndInit();
+            this.pnlGuestForm.ResumeLayout(false);
+            this.pnlGuestForm.PerformLayout();
+            this.pnlGuestList.ResumeLayout(false);
+            this.pnlGuestList.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -409,5 +615,18 @@
         private System.Windows.Forms.Button btnSaveGuest;
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Label lblGuestCount;
+        private System.Windows.Forms.Panel pnlGuestList;
+        private System.Windows.Forms.Label lblGuestDetails;
+        private System.Windows.Forms.Label lblGuestList;
+        private System.Windows.Forms.Label lblFirstNm;
+        private System.Windows.Forms.Label lblLastNm;
+        private System.Windows.Forms.Label lblAddress;
+        private System.Windows.Forms.Label lblEmail;
+        private System.Windows.Forms.Label lblPhone;
+        private System.Windows.Forms.Label lblIDNum;
+        private System.Windows.Forms.Label lblIDType;
+        private System.Windows.Forms.Label lblNationality;
+        private System.Windows.Forms.Label lblDOB;
+        private System.Windows.Forms.Label lblGuestType;
     }
 }

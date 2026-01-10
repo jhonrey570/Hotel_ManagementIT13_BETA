@@ -441,6 +441,8 @@
     <None Include="Resources\Smart-Hotel-Room.jpg" />
     <None Include="Resources\people.png" />
     <None Include="Resources\exit.png" />
+    <None Include="Resources\check.png" />
+    <None Include="Resources\refresh-page-option.png" />
     <Content Include="SqlServerTypes\readme.htm" />
     <Content Include="SqlServerTypes\x64\msvcr120.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

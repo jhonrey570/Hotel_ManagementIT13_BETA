@@ -275,7 +275,7 @@
             this.lblNumDults.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lblNumDults.AutoSize = true;
             this.lblNumDults.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblNumDults.Location = new System.Drawing.Point(458, 594);
+            this.lblNumDults.Location = new System.Drawing.Point(501, 594);
             this.lblNumDults.Name = "lblNumDults";
             this.lblNumDults.Size = new System.Drawing.Size(176, 28);
             this.lblNumDults.TabIndex = 29;
@@ -286,7 +286,7 @@
             this.lblNumDren.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lblNumDren.AutoSize = true;
             this.lblNumDren.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblNumDren.Location = new System.Drawing.Point(458, 524);
+            this.lblNumDren.Location = new System.Drawing.Point(501, 524);
             this.lblNumDren.Name = "lblNumDren";
             this.lblNumDren.Size = new System.Drawing.Size(194, 28);
             this.lblNumDren.TabIndex = 28;
@@ -296,7 +296,7 @@
             // 
             this.lblNotes.AutoSize = true;
             this.lblNotes.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblNotes.Location = new System.Drawing.Point(34, 664);
+            this.lblNotes.Location = new System.Drawing.Point(3, 664);
             this.lblNotes.Name = "lblNotes";
             this.lblNotes.Size = new System.Drawing.Size(167, 28);
             this.lblNotes.TabIndex = 26;
@@ -308,7 +308,7 @@
             this.lblTotalAmount.AutoSize = true;
             this.lblTotalAmount.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTotalAmount.ForeColor = System.Drawing.Color.Green;
-            this.lblTotalAmount.Location = new System.Drawing.Point(619, 678);
+            this.lblTotalAmount.Location = new System.Drawing.Point(501, 847);
             this.lblTotalAmount.Name = "lblTotalAmount";
             this.lblTotalAmount.Size = new System.Drawing.Size(123, 28);
             this.lblTotalAmount.TabIndex = 13;
@@ -318,7 +318,7 @@
             // 
             this.lblChckOut.AutoSize = true;
             this.lblChckOut.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblChckOut.Location = new System.Drawing.Point(33, 594);
+            this.lblChckOut.Location = new System.Drawing.Point(3, 594);
             this.lblChckOut.Name = "lblChckOut";
             this.lblChckOut.Size = new System.Drawing.Size(157, 28);
             this.lblChckOut.TabIndex = 25;
@@ -331,9 +331,9 @@
             this.btnCancel.BackColor = System.Drawing.Color.Red;
             this.btnCancel.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCancel.ForeColor = System.Drawing.Color.White;
-            this.btnCancel.Location = new System.Drawing.Point(713, 723);
+            this.btnCancel.Location = new System.Drawing.Point(699, 850);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(150, 50);
+            this.btnCancel.Size = new System.Drawing.Size(200, 50);
             this.btnCancel.TabIndex = 16;
             this.btnCancel.Text = "CANCEL";
             this.btnCancel.UseVisualStyleBackColor = false;
@@ -343,7 +343,7 @@
             // 
             this.lblchckIn.AutoSize = true;
             this.lblchckIn.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblchckIn.Location = new System.Drawing.Point(33, 524);
+            this.lblchckIn.Location = new System.Drawing.Point(3, 524);
             this.lblchckIn.Name = "lblchckIn";
             this.lblchckIn.Size = new System.Drawing.Size(140, 28);
             this.lblchckIn.TabIndex = 24;
@@ -352,11 +352,13 @@
             // 
             // rtbNotes
             // 
+            this.rtbNotes.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.rtbNotes.BackColor = System.Drawing.Color.White;
             this.rtbNotes.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.rtbNotes.Location = new System.Drawing.Point(39, 695);
+            this.rtbNotes.Location = new System.Drawing.Point(3, 695);
             this.rtbNotes.Name = "rtbNotes";
-            this.rtbNotes.Size = new System.Drawing.Size(399, 174);
+            this.rtbNotes.Size = new System.Drawing.Size(484, 205);
             this.rtbNotes.TabIndex = 12;
             this.rtbNotes.Text = "";
             // 
@@ -365,7 +367,7 @@
             this.nudAdults.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.nudAdults.BackColor = System.Drawing.Color.White;
             this.nudAdults.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.nudAdults.Location = new System.Drawing.Point(463, 625);
+            this.nudAdults.Location = new System.Drawing.Point(498, 625);
             this.nudAdults.Minimum = new decimal(new int[] {
             1,
             0,
@@ -385,7 +387,7 @@
             this.nudChildren.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.nudChildren.BackColor = System.Drawing.Color.White;
             this.nudChildren.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.nudChildren.Location = new System.Drawing.Point(462, 555);
+            this.nudChildren.Location = new System.Drawing.Point(498, 555);
             this.nudChildren.Name = "nudChildren";
             this.nudChildren.Size = new System.Drawing.Size(400, 36);
             this.nudChildren.TabIndex = 8;
@@ -424,7 +426,7 @@
             // dtpCheckIn
             // 
             this.dtpCheckIn.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.dtpCheckIn.Location = new System.Drawing.Point(38, 555);
+            this.dtpCheckIn.Location = new System.Drawing.Point(3, 555);
             this.dtpCheckIn.Name = "dtpCheckIn";
             this.dtpCheckIn.Size = new System.Drawing.Size(400, 36);
             this.dtpCheckIn.TabIndex = 5;
@@ -455,7 +457,7 @@
             // dtpCheckOut
             // 
             this.dtpCheckOut.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.dtpCheckOut.Location = new System.Drawing.Point(37, 625);
+            this.dtpCheckOut.Location = new System.Drawing.Point(3, 625);
             this.dtpCheckOut.Name = "dtpCheckOut";
             this.dtpCheckOut.Size = new System.Drawing.Size(400, 36);
             this.dtpCheckOut.TabIndex = 6;
@@ -470,12 +472,12 @@
             this.dgvGuestResults.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgvGuestResults.BackgroundColor = System.Drawing.Color.GhostWhite;
             this.dgvGuestResults.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvGuestResults.Location = new System.Drawing.Point(2, 100);
+            this.dgvGuestResults.Location = new System.Drawing.Point(3, 100);
             this.dgvGuestResults.Name = "dgvGuestResults";
             this.dgvGuestResults.ReadOnly = true;
             this.dgvGuestResults.RowHeadersWidth = 51;
             this.dgvGuestResults.RowTemplate.Height = 24;
-            this.dgvGuestResults.Size = new System.Drawing.Size(896, 421);
+            this.dgvGuestResults.Size = new System.Drawing.Size(895, 421);
             this.dgvGuestResults.TabIndex = 4;
             this.dgvGuestResults.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvGuestResults_CellClick);
             this.dgvGuestResults.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvGuestResults_CellDoubleClick);
@@ -513,9 +515,9 @@
             this.btnBook.BackColor = System.Drawing.Color.Green;
             this.btnBook.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnBook.ForeColor = System.Drawing.Color.White;
-            this.btnBook.Location = new System.Drawing.Point(463, 723);
+            this.btnBook.Location = new System.Drawing.Point(699, 794);
             this.btnBook.Name = "btnBook";
-            this.btnBook.Size = new System.Drawing.Size(150, 50);
+            this.btnBook.Size = new System.Drawing.Size(200, 50);
             this.btnBook.TabIndex = 15;
             this.btnBook.Text = "BOOK NOW";
             this.btnBook.UseVisualStyleBackColor = false;
@@ -527,9 +529,9 @@
             this.btnCalculate.BackColor = System.Drawing.Color.Blue;
             this.btnCalculate.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCalculate.ForeColor = System.Drawing.Color.White;
-            this.btnCalculate.Location = new System.Drawing.Point(463, 667);
+            this.btnCalculate.Location = new System.Drawing.Point(493, 794);
             this.btnCalculate.Name = "btnCalculate";
-            this.btnCalculate.Size = new System.Drawing.Size(150, 50);
+            this.btnCalculate.Size = new System.Drawing.Size(200, 50);
             this.btnCalculate.TabIndex = 14;
             this.btnCalculate.Text = "CALCULATE";
             this.btnCalculate.UseVisualStyleBackColor = false;

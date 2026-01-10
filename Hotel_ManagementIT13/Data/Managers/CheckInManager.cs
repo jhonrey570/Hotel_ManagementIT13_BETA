@@ -80,7 +80,8 @@ namespace Hotel_ManagementIT13.Data.Managers
 
         public CheckInResult ProcessWalkInCheckIn(Guest guest, DateTime checkIn, DateTime checkOut,
                                                 int roomId, int adults, int children,
-                                                int processedByUserId, decimal depositAmount)
+                                                int processedByUserId, decimal depositAmount,
+                                                decimal paymentAmount, string paymentMethod = "Cash")
         {
             var result = new CheckInResult();
 
@@ -129,8 +130,31 @@ namespace Hotel_ManagementIT13.Data.Managers
 
                 if (!string.IsNullOrEmpty(bookingRef))
                 {
+                    // Process deposit payment if any
+                    if (depositAmount > 0)
+                    {
+                        // Get the newly created reservation
+                        var reservation = _reservationRepo.GetReservationByReference(bookingRef);
+                        if (reservation != null)
+                        {
+                            _paymentRepo.ProcessPayment(reservation.ReservationId, depositAmount,
+                                                      paymentMethod, "Walk-in deposit payment at check-in");
+                        }
+                    }
+
+                    // Process additional payment if any
+                    if (paymentAmount > 0)
+                    {
+                        var reservation = _reservationRepo.GetReservationByReference(bookingRef);
+                        if (reservation != null)
+                        {
+                            _paymentRepo.ProcessPayment(reservation.ReservationId, paymentAmount,
+                                                      paymentMethod, "Walk-in payment at check-in");
+                        }
+                    }
+
                     // Process immediate check-in
-                    return ProcessCheckIn(bookingRef, processedByUserId, depositAmount, "Cash");
+                    return ProcessCheckIn(bookingRef, processedByUserId, 0, paymentMethod); // Deposit already processed above
                 }
 
                 result.Success = false;

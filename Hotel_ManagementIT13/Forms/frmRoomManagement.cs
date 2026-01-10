@@ -66,6 +66,11 @@ namespace Hotel_ManagementIT13.Forms
             _allAmenities = new List<Amenity>();
         }
 
+        private string FormatPeso(decimal amount)
+        {
+            return "₱" + amount.ToString("N2");
+        }
+
         private void frmRoomManagement_Load(object sender, EventArgs e)
         {
             try
@@ -358,7 +363,7 @@ namespace Hotel_ManagementIT13.Forms
                     room.Floor,
                     room.StatusName ?? "N/A",
                     room.ViewName ?? "N/A",
-                    Helper.FormatCurrency(room.BaseRate),
+                    FormatPeso(room.BaseRate),
                     room.MaxOccupancy
                 );
             }

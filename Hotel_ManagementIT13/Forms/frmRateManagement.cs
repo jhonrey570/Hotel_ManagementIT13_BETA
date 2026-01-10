@@ -30,6 +30,11 @@ namespace Hotel_ManagementIT13.Forms
             _rateRepo = new RateRepository();
         }
 
+        private string FormatPeso(decimal amount)
+        {
+            return "₱" + amount.ToString("N2");
+        }
+
         private void frmRateManagement_Load(object sender, EventArgs e)
         {
             Console.WriteLine("DEBUG: Form loading...");
@@ -65,7 +70,7 @@ namespace Hotel_ManagementIT13.Forms
             dgvRates.Columns.Add("RateId", "Rate ID");
 
             dgvRates.Columns["RateId"].Visible = false;
-            dgvRates.Columns["RateAmount"].DefaultCellStyle.Format = "C2";
+            dgvRates.Columns["RateAmount"].DefaultCellStyle.Format = "N2"; // Changed from "C2" to "N2"
             dgvRates.Columns["StartDate"].DefaultCellStyle.Format = "yyyy-MM-dd";
             dgvRates.Columns["EndDate"].DefaultCellStyle.Format = "yyyy-MM-dd";
 
@@ -94,7 +99,6 @@ namespace Hotel_ManagementIT13.Forms
                     Console.WriteLine("WARNING: No room types found");
                     cmbRoomType.Items.Add("-- No Room Types --");
                 }
-                else
                 {
                     Console.WriteLine($"DEBUG: Found {_roomTypes.Count} room types");
                     cmbRoomType.Items.Add("-- Select Room Type --");
@@ -159,7 +163,7 @@ namespace Hotel_ManagementIT13.Forms
                         int rowIndex = dgvRates.Rows.Add();
                         dgvRates.Rows[rowIndex].Cells["RoomType"].Value = rate.RoomTypeName;
                         dgvRates.Rows[rowIndex].Cells["RatePlan"].Value = rate.PlanName;
-                        dgvRates.Rows[rowIndex].Cells["RateAmount"].Value = rate.RateAmount;
+                        dgvRates.Rows[rowIndex].Cells["RateAmount"].Value = FormatPeso(rate.RateAmount); // Use FormatPeso
                         dgvRates.Rows[rowIndex].Cells["StartDate"].Value = rate.StartDate;
                         dgvRates.Rows[rowIndex].Cells["EndDate"].Value = rate.EndDate;
                         dgvRates.Rows[rowIndex].Cells["RateId"].Value = rate.RateId;

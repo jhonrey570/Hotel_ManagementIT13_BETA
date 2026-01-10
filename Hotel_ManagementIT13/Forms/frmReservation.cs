@@ -43,6 +43,10 @@ namespace Hotel_ManagementIT13.Forms
 
         // Track if reservation history tab has been initialized
         private bool _historyTabInitialized = false;
+        private bool _historyDataLoaded = false;
+
+        // Amenity fee per selected amenity
+        private const decimal AMENITY_FEE = 100m;
 
         public frmReservation()
         {
@@ -662,7 +666,7 @@ namespace Hotel_ManagementIT13.Forms
             {
                 if (_selectedGuest == null || _selectedRoomIds.Count == 0)
                 {
-                    lblTotalAmount.Text = "₱0.00"; // Changed from $ to ₱
+                    lblTotalAmount.Text = "₱0.00";
                     return;
                 }
 
@@ -671,13 +675,14 @@ namespace Hotel_ManagementIT13.Forms
 
                 if (checkOut <= checkIn)
                 {
-                    lblTotalAmount.Text = "₱0.00"; // Changed from $ to ₱
+                    lblTotalAmount.Text = "₱0.00";
                     return;
                 }
 
                 int nights = (checkOut - checkIn).Days;
                 decimal totalAmount = 0;
 
+                // Calculate room costs
                 foreach (int roomId in _selectedRoomIds)
                 {
                     var room = _availableRooms.FirstOrDefault(r => r.RoomId == roomId);
@@ -687,19 +692,29 @@ namespace Hotel_ManagementIT13.Forms
                     }
                 }
 
-                var guestHistory = _guestManager.GetGuestHistory(_selectedGuest.GuestId);
-                if (guestHistory != null && guestHistory.TotalReservations > 0)
+                // Calculate amenity fees - ₱100 for each selected amenity
+                int selectedAmenitiesCount = 0;
+                for (int i = 0; i < clbSpecialRequests.Items.Count; i++)
                 {
-                    totalAmount = totalAmount * 0.95m;
+                    if (clbSpecialRequests.GetItemChecked(i))
+                    {
+                        selectedAmenitiesCount++;
+                    }
                 }
 
-                lblTotalAmount.Text = totalAmount.ToString("₱0.00"); // Changed from C to ₱ format
+                decimal amenityFees = selectedAmenitiesCount * AMENITY_FEE;
+                totalAmount += amenityFees;
+
+                // REMOVED: Returning guest discount (5% discount removed)
+                // No discount applied anymore
+
+                lblTotalAmount.Text = totalAmount.ToString("₱0.00");
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Error calculating total: {ex.Message}", "Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
-                lblTotalAmount.Text = "₱0.00"; // Changed from $ to ₱
+                lblTotalAmount.Text = "₱0.00";
             }
         }
 
@@ -724,7 +739,7 @@ namespace Hotel_ManagementIT13.Forms
                     Adults = (int)nudAdults.Value,
                     Children = (int)nudChildren.Value,
                     SpecialRequests = specialRequests,
-                    TotalAmount = decimal.Parse(lblTotalAmount.Text.Replace("₱", "").Replace(",", "")), // Changed from $ to ₱
+                    TotalAmount = decimal.Parse(lblTotalAmount.Text.Replace("₱", "").Replace(",", "")),
                     CreatedAt = DateTime.Now
                 };
 
@@ -814,6 +829,7 @@ namespace Hotel_ManagementIT13.Forms
             {
                 // Clear the history tab flag to force reinitialization
                 _historyTabInitialized = false;
+                _historyDataLoaded = false;
 
                 // Clear existing controls in tabPage2
                 tabPage2.Controls.Clear();
@@ -911,7 +927,7 @@ namespace Hotel_ManagementIT13.Forms
 
                 lblSelectedGuest.Text = "No guest selected";
                 lblSelectedGuest.ForeColor = Color.Red;
-                lblTotalAmount.Text = "₱0.00"; // Changed from $ to ₱
+                lblTotalAmount.Text = "₱0.00";
                 lblAvailableRooms.Text = "Available: 0 room(s)";
 
                 dtpCheckIn.Value = DateTime.Today;
@@ -1136,15 +1152,21 @@ namespace Hotel_ManagementIT13.Forms
             dgvReservationHistory.Columns.Add("CheckInDate", "Check-in");
             dgvReservationHistory.Columns.Add("CheckOutDate", "Check-out");
             dgvReservationHistory.Columns.Add("Rooms", "Rooms");
-            dgvReservationHistory.Columns.Add("TotalAmount", "Total");
+
+            // Changed from "C" format to peso format
+            DataGridViewTextBoxColumn totalAmountCol = new DataGridViewTextBoxColumn();
+            totalAmountCol.Name = "TotalAmount";
+            totalAmountCol.HeaderText = "Total";
+            totalAmountCol.DefaultCellStyle.Format = "₱0.00";
+            totalAmountCol.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dgvReservationHistory.Columns.Add(totalAmountCol);
+
             dgvReservationHistory.Columns.Add("StatusName", "Status");
             dgvReservationHistory.Columns.Add("CreatedAt", "Booking Date");
 
             dgvReservationHistory.Columns["CheckInDate"].DefaultCellStyle.Format = "MM/dd/yyyy";
             dgvReservationHistory.Columns["CheckOutDate"].DefaultCellStyle.Format = "MM/dd/yyyy";
             dgvReservationHistory.Columns["CreatedAt"].DefaultCellStyle.Format = "MM/dd/yyyy HH:mm";
-            dgvReservationHistory.Columns["TotalAmount"].DefaultCellStyle.Format = "C";
-            dgvReservationHistory.Columns["TotalAmount"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
 
             Button btnRefreshHistory = new Button();
             btnRefreshHistory.Text = "Refresh";
@@ -1200,6 +1222,13 @@ namespace Hotel_ManagementIT13.Forms
 
         private void LoadReservationHistory()
         {
+            // Check if data has already been loaded
+            if (_historyDataLoaded && _historyTabInitialized)
+            {
+                // Data already loaded, just return
+                return;
+            }
+
             try
             {
                 // Ensure tab is initialized
@@ -1237,6 +1266,7 @@ namespace Hotel_ManagementIT13.Forms
                 if (dgvReservationHistory == null)
                 {
                     SetupReservationHistoryTab();
+                    // Recursive call to load data after setup
                     LoadReservationHistory();
                     return;
                 }
@@ -1260,13 +1290,16 @@ namespace Hotel_ManagementIT13.Forms
                             roomNumbers = string.Join(", ", reservation.Rooms.Select(r => r.RoomNumber));
                         }
 
+                        // Format the total amount with peso sign
+                        string formattedTotal = reservation.TotalAmount.ToString("₱0.00");
+
                         dgvReservationHistory.Rows.Add(
                             reservation.BookingReference,
                             reservation.GuestName,
                             reservation.CheckInDate,
                             reservation.CheckOutDate,
                             roomNumbers,
-                            reservation.TotalAmount,
+                            formattedTotal,
                             reservation.StatusName,
                             reservation.CreatedAt
                         );
@@ -1284,20 +1317,31 @@ namespace Hotel_ManagementIT13.Forms
 
                     dgvReservationHistory.ClearSelection();
 
-                    // Show success message with count
-                    MessageBox.Show($"Successfully loaded {reservations.Count} reservation(s)", "History Loaded",
-                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    // Mark data as loaded
+                    _historyDataLoaded = true;
+
+                    // Show success message only on first load
+                    if (!_historyDataLoaded)
+                    {
+                        MessageBox.Show($"Successfully loaded {reservations.Count} reservation(s)", "History Loaded",
+                            MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
                 }
                 else
                 {
-                    MessageBox.Show("No reservations found in the database.", "Information",
-                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    if (!_historyDataLoaded)
+                    {
+                        MessageBox.Show("No reservations found in the database.", "Information",
+                            MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    _historyDataLoaded = true;
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Error loading reservation history: {ex.Message}", "Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
+                _historyDataLoaded = false;
             }
         }
 
@@ -1451,11 +1495,15 @@ namespace Hotel_ManagementIT13.Forms
 
         private void BtnRefreshHistory_Click(object sender, EventArgs e)
         {
+            // Reset the loaded flag to force a refresh
+            _historyDataLoaded = false;
             LoadReservationHistory();
         }
 
         private void BtnFilterHistory_Click(object sender, EventArgs e)
         {
+            // Reset the loaded flag to force a refresh with filters
+            _historyDataLoaded = false;
             LoadReservationHistory();
         }
 
@@ -1472,6 +1520,13 @@ namespace Hotel_ManagementIT13.Forms
         private void pnlGuestInfo_Paint(object sender, PaintEventArgs e)
         {
 
+        }
+
+        // Add event handler for amenity selection changes
+        private void clbSpecialRequests_ItemCheck(object sender, ItemCheckEventArgs e)
+        {
+            // Schedule the CalculateTotal to run after the check state has been updated
+            BeginInvoke((Action)(() => CalculateTotal()));
         }
     }
 }

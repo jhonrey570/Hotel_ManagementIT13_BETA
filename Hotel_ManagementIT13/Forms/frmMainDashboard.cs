@@ -2,6 +2,7 @@
 using Hotel_ManagementIT13.Data.Models;
 using Hotel_ManagementIT13.Data.Repositories;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.Globalization;
@@ -19,12 +20,14 @@ namespace Hotel_ManagementIT13.Forms
         private ReportManager _reportManager;
         private Timer _dashboardTimer;
         private CultureInfo _phCulture;
+        private Dictionary<string, Button> _quickActionButtons;
 
         public frmMainDashboard()
         {
             InitializeComponent();
             // Create Philippine culture for Peso formatting
             _phCulture = CultureInfo.CreateSpecificCulture("en-PH");
+            _quickActionButtons = new Dictionary<string, Button>();
             InitializeManagers();
             SetupMenu();
             SetupQuickActions();
@@ -84,11 +87,14 @@ namespace Hotel_ManagementIT13.Forms
 
         private void SetupQuickActions()
         {
-            string[] actions = new[] { "NewReservation", "CheckIn", "CheckOut", "RoomManagement", "GuestManagement" };
-            string[] texts = new[] { "New Reservation", "Check-In", "Check-Out", "Rooms", "Guests" };
+            string[] actions = new[] { "NewReservation", "CheckIn", "CheckOut", "RoomManagement", "GuestManagement", "RateSettings", "UserManagement", "Reports" };
+            string[] texts = new[] { "New Reservation", "Check-In", "Check-Out", "Rooms", "Guests", "Rate Settings", "User Management", "Reports" };
             Color[] colors = new[] { Color.FromArgb(46, 204, 113), Color.FromArgb(52, 152, 219),
                                    Color.FromArgb(231, 76, 60), Color.FromArgb(155, 89, 182),
-                                   Color.FromArgb(241, 196, 15) };
+                                   Color.FromArgb(241, 196, 15), Color.FromArgb(230, 126, 34),
+                                   Color.FromArgb(75, 0, 130),   // Indigo for User Management
+                                   Color.FromArgb(127, 127, 127) // Gray for Reports
+            };
 
             for (int i = 0; i < actions.Length; i++)
             {
@@ -96,12 +102,12 @@ namespace Hotel_ManagementIT13.Forms
                 {
                     Text = texts[i],
                     Tag = actions[i],
-                    Size = new Size(180, 80),
+                    Size = new Size(140, 65),
                     BackColor = colors[i],
                     ForeColor = Color.White,
-                    Font = new Font("Microsoft Sans Serif", 12, FontStyle.Bold),
+                    Font = new Font("Microsoft Sans Serif", 10, FontStyle.Bold),
                     FlatStyle = FlatStyle.Flat,
-                    Margin = new Padding(15, 10, 15, 10),
+                    Margin = new Padding(8, 6, 8, 6),
                     Cursor = Cursors.Hand
                 };
                 btn.FlatAppearance.BorderSize = 0;
@@ -110,12 +116,16 @@ namespace Hotel_ManagementIT13.Forms
 
                 btn.Click += quickActionButton_Click;
                 flpQuickActions.Controls.Add(btn);
+
+                // Store the button in dictionary for easy access
+                _quickActionButtons[actions[i]] = btn;
             }
         }
 
         private void SetupEventHandlers()
         {
             btnLogout.Click += btnLogout_Click;
+            btnRefreshDashboard.Click += btnRefreshDashboard_Click;
             this.FormClosing += frmMainDashboard_FormClosing;
         }
 
@@ -124,6 +134,9 @@ namespace Hotel_ManagementIT13.Forms
             if (ApplicationContext.CurrentUser != null)
             {
                 lblWelcome.Text = $"Welcome, {ApplicationContext.CurrentUser.FirstName} {ApplicationContext.CurrentUser.LastName}";
+
+                // Apply role-based UI restrictions
+                ApplyRoleBasedUIRestrictions();
             }
             else
             {
@@ -138,6 +151,148 @@ namespace Hotel_ManagementIT13.Forms
             _dashboardTimer.Start();
 
             UpdateStatusStrip();
+        }
+
+        private void ApplyRoleBasedUIRestrictions()
+        {
+            var currentUser = ApplicationContext.CurrentUser;
+
+            if (currentUser is FrontDeskStaff)
+            {
+                // Front Desk Staff - Hide specific buttons
+                HideFrontDeskRestrictedButtons();
+
+                // Also hide menu items they shouldn't access
+                HideFrontDeskRestrictedMenuItems();
+            }
+            else if (currentUser is Manager)
+            {
+                // Manager - Show all buttons except User Management
+                HideManagerRestrictedButtons();
+
+                // Also hide admin menu for Manager
+                HideManagerRestrictedMenuItems();
+            }
+            else if (currentUser is Admin)
+            {
+                // Admin - Show all buttons
+                ShowAllQuickActionButtons();
+                ShowAllMenuItems();
+            }
+            else
+            {
+                // Unknown role - Show all by default
+                ShowAllQuickActionButtons();
+            }
+        }
+
+        private void HideFrontDeskRestrictedButtons()
+        {
+            // Front Desk Staff: Hide Rate Settings, User Management, and Reports buttons
+            string[] buttonsToHide = { "RateSettings", "UserManagement", "Reports" };
+
+            foreach (var buttonKey in buttonsToHide)
+            {
+                if (_quickActionButtons.ContainsKey(buttonKey))
+                {
+                    _quickActionButtons[buttonKey].Visible = false;
+                }
+            }
+
+            // Re-layout the FlowLayoutPanel to remove gaps
+            flpQuickActions.PerformLayout();
+        }
+
+        private void HideManagerRestrictedButtons()
+        {
+            // Manager: Hide only User Management button
+            string[] buttonsToHide = { "UserManagement" };
+
+            foreach (var buttonKey in buttonsToHide)
+            {
+                if (_quickActionButtons.ContainsKey(buttonKey))
+                {
+                    _quickActionButtons[buttonKey].Visible = false;
+                }
+            }
+
+            // Show all other buttons
+            foreach (var buttonKey in _quickActionButtons.Keys)
+            {
+                if (!buttonsToHide.Contains(buttonKey))
+                {
+                    _quickActionButtons[buttonKey].Visible = true;
+                }
+            }
+
+            // Re-layout the FlowLayoutPanel to remove gaps
+            flpQuickActions.PerformLayout();
+        }
+
+        private void HideFrontDeskRestrictedMenuItems()
+        {
+            // Hide admin menu for Front Desk Staff
+            foreach (ToolStripMenuItem menuItem in mainMenu.Items)
+            {
+                if (menuItem.Text == "Admin")
+                {
+                    menuItem.Visible = false;
+                }
+                else if (menuItem.Text == "Reports")
+                {
+                    menuItem.Visible = false;
+                }
+            }
+        }
+
+        private void HideManagerRestrictedMenuItems()
+        {
+            // Hide only User Management menu item for Manager
+            foreach (ToolStripMenuItem menuItem in mainMenu.Items)
+            {
+                if (menuItem.Text == "Admin")
+                {
+                    // For Manager, only hide User Management submenu
+                    foreach (ToolStripItem subItem in menuItem.DropDownItems)
+                    {
+                        if (subItem.Name == "menuUsers")
+                        {
+                            subItem.Visible = false;
+                        }
+                        else
+                        {
+                            subItem.Visible = true;
+                        }
+                    }
+                }
+            }
+        }
+
+        private void ShowAllQuickActionButtons()
+        {
+            // Make all buttons visible
+            foreach (var button in _quickActionButtons.Values)
+            {
+                button.Visible = true;
+            }
+
+            // Re-layout the FlowLayoutPanel
+            flpQuickActions.PerformLayout();
+        }
+
+        private void ShowAllMenuItems()
+        {
+            // Make all menu items visible
+            foreach (ToolStripMenuItem menuItem in mainMenu.Items)
+            {
+                menuItem.Visible = true;
+
+                // Make all sub-items visible
+                foreach (ToolStripItem subItem in menuItem.DropDownItems)
+                {
+                    subItem.Visible = true;
+                }
+            }
         }
 
         private void LoadDashboardData()
@@ -334,7 +489,7 @@ namespace Hotel_ManagementIT13.Forms
             lblAvailableRoomsValue.Text = "0";
             lblOccupiedRoomsValue.Text = "0";
             lblPendingValue.Text = "0";
-            lblRevenueValue.Text = "₱0.00"; // Changed from "$0.00" to "₱0.00"
+            lblRevenueValue.Text = "₱0.00";
             lblOccupancyRate.Text = "0%";
             lblOccupancyRate.ForeColor = Color.Gray;
         }
@@ -344,13 +499,12 @@ namespace Hotel_ManagementIT13.Forms
             try
             {
                 decimal todaysRevenue = _paymentRepo.GetTotalRevenue(today, today);
-                // Changed from $"${todaysRevenue:N2}" to use Peso sign with proper formatting
                 lblRevenueValue.Text = todaysRevenue.ToString("₱#,##0.00", _phCulture);
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error loading revenue data: {ex.Message}");
-                lblRevenueValue.Text = "₱0.00"; // Changed from "$0.00"
+                lblRevenueValue.Text = "₱0.00";
             }
         }
 
@@ -637,7 +791,6 @@ namespace Hotel_ManagementIT13.Forms
                     ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Column,
                     Color = Color.FromArgb(52, 152, 219),
                     IsValueShownAsLabel = true,
-                    // Changed from "C0" to custom formatting with Peso sign
                     LabelFormat = "₱#,##0",
                     ChartArea = "ChartArea1"
                 };
@@ -654,7 +807,7 @@ namespace Hotel_ManagementIT13.Forms
                 chartRevenue.Series.Add(revenueSeries);
 
                 // Configure chart
-                chartRevenue.ChartAreas[0].AxisY.Title = "Amount (₱)"; // Changed from "Amount ($)"
+                chartRevenue.ChartAreas[0].AxisY.Title = "Amount (₱)";
                 chartRevenue.ChartAreas[0].AxisY.TitleFont = new Font("Microsoft Sans Serif", 10, FontStyle.Bold);
                 chartRevenue.ChartAreas[0].AxisX.LabelStyle.Angle = -45;
 
@@ -718,6 +871,14 @@ namespace Hotel_ManagementIT13.Forms
             }
         }
 
+        private void btnRefreshDashboard_Click(object sender, EventArgs e)
+        {
+            LoadDashboardData();
+            UpdateStatusStrip();
+            MessageBox.Show("Dashboard refreshed successfully!", "Refresh",
+                MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
         private void quickActionButton_Click(object sender, EventArgs e)
         {
             Button btn = sender as Button;
@@ -743,6 +904,36 @@ namespace Hotel_ManagementIT13.Forms
                     break;
                 case "GuestManagement":
                     formToOpen = new frmGuestManagement();
+                    break;
+                case "RateSettings":
+                    // Check if user is allowed to access Rate Settings
+                    if (ApplicationContext.CurrentUser is FrontDeskStaff)
+                    {
+                        MessageBox.Show("Access denied. Admin or Manager privileges required for Rate Settings.",
+                                      "Access Denied", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+                    formToOpen = new frmRateManagement();
+                    break;
+                case "UserManagement":
+                    // Check if user is allowed to access User Management
+                    if (!(ApplicationContext.CurrentUser is Admin))
+                    {
+                        MessageBox.Show("Access denied. Admin privileges required for User Management.",
+                                      "Access Denied", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+                    formToOpen = new frmUserManagement();
+                    break;
+                case "Reports":
+                    // Check if user is allowed to access Reports
+                    if (ApplicationContext.CurrentUser is FrontDeskStaff)
+                    {
+                        MessageBox.Show("Access denied. Admin or Manager privileges required for Reports.",
+                                      "Access Denied", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+                    formToOpen = new frmReports();
                     break;
             }
 
@@ -786,7 +977,16 @@ namespace Hotel_ManagementIT13.Forms
                 case "menuDailyReport":
                 case "menuMonthlyReport":
                 case "menuFinancialReport":
-                    formToOpen = new frmReports();
+                    if (ApplicationContext.CurrentUser is FrontDeskStaff)
+                    {
+                        MessageBox.Show("Access denied. Admin or Manager privileges required for Reports.",
+                                      "Access Denied", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        shouldOpenForm = false;
+                    }
+                    else
+                    {
+                        formToOpen = new frmReports();
+                    }
                     break;
                 case "menuUsers":
                     if (ApplicationContext.CurrentUser is Admin)

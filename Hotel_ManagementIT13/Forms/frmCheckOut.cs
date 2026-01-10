@@ -4,6 +4,7 @@ using Hotel_ManagementIT13.Data.Repositories;
 using Hotel_ManagementIT13.Utilities;
 using System;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -28,6 +29,11 @@ namespace Hotel_ManagementIT13.Forms
 
             // Then initialize the rest of the form
             InitializeForm();
+        }
+
+        private string FormatPeso(decimal amount)
+        {
+            return "₱" + amount.ToString("N2");
         }
 
         private void InitializeForm()
@@ -156,7 +162,7 @@ namespace Hotel_ManagementIT13.Forms
                         reservation.BookingReference,
                         reservation.GuestName,
                         roomNumbers,
-                        Helper.FormatCurrency(reservation.TotalAmount),
+                        FormatPeso(reservation.TotalAmount),
                         checkInTimeStr,
                         departureTime,
                         reservation.StatusName
@@ -234,9 +240,9 @@ namespace Hotel_ManagementIT13.Forms
 
                     if (billing != null)
                     {
-                        lblTotalBill.Text = Helper.FormatCurrency(billing.TotalAmount);
-                        lblAmountPaid.Text = Helper.FormatCurrency(billing.PaidAmount);
-                        lblBalance.Text = Helper.FormatCurrency(billing.Balance);
+                        lblTotalBill.Text = FormatPeso(billing.TotalAmount);
+                        lblAmountPaid.Text = FormatPeso(billing.PaidAmount);
+                        lblBalance.Text = FormatPeso(billing.Balance);
 
                         // Display billing items
                         DisplayBillingItems(billing);
@@ -246,9 +252,9 @@ namespace Hotel_ManagementIT13.Forms
                     }
                     else
                     {
-                        lblTotalBill.Text = Helper.FormatCurrency(_selectedReservation.TotalAmount);
-                        lblAmountPaid.Text = "$0.00";
-                        lblBalance.Text = Helper.FormatCurrency(_selectedReservation.TotalAmount);
+                        lblTotalBill.Text = FormatPeso(_selectedReservation.TotalAmount);
+                        lblAmountPaid.Text = "₱0.00";
+                        lblBalance.Text = FormatPeso(_selectedReservation.TotalAmount);
                         txtPaymentAmount.Text = _selectedReservation.TotalAmount.ToString("0.00");
                     }
 
@@ -316,7 +322,7 @@ namespace Hotel_ManagementIT13.Forms
 
                 dgvBillingItems.Rows.Add(
                     $"Room {room.RoomNumber} - {nights} night(s)",
-                    Helper.FormatCurrency(roomTotal)
+                    FormatPeso(roomTotal)
                 );
             }
 
@@ -327,7 +333,7 @@ namespace Hotel_ManagementIT13.Forms
                 {
                     dgvBillingItems.Rows.Add(
                         item.Description,
-                        Helper.FormatCurrency(item.Amount)
+                        FormatPeso(item.Amount)
                     );
                 }
             }
@@ -346,12 +352,12 @@ namespace Hotel_ManagementIT13.Forms
                 int lateHours = (int)Math.Ceiling(lateDuration.TotalHours);
 
                 decimal lateFee = lateHours <= 1 ? 50 : 50 + ((lateHours - 1) * 25);
-                lblLateFee.Text = Helper.FormatCurrency(lateFee);
+                lblLateFee.Text = FormatPeso(lateFee);
                 nudLateCheckoutHours.Value = lateHours;
             }
             else
             {
-                lblLateFee.Text = "$0.00";
+                lblLateFee.Text = "₱0.00";
                 nudLateCheckoutHours.Value = 0;
             }
         }
@@ -421,7 +427,7 @@ namespace Hotel_ManagementIT13.Forms
             DialogResult confirm = MessageBox.Show(
                 $"Check-out {_selectedReservation.GuestName} from room(s): {lblRoomNumber.Text}?\n\n" +
                 $"Check-out Time: {dtpActualCheckOut.Value:yyyy-MM-dd HH:mm}\n" +
-                $"Payment Amount: {Helper.FormatCurrency(paymentAmount)}\n" +
+                $"Payment Amount: {FormatPeso(paymentAmount)}\n" +
                 $"Payment Method: {cmbPaymentMethod.SelectedItem}\n\n" +
                 $"Late Fee: {lblLateFee.Text}",
                 "Confirm Check-out",
@@ -580,20 +586,20 @@ namespace Hotel_ManagementIT13.Forms
                 {
                     foreach (var item in billing.Items)
                     {
-                        invoiceText += $"{item.Description}: {item.Amount:C}\n";
+                        invoiceText += $"{item.Description}: {FormatPeso(item.Amount)}\n";
                     }
 
                     invoiceText += $"----------------------------------------\n" +
-                                 $"Total: {billing.TotalAmount:C}\n" +
-                                 $"Paid: {billing.PaidAmount:C}\n" +
-                                 $"Balance: {billing.Balance:C}\n";
+                                 $"Total: {FormatPeso(billing.TotalAmount)}\n" +
+                                 $"Paid: {FormatPeso(billing.PaidAmount)}\n" +
+                                 $"Balance: {FormatPeso(billing.Balance)}\n";
                 }
 
                 if (checkOutResult != null)
                 {
                     invoiceText += $"----------------------------------------\n" +
                                  $"Receipt #: {checkOutResult.ReceiptNumber}\n" +
-                                 $"Late Fee: {checkOutResult.LateFee:C}\n" +
+                                 $"Late Fee: {FormatPeso(checkOutResult.LateFee)}\n" +
                                  $"Processed by: {ApplicationContext.CurrentUser?.FullName}\n" +
                                  $"Date: {DateTime.Now:yyyy-MM-dd HH:mm}\n";
                 }
@@ -637,10 +643,10 @@ namespace Hotel_ManagementIT13.Forms
 
             lblGuestName.Text = "---";
             lblRoomNumber.Text = "---";
-            lblTotalBill.Text = "$0.00";
-            lblAmountPaid.Text = "$0.00";
-            lblBalance.Text = "$0.00";
-            lblLateFee.Text = "$0.00";
+            lblTotalBill.Text = "₱0.00";
+            lblAmountPaid.Text = "₱0.00";
+            lblBalance.Text = "₱0.00";
+            lblLateFee.Text = "₱0.00";
             txtPaymentAmount.Clear();
             dgvBillingItems.Rows.Clear();
             nudLateCheckoutHours.Value = 0;
@@ -664,7 +670,7 @@ namespace Hotel_ManagementIT13.Forms
 
             int lateHours = (int)nudLateCheckoutHours.Value;
             decimal lateFee = lateHours <= 0 ? 0 : (lateHours <= 1 ? 50 : 50 + ((lateHours - 1) * 25));
-            lblLateFee.Text = Helper.FormatCurrency(lateFee);
+            lblLateFee.Text = FormatPeso(lateFee);
 
             // Update check-out time
             DateTime standardCheckOut = _selectedReservation.CheckOutDate.Date.AddHours(12);
@@ -712,6 +718,11 @@ namespace Hotel_ManagementIT13.Forms
             {
                 // Constructor for designer support
             }
+        }
+
+        private void frmCheckOut_Load_1(object sender, EventArgs e)
+        {
+
         }
     }
 }
