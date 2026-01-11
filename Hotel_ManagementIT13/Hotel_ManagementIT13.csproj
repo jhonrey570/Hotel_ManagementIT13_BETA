@@ -255,6 +255,7 @@
   <ItemGroup>
     <Compile Include="ApplicationContext.cs" />
     <Compile Include="Data\DatabaseHelper.cs" />
+    <Compile Include="Data\Managers\BedManager.cs" />
     <Compile Include="Data\Managers\BillingManager.cs" />
     <Compile Include="Data\Managers\CheckInManager.cs" />
     <Compile Include="Data\Managers\CheckOutManager.cs" />
@@ -264,6 +265,7 @@
     <Compile Include="Data\Managers\ReservationManager.cs" />
     <Compile Include="Data\Managers\RoomManager.cs" />
     <Compile Include="Data\Models\Admin.cs" />
+    <Compile Include="Data\Models\BedType.cs" />
     <Compile Include="Data\Models\Billing.cs" />
     <Compile Include="Data\Models\DeluxeRoom.cs" />
     <Compile Include="Data\Models\FrontDeskStaff.cs" />
@@ -273,10 +275,12 @@
     <Compile Include="Data\Models\RateModels.cs" />
     <Compile Include="Data\Models\Reservation.cs" />
     <Compile Include="Data\Models\Room.cs" />
+    <Compile Include="Data\Models\RoomBed.cs" />
     <Compile Include="Data\Models\StandardRoom.cs" />
     <Compile Include="Data\Models\Suite.cs" />
     <Compile Include="Data\Models\User.cs" />
     <Compile Include="Data\Repositories\AmenityRepository.cs" />
+    <Compile Include="Data\Repositories\BedRepository.cs" />
     <Compile Include="Data\Repositories\BillingRepository.cs" />
     <Compile Include="Data\Repositories\GuestRepository.cs" />
     <Compile Include="Data\Repositories\PaymentRepository.cs" />
@@ -368,6 +372,7 @@
     <Compile Include="Utilities\Constants.cs" />
     <Compile Include="Utilities\Helper.cs" />
     <Compile Include="Utilities\Logger.cs" />
+    <Compile Include="Utilities\ReportHelper.cs" />
     <Compile Include="Utilities\Validator.cs" />
     <EmbeddedResource Include="Forms\frmBilling.resx">
       <DependentUpon>frmBilling.cs</DependentUpon>
@@ -443,6 +448,17 @@
     <None Include="Resources\exit.png" />
     <None Include="Resources\check.png" />
     <None Include="Resources\refresh-page-option.png" />
+    <None Include="Resources\clarity--house-line.png" />
+    <None Include="Resources\clarity--house-solid.png" />
+    <None Include="Resources\clarity--refresh-line.png" />
+    <None Include="Resources\clarity--sign-out-line.png" />
+    <None Include="Resources\clarity--warning-line.png" />
+    <None Include="Resources\clarity--warning-standard-line.png" />
+    <None Include="Resources\material-symbols-light--percent.png" />
+    <None Include="Resources\clarity--dollar-bill-line.png" />
+    <None Include="Resources\material-symbols-light--percent1.png" />
+    <None Include="Resources\clarity--check-line.png" />
+    <None Include="Resources\clarity--search-line.png" />
     <Content Include="SqlServerTypes\readme.htm" />
     <Content Include="SqlServerTypes\x64\msvcr120.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

@@ -89,12 +89,9 @@ namespace Hotel_ManagementIT13.Forms
         {
             string[] actions = new[] { "NewReservation", "CheckIn", "CheckOut", "RoomManagement", "GuestManagement", "RateSettings", "UserManagement", "Reports" };
             string[] texts = new[] { "New Reservation", "Check-In", "Check-Out", "Rooms", "Guests", "Rate Settings", "User Management", "Reports" };
-            Color[] colors = new[] { Color.FromArgb(46, 204, 113), Color.FromArgb(52, 152, 219),
-                                   Color.FromArgb(231, 76, 60), Color.FromArgb(155, 89, 182),
-                                   Color.FromArgb(241, 196, 15), Color.FromArgb(230, 126, 34),
-                                   Color.FromArgb(75, 0, 130),   // Indigo for User Management
-                                   Color.FromArgb(127, 127, 127) // Gray for Reports
-            };
+
+            // All buttons will have Thistle color
+            Color thistleColor = Color.Thistle;
 
             for (int i = 0; i < actions.Length; i++)
             {
@@ -102,17 +99,17 @@ namespace Hotel_ManagementIT13.Forms
                 {
                     Text = texts[i],
                     Tag = actions[i],
-                    Size = new Size(140, 65),
-                    BackColor = colors[i],
-                    ForeColor = Color.White,
-                    Font = new Font("Microsoft Sans Serif", 10, FontStyle.Bold),
+                    Size = new Size(200, 40), // Width: 200, Height: 40
+                    BackColor = thistleColor,
+                    ForeColor = Color.Black, // Text color: Black
+                    Font = new Font("Calibri", 13.8f, FontStyle.Regular), // Font: Calibri, 13.8pt Regular
                     FlatStyle = FlatStyle.Flat,
                     Margin = new Padding(8, 6, 8, 6),
                     Cursor = Cursors.Hand
                 };
                 btn.FlatAppearance.BorderSize = 0;
-                btn.FlatAppearance.MouseOverBackColor = ControlPaint.Dark(colors[i], 0.1f);
-                btn.FlatAppearance.MouseDownBackColor = ControlPaint.Dark(colors[i], 0.2f);
+                btn.FlatAppearance.MouseOverBackColor = ControlPaint.Dark(thistleColor, 0.1f);
+                btn.FlatAppearance.MouseDownBackColor = ControlPaint.Dark(thistleColor, 0.2f);
 
                 btn.Click += quickActionButton_Click;
                 flpQuickActions.Controls.Add(btn);

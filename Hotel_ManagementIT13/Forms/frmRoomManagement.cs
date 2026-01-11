@@ -16,6 +16,7 @@ namespace Hotel_ManagementIT13.Forms
     {
         private RoomManager _roomManager;
         private AmenityRepository _amenityRepo;
+        private BedRepository _bedRepo;
         private List<Room> _allRooms;
         private List<string> _roomTypes;
         private List<string> _roomStatuses;
@@ -41,8 +42,14 @@ namespace Hotel_ManagementIT13.Forms
 
             public override decimal CalculateRate(int nights, int guestType)
             {
-                // Simple calculation based on base rate
+                // Calculate base rate
                 decimal rate = this.BaseRate * nights;
+
+                // Add ₱100 for each amenity
+                if (this.Amenities != null)
+                {
+                    rate += (this.Amenities.Count * 100m) * nights;
+                }
 
                 // Apply guest type discount (if any)
                 if (guestType == 2) // Regular guest
@@ -59,6 +66,7 @@ namespace Hotel_ManagementIT13.Forms
             InitializeComponent();
             _roomManager = new RoomManager();
             _amenityRepo = new AmenityRepository();
+            _bedRepo = new BedRepository();
             _allRooms = new List<Room>();
             _roomTypes = new List<string>();
             _roomStatuses = new List<string>();
@@ -176,7 +184,8 @@ namespace Hotel_ManagementIT13.Forms
                 // Store Amenity objects in the Tag property for easy retrieval
                 foreach (var amenity in _allAmenities)
                 {
-                    clbAmenities.Items.Add(amenity.AmenityName, false);
+                    // Add ₱100 indicator to each amenity name
+                    clbAmenities.Items.Add($"{amenity.AmenityName} (+₱100)", false);
                 }
             }
             catch (Exception ex)
@@ -194,9 +203,9 @@ namespace Hotel_ManagementIT13.Forms
             clbAmenities.Items.Clear();
             clbAmenities.Items.AddRange(new string[]
             {
-                "Wi-Fi", "TV", "Mini Bar", "Air Conditioning",
-                "Balcony", "Jacuzzi", "Kitchenette", "Safe",
-                "Hairdryer", "Iron", "Coffee Maker", "Refrigerator"
+                "Wi-Fi (+₱100)", "TV (+₱100)", "Mini Bar (+₱100)", "Air Conditioning (+₱100)",
+                "Balcony (+₱100)", "Jacuzzi (+₱100)", "Kitchenette (+₱100)", "Safe (+₱100)",
+                "Hairdryer (+₱100)", "Iron (+₱100)", "Coffee Maker (+₱100)", "Refrigerator (+₱100)"
             });
         }
 
@@ -356,6 +365,13 @@ namespace Hotel_ManagementIT13.Forms
 
             foreach (var room in rooms)
             {
+                // Calculate total rate including amenities
+                decimal totalRate = room.BaseRate;
+                if (room.Amenities != null)
+                {
+                    totalRate += (room.Amenities.Count * 100m);
+                }
+
                 dgvRooms.Rows.Add(
                     room.RoomId,
                     room.RoomNumber,
@@ -363,7 +379,7 @@ namespace Hotel_ManagementIT13.Forms
                     room.Floor,
                     room.StatusName ?? "N/A",
                     room.ViewName ?? "N/A",
-                    FormatPeso(room.BaseRate),
+                    FormatPeso(totalRate), // Display total rate with amenities
                     room.MaxOccupancy
                 );
             }
@@ -440,7 +456,7 @@ namespace Hotel_ManagementIT13.Forms
             {
                 try
                 {
-                    var roomIdCell = dgvRooms.Rows[e.RowIndex].Cells[0];
+                    var roomIdCell = dgvRooms.Rows[e.RowIndex].Cells["colRoomId"];
                     if (roomIdCell.Value != null)
                     {
                         int roomId = Convert.ToInt32(roomIdCell.Value);
@@ -493,6 +509,12 @@ namespace Hotel_ManagementIT13.Forms
             // Set amenities
             SetAmenitiesForRoom(room);
 
+            // Load beds for this room
+            LoadRoomBeds(room.RoomId);
+
+            // Update rate display with amenities
+            UpdateRateDisplay();
+
             _isAddingNew = false;
             btnSaveRoom.Text = "Update Room";
             pnlRoomDetails.Enabled = true;
@@ -512,16 +534,69 @@ namespace Hotel_ManagementIT13.Forms
                 foreach (var roomAmenity in room.Amenities)
                 {
                     // Find the index of this amenity in the checklist
+                    // We need to match without the (+₱100) suffix
+                    string cleanAmenityName = roomAmenity.AmenityName;
+
                     for (int i = 0; i < clbAmenities.Items.Count; i++)
                     {
-                        string amenityName = clbAmenities.Items[i].ToString();
-                        if (amenityName.Equals(roomAmenity.AmenityName, StringComparison.OrdinalIgnoreCase))
+                        string displayedAmenity = clbAmenities.Items[i].ToString();
+                        // Remove the (+₱100) suffix for comparison
+                        string baseAmenityName = displayedAmenity.Replace(" (+₱100)", "");
+
+                        if (baseAmenityName.Equals(cleanAmenityName, StringComparison.OrdinalIgnoreCase))
                         {
                             clbAmenities.SetItemChecked(i, true);
                             break;
                         }
                     }
                 }
+            }
+        }
+
+        // NEW METHOD: Update rate display when amenities are checked/unchecked
+        private void UpdateRateDisplay()
+        {
+            if (cmbRoomType.SelectedIndex >= 0 && !string.IsNullOrEmpty(cmbRoomType.SelectedItem.ToString()))
+            {
+                string roomTypeName = cmbRoomType.SelectedItem.ToString();
+                Room sampleRoom = CreateRoomByType(roomTypeName);
+
+                // Get count of checked amenities
+                int selectedAmenityCount = clbAmenities.CheckedItems.Count;
+
+                // Calculate total rate: base rate + ₱100 per selected amenity
+                decimal totalRate = sampleRoom.BaseRate + (selectedAmenityCount * 100m);
+
+                // Update display (you might want to add a label for this)
+                // For now, we'll show it in a message or update the room display
+                // You could add a label like lblTotalRate.Text = $"Total Rate: {FormatPeso(totalRate)}";
+            }
+        }
+
+        // NEW METHOD: Load beds for a room from database
+        private void LoadRoomBeds(int roomId)
+        {
+            try
+            {
+                var beds = _bedRepo.GetBedsForRoom(roomId);
+                DisplayRoomBeds(beds);
+            }
+            catch (Exception ex)
+            {
+                Helper.ShowError($"Error loading beds: {ex.Message}");
+            }
+        }
+
+        // NEW METHOD: Display beds in dgvBeds
+        private void DisplayRoomBeds(List<RoomBed> beds)
+        {
+            dgvBeds.Rows.Clear();
+
+            foreach (var bed in beds)
+            {
+                int rowIndex = dgvBeds.Rows.Add();
+                dgvBeds.Rows[rowIndex].Cells["colBedType"].Value = bed.BedTypeName;
+                dgvBeds.Rows[rowIndex].Cells["colQuantity"].Value = bed.Quantity;
             }
         }
 
@@ -554,6 +629,13 @@ namespace Hotel_ManagementIT13.Forms
 
                 // Get selected amenities from database
                 room.Amenities = GetSelectedAmenities();
+
+                // Calculate and update base rate with amenity surcharge
+                int selectedAmenityCount = room.Amenities?.Count ?? 0;
+                room.BaseRate += (selectedAmenityCount * 100m);
+
+                // Note: Beds are already set in CreateRoomByType method
+                // RoomRepository will save them automatically
 
                 bool success;
 
@@ -624,7 +706,10 @@ namespace Hotel_ManagementIT13.Forms
             // Get checked items and find corresponding Amenity objects
             foreach (var checkedItem in clbAmenities.CheckedItems)
             {
-                string amenityName = checkedItem.ToString();
+                string displayedAmenity = checkedItem.ToString();
+                // Remove the (+₱100) suffix to get the original amenity name
+                string amenityName = displayedAmenity.Replace(" (+₱100)", "");
+
                 // Find the amenity in our list
                 var amenity = _allAmenities.FirstOrDefault(a =>
                     a.AmenityName.Equals(amenityName, StringComparison.OrdinalIgnoreCase));
@@ -653,27 +738,82 @@ namespace Hotel_ManagementIT13.Forms
             // Create a concrete instance
             var room = new ConcreteRoom();
 
-            // Set base rate and max occupancy based on room type
-            // You might want to load these from database as well
-            if (roomTypeName.Contains("Standard"))
+            // Set properties based on room type
+            if (roomTypeName == "Standard Single")
             {
-                room.BaseRate = 100.00m;
+                room.BaseRate = 3000.00m;
+                room.MaxOccupancy = 1;
+                // This room should have 1 Single bed (bed_type_id = 1)
+                room.Beds = new List<RoomBed>
+                {
+                    new RoomBed { BedTypeId = 1, BedTypeName = "Single", Quantity = 1 }
+                };
+            }
+            else if (roomTypeName == "Standard Double")
+            {
+                room.BaseRate = 500.00m;
                 room.MaxOccupancy = 2;
+                // This room should have 1 Double bed (bed_type_id = 2)
+                room.Beds = new List<RoomBed>
+                {
+                    new RoomBed { BedTypeId = 2, BedTypeName = "Double", Quantity = 1 }
+                };
             }
-            else if (roomTypeName.Contains("Deluxe"))
+            else if (roomTypeName == "Deluxe King")
             {
-                room.BaseRate = 150.00m;
-                room.MaxOccupancy = 3;
+                room.BaseRate = 12122.00m;
+                room.MaxOccupancy = 2;
+                // This room should have 1 King bed (bed_type_id = 4)
+                room.Beds = new List<RoomBed>
+                {
+                    new RoomBed { BedTypeId = 4, BedTypeName = "King", Quantity = 1 }
+                };
             }
-            else if (roomTypeName.Contains("Suite"))
+            else if (roomTypeName == "Family Suite")
+            {
+                room.BaseRate = 400.00m;
+                room.MaxOccupancy = 4;
+                // This room should have 2 Bunk Beds (bed_type_id = 6)
+                room.Beds = new List<RoomBed>
+                {
+                    new RoomBed { BedTypeId = 6, BedTypeName = "Bunk Bed", Quantity = 2 }
+                };
+            }
+            else if (roomTypeName == "Executive Suite")
             {
                 room.BaseRate = 250.00m;
+                room.MaxOccupancy = 2;
+                // This room should have 1 Queen bed (bed_type_id = 3)
+                room.Beds = new List<RoomBed>
+                {
+                    new RoomBed { BedTypeId = 3, BedTypeName = "Queen", Quantity = 1 }
+                };
+            }
+            else if (roomTypeName == "Penthouse")
+            {
+                room.BaseRate = 400.00m;
                 room.MaxOccupancy = 4;
+                // This room should have 1 King bed (bed_type_id = 4)
+                room.Beds = new List<RoomBed>
+                {
+                    new RoomBed { BedTypeId = 4, BedTypeName = "King", Quantity = 1 }
+                };
+            }
+            else if (roomTypeName == "Junior Suite")
+            {
+                room.BaseRate = 180.00m;
+                room.MaxOccupancy = 3;
+                // This room should have 1 Single bed (bed_type_id = 1)
+                room.Beds = new List<RoomBed>
+                {
+                    new RoomBed { BedTypeId = 1, BedTypeName = "Single", Quantity = 1 }
+                };
             }
             else
             {
                 room.BaseRate = 100.00m;
                 room.MaxOccupancy = 2;
+                room.Beds = new List<RoomBed>();
             }
 
             return room;
@@ -728,6 +868,9 @@ namespace Hotel_ManagementIT13.Forms
             {
                 clbAmenities.SetItemChecked(i, false);
             }
+
+            // Clear beds display
+            dgvBeds.Rows.Clear();
 
             _selectedRoom = null;
             _isAddingNew = false;
@@ -893,6 +1036,108 @@ namespace Hotel_ManagementIT13.Forms
                           "Manage Amenities",
                           MessageBoxButtons.OK,
                           MessageBoxIcon.Information);
+        }
+
+        // Test method to check if dgvBeds is working
+        private void btnTestDisplay_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // Test 1: Check if dgvBeds is accessible
+                MessageBox.Show($"dgvBeds exists: {dgvBeds != null}\n" +
+                               $"Column count: {dgvBeds.Columns.Count}\n" +
+                               $"Visible: {dgvBeds.Visible}",
+                               "dgvBeds Status");
+
+                // Test 2: Try to add data directly
+                dgvBeds.Rows.Clear();
+
+                // Test if we can add rows
+                int rowIndex = dgvBeds.Rows.Add();
+                dgvBeds.Rows[rowIndex].Cells["colBedType"].Value = "TEST BED";
+                dgvBeds.Rows[rowIndex].Cells["colQuantity"].Value = "99";
+
+                MessageBox.Show("Test data added. Can you see 'TEST BED' in dgvBeds?",
+                               "Manual Test");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error in test: {ex.Message}\n\n{ex.StackTrace}",
+                               "Test Error");
+            }
+        }
+
+        // ADD THIS METHOD to debug bed loading
+        private void btnDebugBeds_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (_selectedRoom != null)
+                {
+                    // Test direct database query
+                    using (var conn = DatabaseHelper.GetConnection())
+                    {
+                        conn.Open();
+                        string query = @"
+                            SELECT rb.*, bt.bed_type_name 
+                            FROM room_beds rb 
+                            LEFT JOIN bed_types bt ON rb.bed_type_id = bt.bed_type_id 
+                            WHERE rb.room_id = @roomId";
+
+                        using (var cmd = new MySqlCommand(query, conn))
+                        {
+                            cmd.Parameters.AddWithValue("@roomId", _selectedRoom.RoomId);
+
+                            using (var reader = cmd.ExecuteReader())
+                            {
+                                List<string> results = new List<string>();
+                                while (reader.Read())
+                                {
+                                    string bedTypeName = reader["bed_type_name"]?.ToString() ?? "Unknown";
+                                    int quantity = Convert.ToInt32(reader["quantity"]);
+                                    results.Add($"{quantity} x {bedTypeName}");
+                                }
+
+                                if (results.Count > 0)
+                                {
+                                    MessageBox.Show($"Found beds for room {_selectedRoom.RoomNumber}:\n\n{string.Join("\n", results)}",
+                                                  "Direct DB Test", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                }
+                                else
+                                {
+                                    MessageBox.Show($"No beds found for room {_selectedRoom.RoomNumber} (ID: {_selectedRoom.RoomId})",
+                                                  "Direct DB Test", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                }
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Please select a room first", "Debug",
+                                  MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Database error: {ex.Message}", "Error",
+                              MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        // NEW EVENT HANDLER: Update rate display when amenities change
+        private void clbAmenities_ItemCheck(object sender, ItemCheckEventArgs e)
+        {
+            // Use BeginInvoke to update after the check state has changed
+            BeginInvoke((MethodInvoker)delegate {
+                UpdateRateDisplay();
+            });
+        }
+
+        // NEW EVENT HANDLER: Update rate display when room type changes
+        private void cmbRoomType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            UpdateRateDisplay();
         }
     }
 }

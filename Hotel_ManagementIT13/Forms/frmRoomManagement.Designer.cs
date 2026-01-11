@@ -52,6 +52,8 @@
             this.btnSearch = new System.Windows.Forms.Button();
             this.lblRoomCount = new System.Windows.Forms.Label();
             this.dgvBeds = new System.Windows.Forms.DataGridView();
+            this.colBedType = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colQuantity = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.txtRoomNumber = new System.Windows.Forms.TextBox();
             this.cmbRoomType = new System.Windows.Forms.ComboBox();
             this.cmbStatus = new System.Windows.Forms.ComboBox();
@@ -351,6 +353,9 @@
             this.dgvBeds.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgvBeds.BackgroundColor = System.Drawing.Color.GhostWhite;
             this.dgvBeds.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvBeds.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.colBedType,
+            this.colQuantity});
             this.dgvBeds.Location = new System.Drawing.Point(3, 656);
             this.dgvBeds.Name = "dgvBeds";
             this.dgvBeds.ReadOnly = true;
@@ -358,6 +363,20 @@
             this.dgvBeds.RowTemplate.Height = 30;
             this.dgvBeds.Size = new System.Drawing.Size(1123, 277);
             this.dgvBeds.TabIndex = 16;
+            // 
+            // colBedType
+            // 
+            this.colBedType.HeaderText = "Bed Type";
+            this.colBedType.MinimumWidth = 6;
+            this.colBedType.Name = "colBedType";
+            this.colBedType.ReadOnly = true;
+            // 
+            // colQuantity
+            // 
+            this.colQuantity.HeaderText = "Quantity";
+            this.colQuantity.MinimumWidth = 6;
+            this.colQuantity.Name = "colQuantity";
+            this.colQuantity.ReadOnly = true;
             // 
             // txtRoomNumber
             // 
@@ -425,7 +444,7 @@
             // 
             // clbAmenities
             // 
-            this.clbAmenities.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.clbAmenities.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.clbAmenities.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.clbAmenities.FormattingEnabled = true;
@@ -478,7 +497,7 @@
             // 
             // panel1
             // 
-            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.BackColor = System.Drawing.Color.White;
             this.panel1.Controls.Add(this.lblAmenities);
@@ -650,5 +669,7 @@
         private System.Windows.Forms.Label lblStats;
         private System.Windows.Forms.Label lblFilter;
         private System.Windows.Forms.Label lblAmenities;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colBedType;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colQuantity;
     }
 }

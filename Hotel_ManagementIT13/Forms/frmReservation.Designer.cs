@@ -33,7 +33,6 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.lblReq = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.lbllstRoom = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.clbSpecialRequests = new System.Windows.Forms.CheckedListBox();
             this.cmbRoomType = new System.Windows.Forms.ComboBox();
@@ -53,19 +52,25 @@
             this.nudAdults = new System.Windows.Forms.NumericUpDown();
             this.nudChildren = new System.Windows.Forms.NumericUpDown();
             this.lblRom = new System.Windows.Forms.Label();
-            this.lblGuestAv = new System.Windows.Forms.Label();
             this.lblSearchResults = new System.Windows.Forms.Label();
             this.dtpCheckIn = new System.Windows.Forms.DateTimePicker();
             this.btnNewGuest = new System.Windows.Forms.Button();
             this.lblSelectedGuest = new System.Windows.Forms.Label();
             this.dtpCheckOut = new System.Windows.Forms.DateTimePicker();
             this.dgvGuestResults = new System.Windows.Forms.DataGridView();
-            this.btnSearchGuest = new System.Windows.Forms.Button();
             this.txtGuestSearch = new System.Windows.Forms.TextBox();
             this.btnBook = new System.Windows.Forms.Button();
             this.btnCalculate = new System.Windows.Forms.Button();
             this.btnPrint = new System.Windows.Forms.Button();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.btnSearchGuest = new System.Windows.Forms.Button();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.lblMainDash = new System.Windows.Forms.Label();
             this.tabReservation.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -74,6 +79,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudAdults)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudChildren)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvGuestResults)).BeginInit();
+            this.panel2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // tabReservation
@@ -81,7 +88,7 @@
             this.tabReservation.Controls.Add(this.tabPage1);
             this.tabReservation.Controls.Add(this.tabPage2);
             this.tabReservation.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabReservation.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.tabReservation.Font = new System.Drawing.Font("Calibri", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tabReservation.Location = new System.Drawing.Point(0, 0);
             this.tabReservation.Name = "tabReservation";
             this.tabReservation.SelectedIndex = 0;
@@ -91,13 +98,15 @@
             // 
             // tabPage1
             // 
-            this.tabPage1.BackColor = System.Drawing.Color.Thistle;
+            this.tabPage1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(220)))), ((int)(((byte)(242)))));
+            this.tabPage1.Controls.Add(this.label3);
+            this.tabPage1.Controls.Add(this.panel2);
             this.tabPage1.Controls.Add(this.panel1);
             this.tabPage1.Controls.Add(this.pnlGuestInfo);
-            this.tabPage1.Location = new System.Drawing.Point(4, 29);
+            this.tabPage1.Location = new System.Drawing.Point(4, 30);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(1912, 917);
+            this.tabPage1.Size = new System.Drawing.Size(1912, 916);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "New Reservation";
             // 
@@ -105,32 +114,37 @@
             // 
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
-            this.panel1.BackColor = System.Drawing.Color.White;
-            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel1.Controls.Add(this.lblReq);
+            this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(247)))), ((int)(((byte)(252)))));
+            this.panel1.Controls.Add(this.label4);
             this.panel1.Controls.Add(this.label1);
-            this.panel1.Controls.Add(this.lbllstRoom);
             this.panel1.Controls.Add(this.button1);
-            this.panel1.Controls.Add(this.clbSpecialRequests);
             this.panel1.Controls.Add(this.cmbRoomType);
             this.panel1.Controls.Add(this.lblAvailableRooms);
+            this.panel1.Controls.Add(this.lblSearchResults);
             this.panel1.Controls.Add(this.button2);
             this.panel1.Controls.Add(this.label2);
             this.panel1.Controls.Add(this.dgvAvailableRooms);
-            this.panel1.Location = new System.Drawing.Point(8, 6);
+            this.panel1.Controls.Add(this.dgvGuestResults);
+            this.panel1.Controls.Add(this.lblSelectedGuest);
+            this.panel1.Controls.Add(this.btnSearchGuest);
+            this.panel1.Controls.Add(this.txtGuestSearch);
+            this.panel1.Location = new System.Drawing.Point(44, 108);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(985, 905);
+            this.panel1.Size = new System.Drawing.Size(1318, 776);
             this.panel1.TabIndex = 23;
             // 
             // lblReq
             // 
+            this.lblReq.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.lblReq.AutoSize = true;
             this.lblReq.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblReq.Location = new System.Drawing.Point(3, 524);
+            this.lblReq.Location = new System.Drawing.Point(34, 310);
             this.lblReq.Name = "lblReq";
-            this.lblReq.Size = new System.Drawing.Size(225, 28);
+            this.lblReq.Size = new System.Drawing.Size(231, 28);
             this.lblReq.TabIndex = 26;
-            this.lblReq.Text = "Room Special Requests";
+            this.lblReq.Text = "Room Special Requests:";
             // 
             // label1
             // 
@@ -141,17 +155,6 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(0, 27);
             this.label1.TabIndex = 22;
-            // 
-            // lbllstRoom
-            // 
-            this.lbllstRoom.AutoSize = true;
-            this.lbllstRoom.Font = new System.Drawing.Font("Georgia", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbllstRoom.ForeColor = System.Drawing.Color.DarkGoldenrod;
-            this.lbllstRoom.Location = new System.Drawing.Point(3, 0);
-            this.lbllstRoom.Name = "lbllstRoom";
-            this.lbllstRoom.Size = new System.Drawing.Size(176, 27);
-            this.lbllstRoom.TabIndex = 24;
-            this.lbllstRoom.Text = "List of Rooms";
             // 
             // button1
             // 
@@ -165,22 +168,27 @@
             // 
             // clbSpecialRequests
             // 
+            this.clbSpecialRequests.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.clbSpecialRequests.BackColor = System.Drawing.Color.White;
             this.clbSpecialRequests.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.clbSpecialRequests.FormattingEnabled = true;
-            this.clbSpecialRequests.Location = new System.Drawing.Point(3, 555);
+            this.clbSpecialRequests.Location = new System.Drawing.Point(39, 341);
             this.clbSpecialRequests.Name = "clbSpecialRequests";
-            this.clbSpecialRequests.Size = new System.Drawing.Size(977, 314);
+            this.clbSpecialRequests.Size = new System.Drawing.Size(422, 128);
             this.clbSpecialRequests.TabIndex = 11;
             // 
             // cmbRoomType
             // 
-            this.cmbRoomType.BackColor = System.Drawing.Color.White;
+            this.cmbRoomType.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.cmbRoomType.BackColor = System.Drawing.Color.GhostWhite;
             this.cmbRoomType.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmbRoomType.FormattingEnabled = true;
-            this.cmbRoomType.Location = new System.Drawing.Point(3, 30);
+            this.cmbRoomType.Location = new System.Drawing.Point(39, 425);
             this.cmbRoomType.Name = "cmbRoomType";
-            this.cmbRoomType.Size = new System.Drawing.Size(977, 36);
+            this.cmbRoomType.Size = new System.Drawing.Size(1240, 36);
             this.cmbRoomType.TabIndex = 9;
             this.cmbRoomType.SelectedIndexChanged += new System.EventHandler(this.cmbRoomType_SelectedIndexChanged);
             // 
@@ -189,7 +197,7 @@
             this.lblAvailableRooms.AutoSize = true;
             this.lblAvailableRooms.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblAvailableRooms.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.lblAvailableRooms.Location = new System.Drawing.Point(3, 69);
+            this.lblAvailableRooms.Location = new System.Drawing.Point(34, 464);
             this.lblAvailableRooms.Name = "lblAvailableRooms";
             this.lblAvailableRooms.Size = new System.Drawing.Size(159, 28);
             this.lblAvailableRooms.TabIndex = 20;
@@ -220,18 +228,22 @@
             // 
             this.dgvAvailableRooms.AllowUserToAddRows = false;
             this.dgvAvailableRooms.AllowUserToDeleteRows = false;
+            this.dgvAvailableRooms.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.dgvAvailableRooms.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgvAvailableRooms.BackgroundColor = System.Drawing.Color.GhostWhite;
+            this.dgvAvailableRooms.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.dgvAvailableRooms.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvAvailableRooms.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
-            this.dgvAvailableRooms.Location = new System.Drawing.Point(3, 100);
+            this.dgvAvailableRooms.Location = new System.Drawing.Point(39, 495);
             this.dgvAvailableRooms.Name = "dgvAvailableRooms";
             this.dgvAvailableRooms.RowHeadersVisible = false;
             this.dgvAvailableRooms.RowHeadersWidth = 51;
             this.dgvAvailableRooms.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.dgvAvailableRooms.RowTemplate.Height = 24;
             this.dgvAvailableRooms.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvAvailableRooms.Size = new System.Drawing.Size(977, 421);
+            this.dgvAvailableRooms.Size = new System.Drawing.Size(1240, 252);
             this.dgvAvailableRooms.TabIndex = 10;
             // 
             // pnlGuestInfo
@@ -239,11 +251,14 @@
             this.pnlGuestInfo.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.pnlGuestInfo.BackColor = System.Drawing.Color.White;
-            this.pnlGuestInfo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pnlGuestInfo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(247)))), ((int)(((byte)(252)))));
+            this.pnlGuestInfo.Controls.Add(this.label5);
+            this.pnlGuestInfo.Controls.Add(this.textBox1);
+            this.pnlGuestInfo.Controls.Add(this.lblReq);
             this.pnlGuestInfo.Controls.Add(this.lblNumDults);
             this.pnlGuestInfo.Controls.Add(this.lblNumDren);
             this.pnlGuestInfo.Controls.Add(this.lblNotes);
+            this.pnlGuestInfo.Controls.Add(this.clbSpecialRequests);
             this.pnlGuestInfo.Controls.Add(this.lblTotalAmount);
             this.pnlGuestInfo.Controls.Add(this.lblChckOut);
             this.pnlGuestInfo.Controls.Add(this.btnCancel);
@@ -252,51 +267,52 @@
             this.pnlGuestInfo.Controls.Add(this.nudAdults);
             this.pnlGuestInfo.Controls.Add(this.nudChildren);
             this.pnlGuestInfo.Controls.Add(this.lblRom);
-            this.pnlGuestInfo.Controls.Add(this.lblGuestAv);
-            this.pnlGuestInfo.Controls.Add(this.lblSearchResults);
             this.pnlGuestInfo.Controls.Add(this.dtpCheckIn);
             this.pnlGuestInfo.Controls.Add(this.btnNewGuest);
-            this.pnlGuestInfo.Controls.Add(this.lblSelectedGuest);
             this.pnlGuestInfo.Controls.Add(this.dtpCheckOut);
-            this.pnlGuestInfo.Controls.Add(this.dgvGuestResults);
-            this.pnlGuestInfo.Controls.Add(this.btnSearchGuest);
-            this.pnlGuestInfo.Controls.Add(this.txtGuestSearch);
             this.pnlGuestInfo.Controls.Add(this.btnBook);
             this.pnlGuestInfo.Controls.Add(this.btnCalculate);
             this.pnlGuestInfo.Controls.Add(this.btnPrint);
-            this.pnlGuestInfo.Location = new System.Drawing.Point(1000, 6);
+            this.pnlGuestInfo.Location = new System.Drawing.Point(1368, 108);
             this.pnlGuestInfo.Name = "pnlGuestInfo";
-            this.pnlGuestInfo.Size = new System.Drawing.Size(904, 905);
+            this.pnlGuestInfo.Size = new System.Drawing.Size(500, 776);
             this.pnlGuestInfo.TabIndex = 1;
             this.pnlGuestInfo.Paint += new System.Windows.Forms.PaintEventHandler(this.pnlGuestInfo_Paint);
             // 
             // lblNumDults
             // 
-            this.lblNumDults.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblNumDults.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.lblNumDults.AutoSize = true;
             this.lblNumDults.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblNumDults.Location = new System.Drawing.Point(501, 594);
+            this.lblNumDults.Location = new System.Drawing.Point(34, 170);
             this.lblNumDults.Name = "lblNumDults";
-            this.lblNumDults.Size = new System.Drawing.Size(176, 28);
+            this.lblNumDults.Size = new System.Drawing.Size(182, 28);
             this.lblNumDults.TabIndex = 29;
-            this.lblNumDults.Text = "Number of Adults";
+            this.lblNumDults.Text = "Number of Adults:";
             // 
             // lblNumDren
             // 
-            this.lblNumDren.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblNumDren.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.lblNumDren.AutoSize = true;
             this.lblNumDren.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblNumDren.Location = new System.Drawing.Point(501, 524);
+            this.lblNumDren.Location = new System.Drawing.Point(34, 240);
             this.lblNumDren.Name = "lblNumDren";
-            this.lblNumDren.Size = new System.Drawing.Size(194, 28);
+            this.lblNumDren.Size = new System.Drawing.Size(200, 28);
             this.lblNumDren.TabIndex = 28;
-            this.lblNumDren.Text = "Number of Children";
+            this.lblNumDren.Text = "Number of Children:";
             // 
             // lblNotes
             // 
+            this.lblNotes.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.lblNotes.AutoSize = true;
             this.lblNotes.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblNotes.Location = new System.Drawing.Point(3, 664);
+            this.lblNotes.Location = new System.Drawing.Point(34, 472);
             this.lblNotes.Name = "lblNotes";
             this.lblNotes.Size = new System.Drawing.Size(167, 28);
             this.lblNotes.TabIndex = 26;
@@ -304,11 +320,11 @@
             // 
             // lblTotalAmount
             // 
-            this.lblTotalAmount.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblTotalAmount.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblTotalAmount.AutoSize = true;
             this.lblTotalAmount.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTotalAmount.ForeColor = System.Drawing.Color.Green;
-            this.lblTotalAmount.Location = new System.Drawing.Point(501, 847);
+            this.lblTotalAmount.Location = new System.Drawing.Point(195, 626);
             this.lblTotalAmount.Name = "lblTotalAmount";
             this.lblTotalAmount.Size = new System.Drawing.Size(123, 28);
             this.lblTotalAmount.TabIndex = 13;
@@ -316,65 +332,74 @@
             // 
             // lblChckOut
             // 
+            this.lblChckOut.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.lblChckOut.AutoSize = true;
             this.lblChckOut.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblChckOut.Location = new System.Drawing.Point(3, 594);
+            this.lblChckOut.Location = new System.Drawing.Point(34, 100);
             this.lblChckOut.Name = "lblChckOut";
-            this.lblChckOut.Size = new System.Drawing.Size(157, 28);
+            this.lblChckOut.Size = new System.Drawing.Size(163, 28);
             this.lblChckOut.TabIndex = 25;
-            this.lblChckOut.Text = "Check-Out Date";
+            this.lblChckOut.Text = "Check-Out Date:";
             this.lblChckOut.Click += new System.EventHandler(this.lblChckOut_Click);
             // 
             // btnCancel
             // 
-            this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnCancel.BackColor = System.Drawing.Color.Red;
+            this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnCancel.BackColor = System.Drawing.Color.Thistle;
             this.btnCancel.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnCancel.ForeColor = System.Drawing.Color.White;
-            this.btnCancel.Location = new System.Drawing.Point(699, 850);
+            this.btnCancel.ForeColor = System.Drawing.Color.Black;
+            this.btnCancel.Location = new System.Drawing.Point(311, 697);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(200, 50);
+            this.btnCancel.Size = new System.Drawing.Size(150, 50);
             this.btnCancel.TabIndex = 16;
-            this.btnCancel.Text = "CANCEL";
+            this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = false;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
             // lblchckIn
             // 
+            this.lblchckIn.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.lblchckIn.AutoSize = true;
             this.lblchckIn.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblchckIn.Location = new System.Drawing.Point(3, 524);
+            this.lblchckIn.Location = new System.Drawing.Point(34, 30);
             this.lblchckIn.Name = "lblchckIn";
-            this.lblchckIn.Size = new System.Drawing.Size(140, 28);
+            this.lblchckIn.Size = new System.Drawing.Size(146, 28);
             this.lblchckIn.TabIndex = 24;
-            this.lblchckIn.Text = "Check-In Date";
+            this.lblchckIn.Text = "Check-In Date:";
             this.lblchckIn.Click += new System.EventHandler(this.lblchckIn_Click);
             // 
             // rtbNotes
             // 
-            this.rtbNotes.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.rtbNotes.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.rtbNotes.BackColor = System.Drawing.Color.White;
             this.rtbNotes.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.rtbNotes.Location = new System.Drawing.Point(3, 695);
+            this.rtbNotes.Location = new System.Drawing.Point(39, 503);
             this.rtbNotes.Name = "rtbNotes";
-            this.rtbNotes.Size = new System.Drawing.Size(484, 205);
+            this.rtbNotes.Size = new System.Drawing.Size(422, 80);
             this.rtbNotes.TabIndex = 12;
             this.rtbNotes.Text = "";
             // 
             // nudAdults
             // 
-            this.nudAdults.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.nudAdults.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.nudAdults.BackColor = System.Drawing.Color.White;
             this.nudAdults.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.nudAdults.Location = new System.Drawing.Point(498, 625);
+            this.nudAdults.Location = new System.Drawing.Point(39, 201);
             this.nudAdults.Minimum = new decimal(new int[] {
             1,
             0,
             0,
             0});
             this.nudAdults.Name = "nudAdults";
-            this.nudAdults.Size = new System.Drawing.Size(400, 36);
+            this.nudAdults.Size = new System.Drawing.Size(422, 36);
             this.nudAdults.TabIndex = 7;
             this.nudAdults.Value = new decimal(new int[] {
             1,
@@ -384,40 +409,34 @@
             // 
             // nudChildren
             // 
-            this.nudChildren.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.nudChildren.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.nudChildren.BackColor = System.Drawing.Color.White;
             this.nudChildren.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.nudChildren.Location = new System.Drawing.Point(498, 555);
+            this.nudChildren.Location = new System.Drawing.Point(39, 271);
             this.nudChildren.Name = "nudChildren";
-            this.nudChildren.Size = new System.Drawing.Size(400, 36);
+            this.nudChildren.Size = new System.Drawing.Size(422, 36);
             this.nudChildren.TabIndex = 8;
             // 
             // lblRom
             // 
+            this.lblRom.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.lblRom.AutoSize = true;
             this.lblRom.Font = new System.Drawing.Font("Georgia", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblRom.ForeColor = System.Drawing.Color.DarkGoldenrod;
-            this.lblRom.Location = new System.Drawing.Point(554, 381);
+            this.lblRom.Location = new System.Drawing.Point(431, 381);
             this.lblRom.Name = "lblRom";
             this.lblRom.Size = new System.Drawing.Size(0, 27);
             this.lblRom.TabIndex = 22;
-            // 
-            // lblGuestAv
-            // 
-            this.lblGuestAv.AutoSize = true;
-            this.lblGuestAv.Font = new System.Drawing.Font("Georgia", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblGuestAv.ForeColor = System.Drawing.Color.DarkGoldenrod;
-            this.lblGuestAv.Location = new System.Drawing.Point(3, 0);
-            this.lblGuestAv.Name = "lblGuestAv";
-            this.lblGuestAv.Size = new System.Drawing.Size(174, 27);
-            this.lblGuestAv.TabIndex = 23;
-            this.lblGuestAv.Text = "List of Guests";
             // 
             // lblSearchResults
             // 
             this.lblSearchResults.AutoSize = true;
             this.lblSearchResults.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblSearchResults.Location = new System.Drawing.Point(3, 69);
+            this.lblSearchResults.Location = new System.Drawing.Point(34, 72);
             this.lblSearchResults.Name = "lblSearchResults";
             this.lblSearchResults.Size = new System.Drawing.Size(153, 28);
             this.lblSearchResults.TabIndex = 18;
@@ -425,10 +444,13 @@
             // 
             // dtpCheckIn
             // 
+            this.dtpCheckIn.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.dtpCheckIn.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.dtpCheckIn.Location = new System.Drawing.Point(3, 555);
+            this.dtpCheckIn.Location = new System.Drawing.Point(39, 61);
             this.dtpCheckIn.Name = "dtpCheckIn";
-            this.dtpCheckIn.Size = new System.Drawing.Size(400, 36);
+            this.dtpCheckIn.Size = new System.Drawing.Size(422, 36);
             this.dtpCheckIn.TabIndex = 5;
             this.dtpCheckIn.ValueChanged += new System.EventHandler(this.dtpCheckIn_ValueChanged);
             // 
@@ -447,8 +469,8 @@
             // 
             this.lblSelectedGuest.AutoSize = true;
             this.lblSelectedGuest.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblSelectedGuest.ForeColor = System.Drawing.Color.Red;
-            this.lblSelectedGuest.Location = new System.Drawing.Point(691, 69);
+            this.lblSelectedGuest.ForeColor = System.Drawing.Color.Black;
+            this.lblSelectedGuest.Location = new System.Drawing.Point(34, 2);
             this.lblSelectedGuest.Name = "lblSelectedGuest";
             this.lblSelectedGuest.Size = new System.Drawing.Size(177, 28);
             this.lblSelectedGuest.TabIndex = 19;
@@ -456,10 +478,13 @@
             // 
             // dtpCheckOut
             // 
+            this.dtpCheckOut.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.dtpCheckOut.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.dtpCheckOut.Location = new System.Drawing.Point(3, 625);
+            this.dtpCheckOut.Location = new System.Drawing.Point(39, 131);
             this.dtpCheckOut.Name = "dtpCheckOut";
-            this.dtpCheckOut.Size = new System.Drawing.Size(400, 36);
+            this.dtpCheckOut.Size = new System.Drawing.Size(422, 36);
             this.dtpCheckOut.TabIndex = 6;
             this.dtpCheckOut.ValueChanged += new System.EventHandler(this.dtpCheckOut_ValueChanged);
             // 
@@ -471,31 +496,17 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dgvGuestResults.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgvGuestResults.BackgroundColor = System.Drawing.Color.GhostWhite;
+            this.dgvGuestResults.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.dgvGuestResults.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvGuestResults.Location = new System.Drawing.Point(3, 100);
+            this.dgvGuestResults.Location = new System.Drawing.Point(39, 103);
             this.dgvGuestResults.Name = "dgvGuestResults";
             this.dgvGuestResults.ReadOnly = true;
             this.dgvGuestResults.RowHeadersWidth = 51;
             this.dgvGuestResults.RowTemplate.Height = 24;
-            this.dgvGuestResults.Size = new System.Drawing.Size(895, 421);
+            this.dgvGuestResults.Size = new System.Drawing.Size(1240, 288);
             this.dgvGuestResults.TabIndex = 4;
             this.dgvGuestResults.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvGuestResults_CellClick);
             this.dgvGuestResults.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvGuestResults_CellDoubleClick);
-            // 
-            // btnSearchGuest
-            // 
-            this.btnSearchGuest.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSearchGuest.BackgroundImage = global::Hotel_ManagementIT13.Properties.Resources.people;
-            this.btnSearchGuest.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnSearchGuest.FlatAppearance.BorderSize = 0;
-            this.btnSearchGuest.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSearchGuest.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F);
-            this.btnSearchGuest.Location = new System.Drawing.Point(864, 33);
-            this.btnSearchGuest.Name = "btnSearchGuest";
-            this.btnSearchGuest.Size = new System.Drawing.Size(30, 30);
-            this.btnSearchGuest.TabIndex = 3;
-            this.btnSearchGuest.UseVisualStyleBackColor = true;
-            this.btnSearchGuest.Click += new System.EventHandler(this.btnSearchGuest_Click);
             // 
             // txtGuestSearch
             // 
@@ -503,37 +514,37 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtGuestSearch.BackColor = System.Drawing.Color.White;
             this.txtGuestSearch.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtGuestSearch.Location = new System.Drawing.Point(3, 30);
+            this.txtGuestSearch.Location = new System.Drawing.Point(39, 33);
             this.txtGuestSearch.Name = "txtGuestSearch";
-            this.txtGuestSearch.Size = new System.Drawing.Size(895, 36);
+            this.txtGuestSearch.Size = new System.Drawing.Size(1240, 36);
             this.txtGuestSearch.TabIndex = 2;
             this.txtGuestSearch.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtGuestSearch_KeyPress);
             // 
             // btnBook
             // 
-            this.btnBook.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnBook.BackColor = System.Drawing.Color.Green;
+            this.btnBook.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnBook.BackColor = System.Drawing.Color.Thistle;
             this.btnBook.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnBook.ForeColor = System.Drawing.Color.White;
-            this.btnBook.Location = new System.Drawing.Point(699, 794);
+            this.btnBook.ForeColor = System.Drawing.Color.Black;
+            this.btnBook.Location = new System.Drawing.Point(39, 697);
             this.btnBook.Name = "btnBook";
-            this.btnBook.Size = new System.Drawing.Size(200, 50);
+            this.btnBook.Size = new System.Drawing.Size(150, 50);
             this.btnBook.TabIndex = 15;
-            this.btnBook.Text = "BOOK NOW";
+            this.btnBook.Text = "Book Now";
             this.btnBook.UseVisualStyleBackColor = false;
             this.btnBook.Click += new System.EventHandler(this.btnBook_Click);
             // 
             // btnCalculate
             // 
-            this.btnCalculate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnCalculate.BackColor = System.Drawing.Color.Blue;
+            this.btnCalculate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnCalculate.BackColor = System.Drawing.Color.Thistle;
             this.btnCalculate.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnCalculate.ForeColor = System.Drawing.Color.White;
-            this.btnCalculate.Location = new System.Drawing.Point(493, 794);
+            this.btnCalculate.ForeColor = System.Drawing.Color.Black;
+            this.btnCalculate.Location = new System.Drawing.Point(39, 615);
             this.btnCalculate.Name = "btnCalculate";
-            this.btnCalculate.Size = new System.Drawing.Size(200, 50);
+            this.btnCalculate.Size = new System.Drawing.Size(150, 50);
             this.btnCalculate.TabIndex = 14;
-            this.btnCalculate.Text = "CALCULATE";
+            this.btnCalculate.Text = "Calculate";
             this.btnCalculate.UseVisualStyleBackColor = false;
             this.btnCalculate.Click += new System.EventHandler(this.btnCalculate_Click);
             // 
@@ -550,19 +561,111 @@
             // 
             // tabPage2
             // 
-            this.tabPage2.BackColor = System.Drawing.Color.Thistle;
-            this.tabPage2.Location = new System.Drawing.Point(4, 29);
+            this.tabPage2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(220)))), ((int)(((byte)(242)))));
+            this.tabPage2.Location = new System.Drawing.Point(4, 30);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(1912, 917);
+            this.tabPage2.Size = new System.Drawing.Size(1912, 916);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Reservation History";
+            // 
+            // panel2
+            // 
+            this.panel2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel2.BackColor = System.Drawing.Color.White;
+            this.panel2.Controls.Add(this.lblMainDash);
+            this.panel2.Controls.Add(this.pictureBox1);
+            this.panel2.Location = new System.Drawing.Point(0, 0);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(1912, 56);
+            this.panel2.TabIndex = 24;
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(392, 751);
+            this.textBox1.Multiline = true;
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(30, 20);
+            this.textBox1.TabIndex = 25;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Georgia", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.ForeColor = System.Drawing.Color.DarkGoldenrod;
+            this.label3.Location = new System.Drawing.Point(6, 59);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(138, 20);
+            this.label3.TabIndex = 26;
+            this.label3.Text = "Reservation Page";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.label4.Location = new System.Drawing.Point(34, 394);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(167, 28);
+            this.label4.TabIndex = 23;
+            this.label4.Text = "Room Type Filter";
+            // 
+            // label5
+            // 
+            this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.ForeColor = System.Drawing.Color.Black;
+            this.label5.Location = new System.Drawing.Point(34, 2);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(291, 28);
+            this.label5.TabIndex = 24;
+            this.label5.Text = "Reservation Information Form";
+            // 
+            // btnSearchGuest
+            // 
+            this.btnSearchGuest.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnSearchGuest.BackgroundImage = global::Hotel_ManagementIT13.Properties.Resources.clarity__search_line;
+            this.btnSearchGuest.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnSearchGuest.FlatAppearance.BorderSize = 0;
+            this.btnSearchGuest.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnSearchGuest.Location = new System.Drawing.Point(1246, 36);
+            this.btnSearchGuest.Name = "btnSearchGuest";
+            this.btnSearchGuest.Size = new System.Drawing.Size(30, 30);
+            this.btnSearchGuest.TabIndex = 3;
+            this.btnSearchGuest.UseVisualStyleBackColor = true;
+            this.btnSearchGuest.Click += new System.EventHandler(this.btnSearchGuest_Click);
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.BackgroundImage = global::Hotel_ManagementIT13.Properties.Resources.logosaIT131;
+            this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pictureBox1.Location = new System.Drawing.Point(8, 8);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(40, 40);
+            this.pictureBox1.TabIndex = 29;
+            this.pictureBox1.TabStop = false;
+            // 
+            // lblMainDash
+            // 
+            this.lblMainDash.AutoSize = true;
+            this.lblMainDash.BackColor = System.Drawing.Color.Transparent;
+            this.lblMainDash.Font = new System.Drawing.Font("Georgia", 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblMainDash.ForeColor = System.Drawing.Color.DarkGoldenrod;
+            this.lblMainDash.Location = new System.Drawing.Point(54, 9);
+            this.lblMainDash.Name = "lblMainDash";
+            this.lblMainDash.Size = new System.Drawing.Size(211, 39);
+            this.lblMainDash.TabIndex = 30;
+            this.lblMainDash.Text = "JMS HOTEL";
             // 
             // frmReservation
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.Plum;
+            this.BackColor = System.Drawing.Color.Thistle;
             this.ClientSize = new System.Drawing.Size(1920, 950);
             this.Controls.Add(this.tabReservation);
             this.Name = "frmReservation";
@@ -572,6 +675,7 @@
             this.Load += new System.EventHandler(this.frmReservation_Load);
             this.tabReservation.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
+            this.tabPage1.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvAvailableRooms)).EndInit();
@@ -580,6 +684,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudAdults)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudChildren)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvGuestResults)).EndInit();
+            this.panel2.ResumeLayout(false);
+            this.panel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -611,8 +718,6 @@
         private System.Windows.Forms.Panel pnlGuestInfo;
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.Label lblRom;
-        private System.Windows.Forms.Label lblGuestAv;
-        private System.Windows.Forms.Label lbllstRoom;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button button1;
@@ -624,5 +729,12 @@
         private System.Windows.Forms.Label lblReq;
         private System.Windows.Forms.Label lblNumDults;
         private System.Windows.Forms.Label lblNumDren;
+        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.Label lblMainDash;
     }
 }

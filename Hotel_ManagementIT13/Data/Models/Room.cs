@@ -16,7 +16,10 @@ namespace Hotel_ManagementIT13.Data.Models
         public decimal BaseRate { get; set; }
         public int MaxOccupancy { get; set; }
 
+        // List of RoomBed objects - but RoomBed class is now in a separate file
         public List<RoomBed> Beds { get; set; } = new List<RoomBed>();
+
+        // Amenities kept as is
         public List<Amenity> Amenities { get; set; } = new List<Amenity>();
 
         public abstract string GetRoomCategory();
@@ -32,15 +35,6 @@ namespace Hotel_ManagementIT13.Data.Models
         {
             return StatusId == 1; // Status ID 1 = Available
         }
-    }
-
-    public class RoomBed
-    {
-        public int RoomBedId { get; set; }
-        public int RoomId { get; set; }
-        public int BedTypeId { get; set; }
-        public int Quantity { get; set; }
-        public string BedTypeName { get; set; }
     }
 
     public class Amenity

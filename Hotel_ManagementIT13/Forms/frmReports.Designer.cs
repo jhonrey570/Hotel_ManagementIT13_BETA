@@ -42,16 +42,16 @@
             this.btnExport = new System.Windows.Forms.Button();
             this.btnPrint = new System.Windows.Forms.Button();
             this.dgvReport = new System.Windows.Forms.DataGridView();
-            this.reportViewer = new Microsoft.Reporting.WinForms.ReportViewer();
             this.cmbRoomTypeFilter = new System.Windows.Forms.ComboBox();
             this.cmbGuestTypeFilter = new System.Windows.Forms.ComboBox();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.lblReports = new System.Windows.Forms.Label();
-            this.lblRates = new System.Windows.Forms.Label();
-            this.lblDatess = new System.Windows.Forms.Label();
-            this.lblReportTypes = new System.Windows.Forms.Label();
-            this.lblData = new System.Windows.Forms.Label();
+            this.btnClearFilters = new System.Windows.Forms.Button();
             this.lblFilte = new System.Windows.Forms.Label();
+            this.lblData = new System.Windows.Forms.Label();
+            this.lblReportTypes = new System.Windows.Forms.Label();
+            this.lblDatess = new System.Windows.Forms.Label();
+            this.lblRates = new System.Windows.Forms.Label();
+            this.lblReports = new System.Windows.Forms.Label();
             this.tabReports.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chartReport)).BeginInit();
@@ -153,7 +153,7 @@
             this.btnExport.Name = "btnExport";
             this.btnExport.Size = new System.Drawing.Size(200, 50);
             this.btnExport.TabIndex = 5;
-            this.btnExport.Text = "EXPORT TO EXCEL";
+            this.btnExport.Text = "EXPORT TO CSV";
             this.btnExport.UseVisualStyleBackColor = true;
             // 
             // btnPrint
@@ -181,18 +181,6 @@
             this.dgvReport.Size = new System.Drawing.Size(1003, 175);
             this.dgvReport.TabIndex = 7;
             // 
-            // reportViewer
-            // 
-            this.reportViewer.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.reportViewer.BackColor = System.Drawing.Color.GhostWhite;
-            this.reportViewer.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.reportViewer.Location = new System.Drawing.Point(1012, 89);
-            this.reportViewer.Name = "reportViewer";
-            this.reportViewer.ServerReport.BearerToken = null;
-            this.reportViewer.Size = new System.Drawing.Size(881, 844);
-            this.reportViewer.TabIndex = 8;
-            // 
             // cmbRoomTypeFilter
             // 
             this.cmbRoomTypeFilter.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -215,9 +203,10 @@
             // 
             // panel1
             // 
-            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.BackColor = System.Drawing.Color.White;
+            this.panel1.Controls.Add(this.btnClearFilters);
             this.panel1.Controls.Add(this.lblFilte);
             this.panel1.Controls.Add(this.cmbRoomTypeFilter);
             this.panel1.Controls.Add(this.cmbGuestTypeFilter);
@@ -229,7 +218,6 @@
             this.panel1.Controls.Add(this.lblReports);
             this.panel1.Controls.Add(this.cmbReportType);
             this.panel1.Controls.Add(this.btnPrint);
-            this.panel1.Controls.Add(this.reportViewer);
             this.panel1.Controls.Add(this.btnExport);
             this.panel1.Controls.Add(this.tabReports);
             this.panel1.Controls.Add(this.btnGenerate);
@@ -306,6 +294,16 @@
             this.lblFilte.TabIndex = 44;
             this.lblFilte.Text = "Filters:";
             // 
+            // btnClearFilters
+            // 
+            this.btnClearFilters.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnClearFilters.Location = new System.Drawing.Point(621, 604);
+            this.btnClearFilters.Name = "btnClearFilters";
+            this.btnClearFilters.Size = new System.Drawing.Size(188, 50);
+            this.btnClearFilters.TabIndex = 45;
+            this.btnClearFilters.Text = "CLEAR FILTERS";
+            this.btnClearFilters.UseVisualStyleBackColor = true;
+            // 
             // frmReports
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -318,6 +316,7 @@
             this.Text = "Hotel Management System - Reports";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.frmReports_Load_1);
+            this.Resize += new System.EventHandler(this.frmReports_Resize);
             this.tabReports.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.chartReport)).EndInit();
@@ -326,6 +325,18 @@
             this.panel1.PerformLayout();
             this.ResumeLayout(false);
 
+            // ========== ALL EVENT HANDLERS CONNECTED ==========
+            // Add these lines at the end of InitializeComponent() method
+            this.btnGenerate.Click += new System.EventHandler(this.btnGenerate_Click);
+            this.btnExport.Click += new System.EventHandler(this.btnExport_Click);
+            this.btnPrint.Click += new System.EventHandler(this.btnPrint_Click);
+            this.btnClearFilters.Click += new System.EventHandler(this.btnClearFilters_Click);
+            this.cmbReportType.SelectedIndexChanged += new System.EventHandler(this.cmbReportType_SelectedIndexChanged);
+            this.dtpReportFrom.ValueChanged += new System.EventHandler(this.dtpReportFrom_ValueChanged);
+            this.dtpReportTo.ValueChanged += new System.EventHandler(this.dtpReportTo_ValueChanged);
+            this.tabReports.SelectedIndexChanged += new System.EventHandler(this.tabReports_SelectedIndexChanged);
+            this.cmbRoomTypeFilter.SelectedIndexChanged += new System.EventHandler(this.cmbRoomTypeFilter_SelectedIndexChanged);
+            this.cmbGuestTypeFilter.SelectedIndexChanged += new System.EventHandler(this.cmbGuestTypeFilter_SelectedIndexChanged);
         }
 
         #endregion
@@ -341,7 +352,6 @@
         private System.Windows.Forms.Button btnPrint;
         private System.Windows.Forms.DataGridView dgvReport;
         private System.Windows.Forms.DataVisualization.Charting.Chart chartReport;
-        private Microsoft.Reporting.WinForms.ReportViewer reportViewer;
         private System.Windows.Forms.ComboBox cmbRoomTypeFilter;
         private System.Windows.Forms.ComboBox cmbGuestTypeFilter;
         private System.Windows.Forms.Panel panel1;
@@ -351,5 +361,6 @@
         private System.Windows.Forms.Label lblDatess;
         private System.Windows.Forms.Label lblFilte;
         private System.Windows.Forms.Label lblData;
+        private System.Windows.Forms.Button btnClearFilters;
     }
 }
