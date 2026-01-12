@@ -706,5 +706,10 @@ namespace Hotel_ManagementIT13.Forms
         {
             return amount.ToString("₱0.00");
         }
+
+        private void label3_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

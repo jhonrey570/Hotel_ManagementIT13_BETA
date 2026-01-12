@@ -28,12 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea5 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend5 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series5 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea6 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend6 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series6 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.mainMenu = new System.Windows.Forms.MenuStrip();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.tabMain = new System.Windows.Forms.TabControl();
@@ -71,9 +71,13 @@
             this.pictureBox4 = new System.Windows.Forms.PictureBox();
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
+            this.pictureBox7 = new System.Windows.Forms.PictureBox();
             this.btnLogout = new System.Windows.Forms.Button();
             this.btnRefreshDashboard = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.pictureBox8 = new System.Windows.Forms.PictureBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
             this.tabMain.SuspendLayout();
             this.pnlHeader.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvTodaysArrivals)).BeginInit();
@@ -93,7 +97,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox7)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox8)).BeginInit();
             this.SuspendLayout();
             // 
             // mainMenu
@@ -221,7 +227,7 @@
             this.dgvTodaysDepartures.RowHeadersVisible = false;
             this.dgvTodaysDepartures.RowHeadersWidth = 51;
             this.dgvTodaysDepartures.RowTemplate.Height = 30;
-            this.dgvTodaysDepartures.Size = new System.Drawing.Size(295, 485);
+            this.dgvTodaysDepartures.Size = new System.Drawing.Size(295, 488);
             this.dgvTodaysDepartures.TabIndex = 8;
             // 
             // lblAvailableRooms
@@ -275,20 +281,20 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.chartOccupancy.BackColor = System.Drawing.Color.Transparent;
-            chartArea1.Name = "ChartArea1";
-            this.chartOccupancy.ChartAreas.Add(chartArea1);
-            legend1.Name = "Legend1";
-            this.chartOccupancy.Legends.Add(legend1);
-            this.chartOccupancy.Location = new System.Drawing.Point(13, 13);
+            chartArea5.Name = "ChartArea1";
+            this.chartOccupancy.ChartAreas.Add(chartArea5);
+            legend5.Name = "Legend1";
+            this.chartOccupancy.Legends.Add(legend5);
+            this.chartOccupancy.Location = new System.Drawing.Point(13, 49);
             this.chartOccupancy.Name = "chartOccupancy";
             this.chartOccupancy.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.None;
-            series1.ChartArea = "ChartArea1";
-            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Pie;
-            series1.IsValueShownAsLabel = true;
-            series1.Legend = "Legend1";
-            series1.Name = "Room Status";
-            this.chartOccupancy.Series.Add(series1);
-            this.chartOccupancy.Size = new System.Drawing.Size(518, 508);
+            series5.ChartArea = "ChartArea1";
+            series5.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Pie;
+            series5.IsValueShownAsLabel = true;
+            series5.Legend = "Legend1";
+            series5.Name = "Room Status";
+            this.chartOccupancy.Series.Add(series5);
+            this.chartOccupancy.Size = new System.Drawing.Size(518, 416);
             this.chartOccupancy.TabIndex = 13;
             this.chartOccupancy.Text = "chart1";
             // 
@@ -298,20 +304,20 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.chartRevenue.BackColor = System.Drawing.Color.Transparent;
-            chartArea2.Name = "ChartArea1";
-            this.chartRevenue.ChartAreas.Add(chartArea2);
-            legend2.Name = "Legend1";
-            this.chartRevenue.Legends.Add(legend2);
-            this.chartRevenue.Location = new System.Drawing.Point(13, 13);
+            chartArea6.Name = "ChartArea1";
+            this.chartRevenue.ChartAreas.Add(chartArea6);
+            legend6.Name = "Legend1";
+            this.chartRevenue.Legends.Add(legend6);
+            this.chartRevenue.Location = new System.Drawing.Point(13, 49);
             this.chartRevenue.Name = "chartRevenue";
             this.chartRevenue.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.None;
-            series2.ChartArea = "ChartArea1";
-            series2.IsValueShownAsLabel = true;
-            series2.LabelFormat = "C0";
-            series2.Legend = "Legend1";
-            series2.Name = "Revenue";
-            this.chartRevenue.Series.Add(series2);
-            this.chartRevenue.Size = new System.Drawing.Size(630, 508);
+            series6.ChartArea = "ChartArea1";
+            series6.IsValueShownAsLabel = true;
+            series6.LabelFormat = "C0";
+            series6.Legend = "Legend1";
+            series6.Name = "Revenue";
+            this.chartRevenue.Series.Add(series6);
+            this.chartRevenue.Size = new System.Drawing.Size(630, 416);
             this.chartRevenue.TabIndex = 14;
             this.chartRevenue.Text = "chart2";
             // 
@@ -376,6 +382,8 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.pnlStats.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(247)))), ((int)(((byte)(252)))));
+            this.pnlStats.Controls.Add(this.label3);
+            this.pnlStats.Controls.Add(this.pictureBox8);
             this.pnlStats.Controls.Add(this.chartOccupancy);
             this.pnlStats.Controls.Add(this.pnlRightSidebar);
             this.pnlStats.Location = new System.Drawing.Point(1019, 355);
@@ -395,7 +403,7 @@
             this.pnlRightSidebar.Location = new System.Drawing.Point(537, 13);
             this.pnlRightSidebar.Name = "pnlRightSidebar";
             this.pnlRightSidebar.Padding = new System.Windows.Forms.Padding(10);
-            this.pnlRightSidebar.Size = new System.Drawing.Size(315, 505);
+            this.pnlRightSidebar.Size = new System.Drawing.Size(315, 508);
             this.pnlRightSidebar.TabIndex = 21;
             // 
             // pnlCharts
@@ -403,6 +411,8 @@
             this.pnlCharts.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.pnlCharts.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(247)))), ((int)(((byte)(252)))));
+            this.pnlCharts.Controls.Add(this.label2);
+            this.pnlCharts.Controls.Add(this.pictureBox7);
             this.pnlCharts.Controls.Add(this.chartRevenue);
             this.pnlCharts.Location = new System.Drawing.Point(357, 355);
             this.pnlCharts.Name = "pnlCharts";
@@ -507,9 +517,9 @@
             this.pictureBox6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(247)))), ((int)(((byte)(252)))));
             this.pictureBox6.BackgroundImage = global::Hotel_ManagementIT13.Properties.Resources.material_symbols_light__percent1;
             this.pictureBox6.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBox6.Location = new System.Drawing.Point(155, 8);
+            this.pictureBox6.Location = new System.Drawing.Point(160, 8);
             this.pictureBox6.Name = "pictureBox6";
-            this.pictureBox6.Size = new System.Drawing.Size(40, 40);
+            this.pictureBox6.Size = new System.Drawing.Size(35, 35);
             this.pictureBox6.TabIndex = 31;
             this.pictureBox6.TabStop = false;
             // 
@@ -518,9 +528,9 @@
             this.pictureBox5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(247)))), ((int)(((byte)(252)))));
             this.pictureBox5.BackgroundImage = global::Hotel_ManagementIT13.Properties.Resources.clarity__warning_line;
             this.pictureBox5.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBox5.Location = new System.Drawing.Point(277, 8);
+            this.pictureBox5.Location = new System.Drawing.Point(282, 8);
             this.pictureBox5.Name = "pictureBox5";
-            this.pictureBox5.Size = new System.Drawing.Size(40, 40);
+            this.pictureBox5.Size = new System.Drawing.Size(35, 35);
             this.pictureBox5.TabIndex = 30;
             this.pictureBox5.TabStop = false;
             // 
@@ -529,9 +539,9 @@
             this.pictureBox4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(247)))), ((int)(((byte)(252)))));
             this.pictureBox4.BackgroundImage = global::Hotel_ManagementIT13.Properties.Resources.clarity__dollar_bill_line;
             this.pictureBox4.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBox4.Location = new System.Drawing.Point(277, 8);
+            this.pictureBox4.Location = new System.Drawing.Point(282, 8);
             this.pictureBox4.Name = "pictureBox4";
-            this.pictureBox4.Size = new System.Drawing.Size(40, 40);
+            this.pictureBox4.Size = new System.Drawing.Size(35, 35);
             this.pictureBox4.TabIndex = 30;
             this.pictureBox4.TabStop = false;
             // 
@@ -540,9 +550,9 @@
             this.pictureBox3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(247)))), ((int)(((byte)(252)))));
             this.pictureBox3.BackgroundImage = global::Hotel_ManagementIT13.Properties.Resources.clarity__house_solid;
             this.pictureBox3.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBox3.Location = new System.Drawing.Point(277, 8);
+            this.pictureBox3.Location = new System.Drawing.Point(282, 8);
             this.pictureBox3.Name = "pictureBox3";
-            this.pictureBox3.Size = new System.Drawing.Size(40, 40);
+            this.pictureBox3.Size = new System.Drawing.Size(35, 35);
             this.pictureBox3.TabIndex = 30;
             this.pictureBox3.TabStop = false;
             // 
@@ -551,11 +561,22 @@
             this.pictureBox2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(247)))), ((int)(((byte)(252)))));
             this.pictureBox2.BackgroundImage = global::Hotel_ManagementIT13.Properties.Resources.clarity__house_line;
             this.pictureBox2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBox2.Location = new System.Drawing.Point(277, 8);
+            this.pictureBox2.Location = new System.Drawing.Point(282, 8);
             this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(40, 40);
+            this.pictureBox2.Size = new System.Drawing.Size(35, 35);
             this.pictureBox2.TabIndex = 29;
             this.pictureBox2.TabStop = false;
+            // 
+            // pictureBox7
+            // 
+            this.pictureBox7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(247)))), ((int)(((byte)(252)))));
+            this.pictureBox7.BackgroundImage = global::Hotel_ManagementIT13.Properties.Resources.clarity__bar_chart_line;
+            this.pictureBox7.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pictureBox7.Location = new System.Drawing.Point(613, 8);
+            this.pictureBox7.Name = "pictureBox7";
+            this.pictureBox7.Size = new System.Drawing.Size(35, 35);
+            this.pictureBox7.TabIndex = 31;
+            this.pictureBox7.TabStop = false;
             // 
             // btnLogout
             // 
@@ -566,10 +587,10 @@
             this.btnLogout.FlatAppearance.BorderSize = 0;
             this.btnLogout.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnLogout.ForeColor = System.Drawing.Color.White;
-            this.btnLogout.Location = new System.Drawing.Point(1872, 8);
+            this.btnLogout.Location = new System.Drawing.Point(1874, 11);
             this.btnLogout.Name = "btnLogout";
             this.btnLogout.Padding = new System.Windows.Forms.Padding(12, 6, 12, 6);
-            this.btnLogout.Size = new System.Drawing.Size(40, 40);
+            this.btnLogout.Size = new System.Drawing.Size(35, 35);
             this.btnLogout.TabIndex = 1;
             this.btnLogout.UseVisualStyleBackColor = false;
             // 
@@ -578,9 +599,9 @@
             this.btnRefreshDashboard.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnRefreshDashboard.BackgroundImage = global::Hotel_ManagementIT13.Properties.Resources.clarity__refresh_line;
             this.btnRefreshDashboard.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnRefreshDashboard.Location = new System.Drawing.Point(1826, 8);
+            this.btnRefreshDashboard.Location = new System.Drawing.Point(1833, 11);
             this.btnRefreshDashboard.Name = "btnRefreshDashboard";
-            this.btnRefreshDashboard.Size = new System.Drawing.Size(40, 40);
+            this.btnRefreshDashboard.Size = new System.Drawing.Size(35, 35);
             this.btnRefreshDashboard.TabIndex = 9;
             this.btnRefreshDashboard.UseVisualStyleBackColor = true;
             // 
@@ -593,6 +614,39 @@
             this.pictureBox1.Size = new System.Drawing.Size(40, 40);
             this.pictureBox1.TabIndex = 28;
             this.pictureBox1.TabStop = false;
+            // 
+            // pictureBox8
+            // 
+            this.pictureBox8.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(247)))), ((int)(((byte)(252)))));
+            this.pictureBox8.BackgroundImage = global::Hotel_ManagementIT13.Properties.Resources.clarity__pie_chart_line;
+            this.pictureBox8.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pictureBox8.Location = new System.Drawing.Point(495, 8);
+            this.pictureBox8.Name = "pictureBox8";
+            this.pictureBox8.Size = new System.Drawing.Size(35, 35);
+            this.pictureBox8.TabIndex = 32;
+            this.pictureBox8.TabStop = false;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Calibri", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.ForeColor = System.Drawing.Color.Black;
+            this.label2.Location = new System.Drawing.Point(9, 497);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(143, 21);
+            this.label2.TabIndex = 32;
+            this.label2.Text = "Bar Graph Revenue";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Calibri", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.ForeColor = System.Drawing.Color.Black;
+            this.label3.Location = new System.Drawing.Point(9, 497);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(152, 21);
+            this.label3.TabIndex = 33;
+            this.label3.Text = "Pie Chart Occupancy";
             // 
             // frmMainDashboard
             // 
@@ -628,8 +682,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.chartOccupancy)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.chartRevenue)).EndInit();
             this.pnlStats.ResumeLayout(false);
+            this.pnlStats.PerformLayout();
             this.pnlRightSidebar.ResumeLayout(false);
             this.pnlCharts.ResumeLayout(false);
+            this.pnlCharts.PerformLayout();
             this.pnlAvailableRoom.ResumeLayout(false);
             this.pnlAvailableRoom.PerformLayout();
             this.pnlOccupiedRoom.ResumeLayout(false);
@@ -645,7 +701,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox7)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox8)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -693,5 +751,9 @@
         private System.Windows.Forms.PictureBox pictureBox4;
         private System.Windows.Forms.PictureBox pictureBox5;
         private System.Windows.Forms.PictureBox pictureBox6;
+        private System.Windows.Forms.PictureBox pictureBox7;
+        private System.Windows.Forms.PictureBox pictureBox8;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label3;
     }
 }

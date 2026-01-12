@@ -64,7 +64,6 @@
             this.btnPrint = new System.Windows.Forms.Button();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.textBox1 = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
@@ -253,7 +252,6 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.pnlGuestInfo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(247)))), ((int)(((byte)(252)))));
             this.pnlGuestInfo.Controls.Add(this.label5);
-            this.pnlGuestInfo.Controls.Add(this.textBox1);
             this.pnlGuestInfo.Controls.Add(this.lblReq);
             this.pnlGuestInfo.Controls.Add(this.lblNumDults);
             this.pnlGuestInfo.Controls.Add(this.lblNumDren);
@@ -581,20 +579,12 @@
             this.panel2.Size = new System.Drawing.Size(1912, 56);
             this.panel2.TabIndex = 24;
             // 
-            // textBox1
-            // 
-            this.textBox1.Location = new System.Drawing.Point(392, 751);
-            this.textBox1.Multiline = true;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(30, 20);
-            this.textBox1.TabIndex = 25;
-            // 
             // label3
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Georgia", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.ForeColor = System.Drawing.Color.DarkGoldenrod;
-            this.label3.Location = new System.Drawing.Point(6, 59);
+            this.label3.Location = new System.Drawing.Point(8, 59);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(138, 20);
             this.label3.TabIndex = 26;
@@ -617,11 +607,11 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.ForeColor = System.Drawing.Color.Black;
-            this.label5.Location = new System.Drawing.Point(34, 2);
+            this.label5.Font = new System.Drawing.Font("Georgia", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.ForeColor = System.Drawing.Color.DarkGoldenrod;
+            this.label5.Location = new System.Drawing.Point(34, 3);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(291, 28);
+            this.label5.Size = new System.Drawing.Size(324, 27);
             this.label5.TabIndex = 24;
             this.label5.Text = "Reservation Information Form";
             // 
@@ -730,7 +720,6 @@
         private System.Windows.Forms.Label lblNumDults;
         private System.Windows.Forms.Label lblNumDren;
         private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;

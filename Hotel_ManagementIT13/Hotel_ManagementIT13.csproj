@@ -459,6 +459,23 @@
     <None Include="Resources\material-symbols-light--percent1.png" />
     <None Include="Resources\clarity--check-line.png" />
     <None Include="Resources\clarity--search-line.png" />
+    <None Include="Resources\clarity--pie-chart-line.png" />
+    <None Include="Resources\clarity--bar-chart-line.png" />
+    <None Include="Resources\clarity--bar-chart-line1.png" />
+    <None Include="Resources\clarity--line-chart-line.png" />
+    <None Include="Resources\clarity--plus-line.png" />
+    <None Include="Resources\clarity--pencil-line.png" />
+    <None Include="Resources\clarity--trash-line.png" />
+    <None Include="Resources\material-symbols-light--person-add-outline-rounded.png" />
+    <None Include="Resources\material-symbols-light--person-edit-outline-rounded.png" />
+    <None Include="Resources\bi--person-add.png" />
+    <None Include="Resources\fluent--edit-person-16-regular.png" />
+    <None Include="Resources\fluent--person-board-add-16-regular.png" />
+    <None Include="Resources\fluent--person-delete-20-regular.png" />
+    <None Include="Resources\hugeicons--reset-password.png" />
+    <None Include="Resources\clarity--export-line.png" />
+    <None Include="Resources\clarity--printer-line.png" />
+    <None Include="Resources\tdesign--filter-clear.png" />
     <Content Include="SqlServerTypes\readme.htm" />
     <Content Include="SqlServerTypes\x64\msvcr120.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

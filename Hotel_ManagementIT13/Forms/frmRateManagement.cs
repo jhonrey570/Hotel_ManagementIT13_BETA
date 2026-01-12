@@ -70,7 +70,7 @@ namespace Hotel_ManagementIT13.Forms
             dgvRates.Columns.Add("RateId", "Rate ID");
 
             dgvRates.Columns["RateId"].Visible = false;
-            dgvRates.Columns["RateAmount"].DefaultCellStyle.Format = "N2"; // Changed from "C2" to "N2"
+            dgvRates.Columns["RateAmount"].DefaultCellStyle.Format = "N2";
             dgvRates.Columns["StartDate"].DefaultCellStyle.Format = "yyyy-MM-dd";
             dgvRates.Columns["EndDate"].DefaultCellStyle.Format = "yyyy-MM-dd";
 
@@ -163,7 +163,7 @@ namespace Hotel_ManagementIT13.Forms
                         int rowIndex = dgvRates.Rows.Add();
                         dgvRates.Rows[rowIndex].Cells["RoomType"].Value = rate.RoomTypeName;
                         dgvRates.Rows[rowIndex].Cells["RatePlan"].Value = rate.PlanName;
-                        dgvRates.Rows[rowIndex].Cells["RateAmount"].Value = FormatPeso(rate.RateAmount); // Use FormatPeso
+                        dgvRates.Rows[rowIndex].Cells["RateAmount"].Value = FormatPeso(rate.RateAmount);
                         dgvRates.Rows[rowIndex].Cells["StartDate"].Value = rate.StartDate;
                         dgvRates.Rows[rowIndex].Cells["EndDate"].Value = rate.EndDate;
                         dgvRates.Rows[rowIndex].Cells["RateId"].Value = rate.RateId;
@@ -171,18 +171,6 @@ namespace Hotel_ManagementIT13.Forms
                         // Determine status
                         string status = rate.IsActive() ? "Active" : "Inactive";
                         dgvRates.Rows[rowIndex].Cells["Status"].Value = status;
-
-                        // Color code based on status
-                        if (rate.IsActive())
-                        {
-                            dgvRates.Rows[rowIndex].DefaultCellStyle.ForeColor = Color.DarkGreen;
-                            dgvRates.Rows[rowIndex].DefaultCellStyle.Font = new Font(dgvRates.Font, FontStyle.Bold);
-                        }
-                        else
-                        {
-                            dgvRates.Rows[rowIndex].DefaultCellStyle.ForeColor = Color.Gray;
-                            dgvRates.Rows[rowIndex].DefaultCellStyle.Font = new Font(dgvRates.Font, FontStyle.Italic);
-                        }
                     }
 
                     Console.WriteLine($"DEBUG: Added {dgvRates.Rows.Count} rows to DataGridView");
@@ -213,13 +201,7 @@ namespace Hotel_ManagementIT13.Forms
 
             _isEditing = false;
             _currentRateId = 0;
-            btnSave.Text = "SAVE RATE";
-            btnCancel.Visible = false;
-
-            btnEditRate.Enabled = false;
-            btnDeleteRate.Enabled = false;
-
-            pnlRateForm.BackColor = SystemColors.ControlLight;
+            btnSave.Text = "Save Rate";
         }
 
         private void btnAddRate_Click(object sender, EventArgs e)
@@ -227,9 +209,7 @@ namespace Hotel_ManagementIT13.Forms
             Console.WriteLine("DEBUG: Add Rate button clicked");
             ClearForm();
             _isEditing = false;
-            btnSave.Text = "ADD RATE";
-            btnCancel.Visible = true;
-            pnlRateForm.BackColor = Color.LightBlue;
+            btnSave.Text = "Add Rate";
         }
 
         private void btnEditRate_Click(object sender, EventArgs e)
@@ -262,9 +242,7 @@ namespace Hotel_ManagementIT13.Forms
                 dtpEndDate.Value = rate.EndDate;
 
                 _isEditing = true;
-                btnSave.Text = "UPDATE RATE";
-                btnCancel.Visible = true;
-                pnlRateForm.BackColor = Color.LightGreen;
+                btnSave.Text = "Update Rate";
             }
             catch (Exception ex)
             {

@@ -60,11 +60,7 @@ namespace Hotel_ManagementIT13.Forms
             // Configure detailed reports tab
             ConfigureDetailedReportsTab();
 
-            // Set button colors
-            SetButtonColors();
-
-            // Center the panel
-            CenterPanel();
+            // Note: CenterPanel() call removed - panel will stay at its designer position
         }
 
         private void ConfigureChart()
@@ -134,32 +130,9 @@ namespace Hotel_ManagementIT13.Forms
             tabPage2.Controls.Add(detailPanel);
         }
 
-        private void SetButtonColors()
-        {
-            // Set button colors for better UI
-            btnGenerate.BackColor = Color.FromArgb(46, 204, 113); // Green
-            btnGenerate.ForeColor = Color.White;
-            btnGenerate.FlatStyle = FlatStyle.Flat;
-            btnGenerate.FlatAppearance.BorderSize = 0;
-
-            btnExport.BackColor = Color.FromArgb(52, 152, 219); // Blue
-            btnExport.ForeColor = Color.White;
-            btnExport.FlatStyle = FlatStyle.Flat;
-            btnExport.FlatAppearance.BorderSize = 0;
-
-            btnPrint.BackColor = Color.FromArgb(155, 89, 182); // Purple
-            btnPrint.ForeColor = Color.White;
-            btnPrint.FlatStyle = FlatStyle.Flat;
-            btnPrint.FlatAppearance.BorderSize = 0;
-
-            btnClearFilters.BackColor = Color.FromArgb(231, 76, 60); // Red
-            btnClearFilters.ForeColor = Color.White;
-            btnClearFilters.FlatStyle = FlatStyle.Flat;
-            btnClearFilters.FlatAppearance.BorderSize = 0;
-        }
-
         private void CenterPanel()
         {
+            // This method is kept but no longer called
             if (panel1 != null)
             {
                 panel1.Left = Math.Max(0, (this.ClientSize.Width - panel1.Width) / 2);
@@ -696,8 +669,7 @@ namespace Hotel_ManagementIT13.Forms
 
         private void frmReports_Resize(object sender, EventArgs e)
         {
-            // Center the panel when form is resized
-            CenterPanel();
+            // Note: CenterPanel() call removed - panel will stay at its current position
         }
 
         private void btnClearFilters_Click(object sender, EventArgs e)
@@ -738,6 +710,11 @@ namespace Hotel_ManagementIT13.Forms
 
             MessageBox.Show("All filters cleared!", "Clear Filters",
                 MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void lblData_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

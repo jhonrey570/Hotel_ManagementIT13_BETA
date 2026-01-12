@@ -39,8 +39,8 @@
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.lblStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.panelMain = new System.Windows.Forms.Panel();
-            this.lblRights = new System.Windows.Forms.Label();
             this.picLogo = new System.Windows.Forms.PictureBox();
+            this.lblRights = new System.Windows.Forms.Label();
             this.statusStrip.SuspendLayout();
             this.panelMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picLogo)).BeginInit();
@@ -51,7 +51,7 @@
             this.lblTitle.AutoSize = true;
             this.lblTitle.Font = new System.Drawing.Font("Georgia", 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTitle.ForeColor = System.Drawing.Color.DarkGoldenrod;
-            this.lblTitle.Location = new System.Drawing.Point(32, 71);
+            this.lblTitle.Location = new System.Drawing.Point(76, 38);
             this.lblTitle.Name = "lblTitle";
             this.lblTitle.Size = new System.Drawing.Size(329, 39);
             this.lblTitle.TabIndex = 0;
@@ -185,29 +185,30 @@
             this.panelMain.Size = new System.Drawing.Size(500, 578);
             this.panelMain.TabIndex = 10;
             // 
-            // lblRights
-            // 
-            this.lblRights.AutoSize = true;
-            this.lblRights.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblRights.ForeColor = System.Drawing.Color.DarkGoldenrod;
-            this.lblRights.Location = new System.Drawing.Point(34, 519);
-            this.lblRights.Name = "lblRights";
-            this.lblRights.Size = new System.Drawing.Size(390, 28);
-            this.lblRights.TabIndex = 9;
-            this.lblRights.Text = "© 2026 JMS.Service. All Rights Reserved.";
-            this.lblRights.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
             // picLogo
             // 
             this.picLogo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.picLogo.Image = global::Hotel_ManagementIT13.Properties.Resources.logosaIT131;
-            this.picLogo.Location = new System.Drawing.Point(381, 46);
+            this.picLogo.Location = new System.Drawing.Point(215, 86);
             this.picLogo.Margin = new System.Windows.Forms.Padding(3, 20, 3, 10);
             this.picLogo.Name = "picLogo";
             this.picLogo.Size = new System.Drawing.Size(80, 80);
             this.picLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.picLogo.TabIndex = 8;
             this.picLogo.TabStop = false;
+            // 
+            // lblRights
+            // 
+            this.lblRights.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lblRights.AutoSize = true;
+            this.lblRights.Font = new System.Drawing.Font("Calibri", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblRights.ForeColor = System.Drawing.Color.DarkGoldenrod;
+            this.lblRights.Location = new System.Drawing.Point(95, 505);
+            this.lblRights.Name = "lblRights";
+            this.lblRights.Size = new System.Drawing.Size(293, 21);
+            this.lblRights.TabIndex = 9;
+            this.lblRights.Text = "© 2026 JMS.Service. All Rights Reserved.";
+            this.lblRights.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // frmLogin
             // 

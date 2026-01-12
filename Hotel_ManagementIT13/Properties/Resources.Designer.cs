@@ -63,9 +63,39 @@ namespace Hotel_ManagementIT13.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap bi__person_add {
+            get {
+                object obj = ResourceManager.GetObject("bi--person-add", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap check {
             get {
                 object obj = ResourceManager.GetObject("check", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap clarity__bar_chart_line {
+            get {
+                object obj = ResourceManager.GetObject("clarity--bar-chart-line", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap clarity__bar_chart_line1 {
+            get {
+                object obj = ResourceManager.GetObject("clarity--bar-chart-line1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -93,6 +123,16 @@ namespace Hotel_ManagementIT13.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap clarity__export_line {
+            get {
+                object obj = ResourceManager.GetObject("clarity--export-line", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap clarity__house_line {
             get {
                 object obj = ResourceManager.GetObject("clarity--house-line", resourceCulture);
@@ -106,6 +146,56 @@ namespace Hotel_ManagementIT13.Properties {
         internal static System.Drawing.Bitmap clarity__house_solid {
             get {
                 object obj = ResourceManager.GetObject("clarity--house-solid", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap clarity__line_chart_line {
+            get {
+                object obj = ResourceManager.GetObject("clarity--line-chart-line", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap clarity__pencil_line {
+            get {
+                object obj = ResourceManager.GetObject("clarity--pencil-line", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap clarity__pie_chart_line {
+            get {
+                object obj = ResourceManager.GetObject("clarity--pie-chart-line", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap clarity__plus_line {
+            get {
+                object obj = ResourceManager.GetObject("clarity--plus-line", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap clarity__printer_line {
+            get {
+                object obj = ResourceManager.GetObject("clarity--printer-line", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -143,6 +233,16 @@ namespace Hotel_ManagementIT13.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap clarity__trash_line {
+            get {
+                object obj = ResourceManager.GetObject("clarity--trash-line", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap clarity__warning_line {
             get {
                 object obj = ResourceManager.GetObject("clarity--warning-line", resourceCulture);
@@ -166,6 +266,46 @@ namespace Hotel_ManagementIT13.Properties {
         internal static System.Drawing.Bitmap exit {
             get {
                 object obj = ResourceManager.GetObject("exit", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap fluent__edit_person_16_regular {
+            get {
+                object obj = ResourceManager.GetObject("fluent--edit-person-16-regular", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap fluent__person_board_add_16_regular {
+            get {
+                object obj = ResourceManager.GetObject("fluent--person-board-add-16-regular", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap fluent__person_delete_20_regular {
+            get {
+                object obj = ResourceManager.GetObject("fluent--person-delete-20-regular", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap hugeicons__reset_password {
+            get {
+                object obj = ResourceManager.GetObject("hugeicons--reset-password", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -233,6 +373,26 @@ namespace Hotel_ManagementIT13.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap material_symbols_light__person_add_outline_rounded {
+            get {
+                object obj = ResourceManager.GetObject("material-symbols-light--person-add-outline-rounded", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap material_symbols_light__person_edit_outline_rounded {
+            get {
+                object obj = ResourceManager.GetObject("material-symbols-light--person-edit-outline-rounded", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap people {
             get {
                 object obj = ResourceManager.GetObject("people", resourceCulture);
@@ -256,6 +416,16 @@ namespace Hotel_ManagementIT13.Properties {
         internal static System.Drawing.Bitmap Smart_Hotel_Room {
             get {
                 object obj = ResourceManager.GetObject("Smart-Hotel-Room", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap tdesign__filter_clear {
+            get {
+                object obj = ResourceManager.GetObject("tdesign--filter-clear", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

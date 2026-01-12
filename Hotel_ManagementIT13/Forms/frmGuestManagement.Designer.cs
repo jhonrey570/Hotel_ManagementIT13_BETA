@@ -36,41 +36,46 @@
             this.colNationality = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colGuestType = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colCreatedAt = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.btnAddGuest = new System.Windows.Forms.Button();
-            this.btnEditGuest = new System.Windows.Forms.Button();
-            this.btnDeleteGuest = new System.Windows.Forms.Button();
-            this.btnSearch = new System.Windows.Forms.Button();
             this.txtSearch = new System.Windows.Forms.TextBox();
             this.pnlGuestForm = new System.Windows.Forms.Panel();
-            this.txtFirstName = new System.Windows.Forms.TextBox();
-            this.txtLastName = new System.Windows.Forms.TextBox();
-            this.txtEmail = new System.Windows.Forms.TextBox();
-            this.txtPhone = new System.Windows.Forms.TextBox();
-            this.txtAddress = new System.Windows.Forms.TextBox();
-            this.cmbNationality = new System.Windows.Forms.ComboBox();
-            this.dtpDOB = new System.Windows.Forms.DateTimePicker();
-            this.cmbIDType = new System.Windows.Forms.ComboBox();
+            this.lblGuestType = new System.Windows.Forms.Label();
+            this.lblIDNum = new System.Windows.Forms.Label();
+            this.lblIDType = new System.Windows.Forms.Label();
+            this.lblNationality = new System.Windows.Forms.Label();
+            this.lblDOB = new System.Windows.Forms.Label();
             this.txtIDNumber = new System.Windows.Forms.TextBox();
-            this.cmbGuestType = new System.Windows.Forms.ComboBox();
-            this.btnSaveGuest = new System.Windows.Forms.Button();
+            this.lblAddress = new System.Windows.Forms.Label();
+            this.dtpDOB = new System.Windows.Forms.DateTimePicker();
+            this.lblEmail = new System.Windows.Forms.Label();
+            this.lblPhone = new System.Windows.Forms.Label();
+            this.lblLastNm = new System.Windows.Forms.Label();
+            this.txtPhone = new System.Windows.Forms.TextBox();
             this.btnCancel = new System.Windows.Forms.Button();
+            this.lblFirstNm = new System.Windows.Forms.Label();
+            this.txtAddress = new System.Windows.Forms.TextBox();
+            this.txtLastName = new System.Windows.Forms.TextBox();
+            this.btnSaveGuest = new System.Windows.Forms.Button();
+            this.lblGuestDetails = new System.Windows.Forms.Label();
+            this.cmbGuestType = new System.Windows.Forms.ComboBox();
+            this.txtFirstName = new System.Windows.Forms.TextBox();
+            this.cmbIDType = new System.Windows.Forms.ComboBox();
+            this.cmbNationality = new System.Windows.Forms.ComboBox();
+            this.txtEmail = new System.Windows.Forms.TextBox();
             this.lblGuestCount = new System.Windows.Forms.Label();
             this.pnlGuestList = new System.Windows.Forms.Panel();
-            this.lblGuestDetails = new System.Windows.Forms.Label();
-            this.lblGuestList = new System.Windows.Forms.Label();
-            this.lblFirstNm = new System.Windows.Forms.Label();
-            this.lblLastNm = new System.Windows.Forms.Label();
-            this.lblPhone = new System.Windows.Forms.Label();
-            this.lblEmail = new System.Windows.Forms.Label();
-            this.lblAddress = new System.Windows.Forms.Label();
-            this.lblDOB = new System.Windows.Forms.Label();
-            this.lblNationality = new System.Windows.Forms.Label();
-            this.lblIDType = new System.Windows.Forms.Label();
-            this.lblIDNum = new System.Windows.Forms.Label();
-            this.lblGuestType = new System.Windows.Forms.Label();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.lblMainDash = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.btnEditGuest = new System.Windows.Forms.Button();
+            this.btnAddGuest = new System.Windows.Forms.Button();
+            this.btnSearch = new System.Windows.Forms.Button();
+            this.btnDeleteGuest = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvGuests)).BeginInit();
             this.pnlGuestForm.SuspendLayout();
             this.pnlGuestList.SuspendLayout();
+            this.panel2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // dgvGuests
@@ -88,12 +93,12 @@
             this.colNationality,
             this.colGuestType,
             this.colCreatedAt});
-            this.dgvGuests.Location = new System.Drawing.Point(3, 131);
+            this.dgvGuests.Location = new System.Drawing.Point(39, 99);
             this.dgvGuests.Name = "dgvGuests";
             this.dgvGuests.ReadOnly = true;
             this.dgvGuests.RowHeadersWidth = 51;
             this.dgvGuests.RowTemplate.Height = 30;
-            this.dgvGuests.Size = new System.Drawing.Size(1123, 802);
+            this.dgvGuests.Size = new System.Drawing.Size(1240, 686);
             this.dgvGuests.TabIndex = 0;
             this.dgvGuests.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvGuests_CellClick);
             // 
@@ -153,67 +158,12 @@
             this.colCreatedAt.Name = "colCreatedAt";
             this.colCreatedAt.ReadOnly = true;
             // 
-            // btnAddGuest
-            // 
-            this.btnAddGuest.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnAddGuest.BackColor = System.Drawing.Color.Green;
-            this.btnAddGuest.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnAddGuest.ForeColor = System.Drawing.Color.White;
-            this.btnAddGuest.Location = new System.Drawing.Point(352, 441);
-            this.btnAddGuest.Name = "btnAddGuest";
-            this.btnAddGuest.Size = new System.Drawing.Size(200, 50);
-            this.btnAddGuest.TabIndex = 1;
-            this.btnAddGuest.Text = "ADD GUEST";
-            this.btnAddGuest.UseVisualStyleBackColor = false;
-            this.btnAddGuest.Click += new System.EventHandler(this.btnAddGuest_Click);
-            // 
-            // btnEditGuest
-            // 
-            this.btnEditGuest.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnEditGuest.BackColor = System.Drawing.Color.Blue;
-            this.btnEditGuest.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnEditGuest.ForeColor = System.Drawing.Color.White;
-            this.btnEditGuest.Location = new System.Drawing.Point(352, 497);
-            this.btnEditGuest.Name = "btnEditGuest";
-            this.btnEditGuest.Size = new System.Drawing.Size(200, 50);
-            this.btnEditGuest.TabIndex = 2;
-            this.btnEditGuest.Text = "EDIT GUEST";
-            this.btnEditGuest.UseVisualStyleBackColor = false;
-            this.btnEditGuest.Click += new System.EventHandler(this.btnEditGuest_Click);
-            // 
-            // btnDeleteGuest
-            // 
-            this.btnDeleteGuest.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnDeleteGuest.BackColor = System.Drawing.Color.Red;
-            this.btnDeleteGuest.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnDeleteGuest.ForeColor = System.Drawing.Color.White;
-            this.btnDeleteGuest.Location = new System.Drawing.Point(558, 497);
-            this.btnDeleteGuest.Name = "btnDeleteGuest";
-            this.btnDeleteGuest.Size = new System.Drawing.Size(200, 50);
-            this.btnDeleteGuest.TabIndex = 3;
-            this.btnDeleteGuest.Text = "DELETE GUEST";
-            this.btnDeleteGuest.UseVisualStyleBackColor = false;
-            this.btnDeleteGuest.Click += new System.EventHandler(this.btnDeleteGuest_Click);
-            // 
-            // btnSearch
-            // 
-            this.btnSearch.BackgroundImage = global::Hotel_ManagementIT13.Properties.Resources.people;
-            this.btnSearch.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnSearch.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSearch.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnSearch.Location = new System.Drawing.Point(1096, 64);
-            this.btnSearch.Name = "btnSearch";
-            this.btnSearch.Size = new System.Drawing.Size(30, 30);
-            this.btnSearch.TabIndex = 4;
-            this.btnSearch.UseVisualStyleBackColor = true;
-            this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
-            // 
             // txtSearch
             // 
             this.txtSearch.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtSearch.Location = new System.Drawing.Point(3, 61);
+            this.txtSearch.Location = new System.Drawing.Point(39, 29);
             this.txtSearch.Name = "txtSearch";
-            this.txtSearch.Size = new System.Drawing.Size(1123, 36);
+            this.txtSearch.Size = new System.Drawing.Size(1240, 36);
             this.txtSearch.TabIndex = 0;
             this.txtSearch.Text = "Search guests by name, email, or phone...";
             this.txtSearch.Enter += new System.EventHandler(this.txtSearch_Enter);
@@ -222,194 +172,326 @@
             // 
             // pnlGuestForm
             // 
-            this.pnlGuestForm.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.pnlGuestForm.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.pnlGuestForm.BackColor = System.Drawing.Color.White;
+            this.pnlGuestForm.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(247)))), ((int)(((byte)(252)))));
             this.pnlGuestForm.Controls.Add(this.lblGuestType);
             this.pnlGuestForm.Controls.Add(this.lblIDNum);
             this.pnlGuestForm.Controls.Add(this.lblIDType);
             this.pnlGuestForm.Controls.Add(this.lblNationality);
+            this.pnlGuestForm.Controls.Add(this.btnCancel);
             this.pnlGuestForm.Controls.Add(this.lblDOB);
             this.pnlGuestForm.Controls.Add(this.txtIDNumber);
+            this.pnlGuestForm.Controls.Add(this.btnSaveGuest);
             this.pnlGuestForm.Controls.Add(this.lblAddress);
             this.pnlGuestForm.Controls.Add(this.dtpDOB);
             this.pnlGuestForm.Controls.Add(this.lblEmail);
             this.pnlGuestForm.Controls.Add(this.lblPhone);
             this.pnlGuestForm.Controls.Add(this.lblLastNm);
             this.pnlGuestForm.Controls.Add(this.txtPhone);
-            this.pnlGuestForm.Controls.Add(this.btnCancel);
             this.pnlGuestForm.Controls.Add(this.lblFirstNm);
             this.pnlGuestForm.Controls.Add(this.txtAddress);
             this.pnlGuestForm.Controls.Add(this.txtLastName);
-            this.pnlGuestForm.Controls.Add(this.btnSaveGuest);
             this.pnlGuestForm.Controls.Add(this.lblGuestDetails);
             this.pnlGuestForm.Controls.Add(this.cmbGuestType);
             this.pnlGuestForm.Controls.Add(this.txtFirstName);
-            this.pnlGuestForm.Controls.Add(this.btnDeleteGuest);
             this.pnlGuestForm.Controls.Add(this.cmbIDType);
-            this.pnlGuestForm.Controls.Add(this.btnAddGuest);
-            this.pnlGuestForm.Controls.Add(this.btnEditGuest);
             this.pnlGuestForm.Controls.Add(this.cmbNationality);
             this.pnlGuestForm.Controls.Add(this.txtEmail);
-            this.pnlGuestForm.Location = new System.Drawing.Point(1147, 12);
+            this.pnlGuestForm.Location = new System.Drawing.Point(1372, 108);
             this.pnlGuestForm.Name = "pnlGuestForm";
-            this.pnlGuestForm.Size = new System.Drawing.Size(761, 685);
+            this.pnlGuestForm.Size = new System.Drawing.Size(500, 814);
             this.pnlGuestForm.TabIndex = 6;
             // 
-            // txtFirstName
+            // lblGuestType
             // 
-            this.txtFirstName.BackColor = System.Drawing.Color.White;
-            this.txtFirstName.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtFirstName.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.txtFirstName.Location = new System.Drawing.Point(3, 91);
-            this.txtFirstName.Name = "txtFirstName";
-            this.txtFirstName.Size = new System.Drawing.Size(300, 36);
-            this.txtFirstName.TabIndex = 7;
-            this.txtFirstName.Text = "First Name";
-            this.txtFirstName.Enter += new System.EventHandler(this.TextBox_Enter);
-            this.txtFirstName.Leave += new System.EventHandler(this.TextBox_Leave);
+            this.lblGuestType.AutoSize = true;
+            this.lblGuestType.BackColor = System.Drawing.Color.Transparent;
+            this.lblGuestType.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblGuestType.Location = new System.Drawing.Point(34, 450);
+            this.lblGuestType.Name = "lblGuestType";
+            this.lblGuestType.Size = new System.Drawing.Size(121, 28);
+            this.lblGuestType.TabIndex = 42;
+            this.lblGuestType.Text = "Guest Type:";
             // 
-            // txtLastName
+            // lblIDNum
             // 
-            this.txtLastName.BackColor = System.Drawing.Color.White;
-            this.txtLastName.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtLastName.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.txtLastName.Location = new System.Drawing.Point(3, 161);
-            this.txtLastName.Name = "txtLastName";
-            this.txtLastName.Size = new System.Drawing.Size(300, 36);
-            this.txtLastName.TabIndex = 8;
-            this.txtLastName.Text = "Last Name";
-            this.txtLastName.Enter += new System.EventHandler(this.TextBox_Enter);
-            this.txtLastName.Leave += new System.EventHandler(this.TextBox_Leave);
+            this.lblIDNum.AutoSize = true;
+            this.lblIDNum.BackColor = System.Drawing.Color.Transparent;
+            this.lblIDNum.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblIDNum.Location = new System.Drawing.Point(274, 520);
+            this.lblIDNum.Name = "lblIDNum";
+            this.lblIDNum.Size = new System.Drawing.Size(119, 28);
+            this.lblIDNum.TabIndex = 41;
+            this.lblIDNum.Text = "ID Number:";
             // 
-            // txtEmail
+            // lblIDType
             // 
-            this.txtEmail.BackColor = System.Drawing.Color.White;
-            this.txtEmail.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtEmail.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.txtEmail.Location = new System.Drawing.Point(3, 301);
-            this.txtEmail.Name = "txtEmail";
-            this.txtEmail.Size = new System.Drawing.Size(300, 36);
-            this.txtEmail.TabIndex = 9;
-            this.txtEmail.Text = "Email Address";
-            this.txtEmail.Enter += new System.EventHandler(this.TextBox_Enter);
-            this.txtEmail.Leave += new System.EventHandler(this.TextBox_Leave);
+            this.lblIDType.AutoSize = true;
+            this.lblIDType.BackColor = System.Drawing.Color.Transparent;
+            this.lblIDType.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblIDType.Location = new System.Drawing.Point(34, 520);
+            this.lblIDType.Name = "lblIDType";
+            this.lblIDType.Size = new System.Drawing.Size(86, 28);
+            this.lblIDType.TabIndex = 40;
+            this.lblIDType.Text = "ID Type:";
             // 
-            // txtPhone
+            // lblNationality
             // 
-            this.txtPhone.BackColor = System.Drawing.Color.White;
-            this.txtPhone.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtPhone.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.txtPhone.Location = new System.Drawing.Point(3, 231);
-            this.txtPhone.Name = "txtPhone";
-            this.txtPhone.Size = new System.Drawing.Size(300, 36);
-            this.txtPhone.TabIndex = 10;
-            this.txtPhone.Text = "Phone Number";
-            this.txtPhone.Enter += new System.EventHandler(this.TextBox_Enter);
-            this.txtPhone.Leave += new System.EventHandler(this.TextBox_Leave);
+            this.lblNationality.AutoSize = true;
+            this.lblNationality.BackColor = System.Drawing.Color.Transparent;
+            this.lblNationality.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblNationality.Location = new System.Drawing.Point(34, 240);
+            this.lblNationality.Name = "lblNationality";
+            this.lblNationality.Size = new System.Drawing.Size(120, 28);
+            this.lblNationality.TabIndex = 39;
+            this.lblNationality.Text = "Nationality:";
             // 
-            // txtAddress
+            // lblDOB
             // 
-            this.txtAddress.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtAddress.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtAddress.Location = new System.Drawing.Point(3, 441);
-            this.txtAddress.Multiline = true;
-            this.txtAddress.Name = "txtAddress";
-            this.txtAddress.Size = new System.Drawing.Size(343, 241);
-            this.txtAddress.TabIndex = 11;
-            this.txtAddress.Text = "Address";
-            this.txtAddress.Enter += new System.EventHandler(this.TextBox_Enter);
-            this.txtAddress.Leave += new System.EventHandler(this.TextBox_Leave);
-            // 
-            // cmbNationality
-            // 
-            this.cmbNationality.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmbNationality.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbNationality.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cmbNationality.FormattingEnabled = true;
-            this.cmbNationality.Location = new System.Drawing.Point(311, 161);
-            this.cmbNationality.Name = "cmbNationality";
-            this.cmbNationality.Size = new System.Drawing.Size(300, 36);
-            this.cmbNationality.TabIndex = 12;
-            // 
-            // dtpDOB
-            // 
-            this.dtpDOB.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.dtpDOB.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.dtpDOB.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.dtpDOB.Location = new System.Drawing.Point(311, 91);
-            this.dtpDOB.Name = "dtpDOB";
-            this.dtpDOB.Size = new System.Drawing.Size(400, 36);
-            this.dtpDOB.TabIndex = 13;
-            // 
-            // cmbIDType
-            // 
-            this.cmbIDType.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmbIDType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbIDType.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cmbIDType.FormattingEnabled = true;
-            this.cmbIDType.Location = new System.Drawing.Point(309, 231);
-            this.cmbIDType.Name = "cmbIDType";
-            this.cmbIDType.Size = new System.Drawing.Size(300, 36);
-            this.cmbIDType.TabIndex = 14;
+            this.lblDOB.AutoSize = true;
+            this.lblDOB.BackColor = System.Drawing.Color.Transparent;
+            this.lblDOB.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDOB.Location = new System.Drawing.Point(34, 170);
+            this.lblDOB.Name = "lblDOB";
+            this.lblDOB.Size = new System.Drawing.Size(137, 28);
+            this.lblDOB.TabIndex = 38;
+            this.lblDOB.Text = "Date of Birth:";
             // 
             // txtIDNumber
             // 
-            this.txtIDNumber.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtIDNumber.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.txtIDNumber.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtIDNumber.Location = new System.Drawing.Point(309, 301);
+            this.txtIDNumber.Location = new System.Drawing.Point(279, 551);
             this.txtIDNumber.Name = "txtIDNumber";
-            this.txtIDNumber.Size = new System.Drawing.Size(300, 36);
+            this.txtIDNumber.Size = new System.Drawing.Size(182, 36);
             this.txtIDNumber.TabIndex = 15;
             this.txtIDNumber.Text = "ID Number";
             this.txtIDNumber.Enter += new System.EventHandler(this.TextBox_Enter);
             this.txtIDNumber.Leave += new System.EventHandler(this.TextBox_Leave);
             // 
-            // cmbGuestType
+            // lblAddress
             // 
-            this.cmbGuestType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbGuestType.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cmbGuestType.FormattingEnabled = true;
-            this.cmbGuestType.Location = new System.Drawing.Point(3, 371);
-            this.cmbGuestType.Name = "cmbGuestType";
-            this.cmbGuestType.Size = new System.Drawing.Size(300, 36);
-            this.cmbGuestType.TabIndex = 16;
+            this.lblAddress.AutoSize = true;
+            this.lblAddress.BackColor = System.Drawing.Color.White;
+            this.lblAddress.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblAddress.Location = new System.Drawing.Point(34, 590);
+            this.lblAddress.Name = "lblAddress";
+            this.lblAddress.Size = new System.Drawing.Size(92, 28);
+            this.lblAddress.TabIndex = 37;
+            this.lblAddress.Text = "Address:";
             // 
-            // btnSaveGuest
+            // dtpDOB
             // 
-            this.btnSaveGuest.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSaveGuest.BackColor = System.Drawing.Color.Orange;
-            this.btnSaveGuest.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnSaveGuest.ForeColor = System.Drawing.Color.White;
-            this.btnSaveGuest.Location = new System.Drawing.Point(558, 441);
-            this.btnSaveGuest.Name = "btnSaveGuest";
-            this.btnSaveGuest.Size = new System.Drawing.Size(200, 50);
-            this.btnSaveGuest.TabIndex = 17;
-            this.btnSaveGuest.Text = "SAVE GUEST";
-            this.btnSaveGuest.UseVisualStyleBackColor = false;
-            this.btnSaveGuest.Click += new System.EventHandler(this.btnSaveGuest_Click);
+            this.dtpDOB.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.dtpDOB.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dtpDOB.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.dtpDOB.Location = new System.Drawing.Point(39, 201);
+            this.dtpDOB.Name = "dtpDOB";
+            this.dtpDOB.Size = new System.Drawing.Size(422, 36);
+            this.dtpDOB.TabIndex = 13;
+            // 
+            // lblEmail
+            // 
+            this.lblEmail.AutoSize = true;
+            this.lblEmail.BackColor = System.Drawing.Color.Transparent;
+            this.lblEmail.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblEmail.Location = new System.Drawing.Point(34, 380);
+            this.lblEmail.Name = "lblEmail";
+            this.lblEmail.Size = new System.Drawing.Size(147, 28);
+            this.lblEmail.TabIndex = 36;
+            this.lblEmail.Text = "Email Address:";
+            // 
+            // lblPhone
+            // 
+            this.lblPhone.AutoSize = true;
+            this.lblPhone.BackColor = System.Drawing.Color.Transparent;
+            this.lblPhone.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblPhone.Location = new System.Drawing.Point(34, 310);
+            this.lblPhone.Name = "lblPhone";
+            this.lblPhone.Size = new System.Drawing.Size(158, 28);
+            this.lblPhone.TabIndex = 35;
+            this.lblPhone.Text = "Phone Number:";
+            // 
+            // lblLastNm
+            // 
+            this.lblLastNm.AutoSize = true;
+            this.lblLastNm.BackColor = System.Drawing.Color.Transparent;
+            this.lblLastNm.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblLastNm.Location = new System.Drawing.Point(34, 100);
+            this.lblLastNm.Name = "lblLastNm";
+            this.lblLastNm.Size = new System.Drawing.Size(116, 28);
+            this.lblLastNm.TabIndex = 34;
+            this.lblLastNm.Text = "Last Name:";
+            // 
+            // txtPhone
+            // 
+            this.txtPhone.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtPhone.BackColor = System.Drawing.Color.White;
+            this.txtPhone.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtPhone.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.txtPhone.Location = new System.Drawing.Point(39, 341);
+            this.txtPhone.Name = "txtPhone";
+            this.txtPhone.Size = new System.Drawing.Size(422, 36);
+            this.txtPhone.TabIndex = 10;
+            this.txtPhone.Text = "Phone Number";
+            this.txtPhone.Enter += new System.EventHandler(this.TextBox_Enter);
+            this.txtPhone.Leave += new System.EventHandler(this.TextBox_Leave);
             // 
             // btnCancel
             // 
-            this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnCancel.BackColor = System.Drawing.Color.Red;
+            this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnCancel.BackColor = System.Drawing.Color.Thistle;
             this.btnCancel.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnCancel.ForeColor = System.Drawing.Color.White;
-            this.btnCancel.Location = new System.Drawing.Point(558, 553);
+            this.btnCancel.ForeColor = System.Drawing.Color.Black;
+            this.btnCancel.Location = new System.Drawing.Point(311, 735);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(200, 50);
+            this.btnCancel.Size = new System.Drawing.Size(150, 50);
             this.btnCancel.TabIndex = 18;
             this.btnCancel.Text = "CANCEL";
             this.btnCancel.UseVisualStyleBackColor = false;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
+            // lblFirstNm
+            // 
+            this.lblFirstNm.AutoSize = true;
+            this.lblFirstNm.BackColor = System.Drawing.Color.Transparent;
+            this.lblFirstNm.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblFirstNm.Location = new System.Drawing.Point(34, 30);
+            this.lblFirstNm.Name = "lblFirstNm";
+            this.lblFirstNm.Size = new System.Drawing.Size(119, 28);
+            this.lblFirstNm.TabIndex = 33;
+            this.lblFirstNm.Text = "First Name:";
+            // 
+            // txtAddress
+            // 
+            this.txtAddress.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtAddress.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtAddress.Location = new System.Drawing.Point(39, 621);
+            this.txtAddress.Multiline = true;
+            this.txtAddress.Name = "txtAddress";
+            this.txtAddress.Size = new System.Drawing.Size(422, 82);
+            this.txtAddress.TabIndex = 11;
+            this.txtAddress.Text = "Address";
+            this.txtAddress.Enter += new System.EventHandler(this.TextBox_Enter);
+            this.txtAddress.Leave += new System.EventHandler(this.TextBox_Leave);
+            // 
+            // txtLastName
+            // 
+            this.txtLastName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtLastName.BackColor = System.Drawing.Color.White;
+            this.txtLastName.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtLastName.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.txtLastName.Location = new System.Drawing.Point(39, 131);
+            this.txtLastName.Name = "txtLastName";
+            this.txtLastName.Size = new System.Drawing.Size(422, 36);
+            this.txtLastName.TabIndex = 8;
+            this.txtLastName.Text = "Last Name";
+            this.txtLastName.Enter += new System.EventHandler(this.TextBox_Enter);
+            this.txtLastName.Leave += new System.EventHandler(this.TextBox_Leave);
+            // 
+            // btnSaveGuest
+            // 
+            this.btnSaveGuest.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnSaveGuest.BackColor = System.Drawing.Color.Thistle;
+            this.btnSaveGuest.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnSaveGuest.ForeColor = System.Drawing.Color.Black;
+            this.btnSaveGuest.Location = new System.Drawing.Point(39, 735);
+            this.btnSaveGuest.Name = "btnSaveGuest";
+            this.btnSaveGuest.Size = new System.Drawing.Size(200, 50);
+            this.btnSaveGuest.TabIndex = 17;
+            this.btnSaveGuest.Text = "Save Guest";
+            this.btnSaveGuest.UseVisualStyleBackColor = false;
+            this.btnSaveGuest.Click += new System.EventHandler(this.btnSaveGuest_Click);
+            // 
+            // lblGuestDetails
+            // 
+            this.lblGuestDetails.AutoSize = true;
+            this.lblGuestDetails.Font = new System.Drawing.Font("Georgia", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblGuestDetails.ForeColor = System.Drawing.Color.DarkGoldenrod;
+            this.lblGuestDetails.Location = new System.Drawing.Point(34, 3);
+            this.lblGuestDetails.Name = "lblGuestDetails";
+            this.lblGuestDetails.Size = new System.Drawing.Size(155, 27);
+            this.lblGuestDetails.TabIndex = 32;
+            this.lblGuestDetails.Text = "Guest Details ";
+            // 
+            // cmbGuestType
+            // 
+            this.cmbGuestType.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.cmbGuestType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbGuestType.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cmbGuestType.FormattingEnabled = true;
+            this.cmbGuestType.Location = new System.Drawing.Point(39, 481);
+            this.cmbGuestType.Name = "cmbGuestType";
+            this.cmbGuestType.Size = new System.Drawing.Size(422, 36);
+            this.cmbGuestType.TabIndex = 16;
+            // 
+            // txtFirstName
+            // 
+            this.txtFirstName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtFirstName.BackColor = System.Drawing.Color.White;
+            this.txtFirstName.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtFirstName.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.txtFirstName.Location = new System.Drawing.Point(39, 61);
+            this.txtFirstName.Name = "txtFirstName";
+            this.txtFirstName.Size = new System.Drawing.Size(422, 36);
+            this.txtFirstName.TabIndex = 7;
+            this.txtFirstName.Text = "First Name";
+            this.txtFirstName.Enter += new System.EventHandler(this.TextBox_Enter);
+            this.txtFirstName.Leave += new System.EventHandler(this.TextBox_Leave);
+            // 
+            // cmbIDType
+            // 
+            this.cmbIDType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbIDType.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cmbIDType.FormattingEnabled = true;
+            this.cmbIDType.Location = new System.Drawing.Point(39, 551);
+            this.cmbIDType.Name = "cmbIDType";
+            this.cmbIDType.Size = new System.Drawing.Size(198, 36);
+            this.cmbIDType.TabIndex = 14;
+            // 
+            // cmbNationality
+            // 
+            this.cmbNationality.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.cmbNationality.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbNationality.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cmbNationality.FormattingEnabled = true;
+            this.cmbNationality.Location = new System.Drawing.Point(39, 271);
+            this.cmbNationality.Name = "cmbNationality";
+            this.cmbNationality.Size = new System.Drawing.Size(422, 36);
+            this.cmbNationality.TabIndex = 12;
+            // 
+            // txtEmail
+            // 
+            this.txtEmail.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtEmail.BackColor = System.Drawing.Color.White;
+            this.txtEmail.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtEmail.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.txtEmail.Location = new System.Drawing.Point(39, 411);
+            this.txtEmail.Name = "txtEmail";
+            this.txtEmail.Size = new System.Drawing.Size(422, 36);
+            this.txtEmail.TabIndex = 9;
+            this.txtEmail.Text = "Email Address";
+            this.txtEmail.Enter += new System.EventHandler(this.TextBox_Enter);
+            this.txtEmail.Leave += new System.EventHandler(this.TextBox_Leave);
+            // 
             // lblGuestCount
             // 
             this.lblGuestCount.AutoSize = true;
-            this.lblGuestCount.BackColor = System.Drawing.Color.White;
+            this.lblGuestCount.BackColor = System.Drawing.Color.Transparent;
             this.lblGuestCount.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblGuestCount.Location = new System.Drawing.Point(3, 100);
+            this.lblGuestCount.Location = new System.Drawing.Point(34, 68);
             this.lblGuestCount.Name = "lblGuestCount";
             this.lblGuestCount.Size = new System.Drawing.Size(163, 28);
             this.lblGuestCount.TabIndex = 19;
@@ -417,159 +499,131 @@
             // 
             // pnlGuestList
             // 
-            this.pnlGuestList.BackColor = System.Drawing.Color.White;
+            this.pnlGuestList.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.pnlGuestList.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(247)))), ((int)(((byte)(252)))));
             this.pnlGuestList.Controls.Add(this.lblGuestCount);
             this.pnlGuestList.Controls.Add(this.btnSearch);
-            this.pnlGuestList.Controls.Add(this.lblGuestList);
             this.pnlGuestList.Controls.Add(this.txtSearch);
             this.pnlGuestList.Controls.Add(this.dgvGuests);
-            this.pnlGuestList.Location = new System.Drawing.Point(12, 12);
+            this.pnlGuestList.Location = new System.Drawing.Point(48, 108);
             this.pnlGuestList.Name = "pnlGuestList";
-            this.pnlGuestList.Size = new System.Drawing.Size(1129, 936);
+            this.pnlGuestList.Size = new System.Drawing.Size(1318, 814);
             this.pnlGuestList.TabIndex = 20;
             // 
-            // lblGuestDetails
+            // panel2
             // 
-            this.lblGuestDetails.AutoSize = true;
-            this.lblGuestDetails.Font = new System.Drawing.Font("Georgia", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblGuestDetails.ForeColor = System.Drawing.Color.DarkGoldenrod;
-            this.lblGuestDetails.Location = new System.Drawing.Point(2, 2);
-            this.lblGuestDetails.Name = "lblGuestDetails";
-            this.lblGuestDetails.Size = new System.Drawing.Size(176, 27);
-            this.lblGuestDetails.TabIndex = 32;
-            this.lblGuestDetails.Text = "Guest Details ";
+            this.panel2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel2.BackColor = System.Drawing.Color.White;
+            this.panel2.Controls.Add(this.lblMainDash);
+            this.panel2.Controls.Add(this.pictureBox1);
+            this.panel2.Controls.Add(this.btnEditGuest);
+            this.panel2.Controls.Add(this.btnAddGuest);
+            this.panel2.Controls.Add(this.btnDeleteGuest);
+            this.panel2.Location = new System.Drawing.Point(0, 0);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(1920, 56);
+            this.panel2.TabIndex = 41;
             // 
-            // lblGuestList
+            // lblMainDash
             // 
-            this.lblGuestList.AutoSize = true;
-            this.lblGuestList.Font = new System.Drawing.Font("Georgia", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblGuestList.ForeColor = System.Drawing.Color.DarkGoldenrod;
-            this.lblGuestList.Location = new System.Drawing.Point(3, 3);
-            this.lblGuestList.Name = "lblGuestList";
-            this.lblGuestList.Size = new System.Drawing.Size(150, 27);
-            this.lblGuestList.TabIndex = 33;
-            this.lblGuestList.Text = "Guest Lists ";
+            this.lblMainDash.AutoSize = true;
+            this.lblMainDash.BackColor = System.Drawing.Color.Transparent;
+            this.lblMainDash.Font = new System.Drawing.Font("Georgia", 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblMainDash.ForeColor = System.Drawing.Color.DarkGoldenrod;
+            this.lblMainDash.Location = new System.Drawing.Point(54, 9);
+            this.lblMainDash.Name = "lblMainDash";
+            this.lblMainDash.Size = new System.Drawing.Size(211, 39);
+            this.lblMainDash.TabIndex = 31;
+            this.lblMainDash.Text = "JMS HOTEL";
             // 
-            // lblFirstNm
+            // label2
             // 
-            this.lblFirstNm.AutoSize = true;
-            this.lblFirstNm.BackColor = System.Drawing.Color.White;
-            this.lblFirstNm.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblFirstNm.Location = new System.Drawing.Point(3, 60);
-            this.lblFirstNm.Name = "lblFirstNm";
-            this.lblFirstNm.Size = new System.Drawing.Size(119, 28);
-            this.lblFirstNm.TabIndex = 33;
-            this.lblFirstNm.Text = "First Name:";
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Georgia", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.ForeColor = System.Drawing.Color.DarkGoldenrod;
+            this.label2.Location = new System.Drawing.Point(4, 59);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(156, 20);
+            this.label2.TabIndex = 42;
+            this.label2.Text = "Guest Management";
             // 
-            // lblLastNm
+            // pictureBox1
             // 
-            this.lblLastNm.AutoSize = true;
-            this.lblLastNm.BackColor = System.Drawing.Color.White;
-            this.lblLastNm.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblLastNm.Location = new System.Drawing.Point(3, 130);
-            this.lblLastNm.Name = "lblLastNm";
-            this.lblLastNm.Size = new System.Drawing.Size(116, 28);
-            this.lblLastNm.TabIndex = 34;
-            this.lblLastNm.Text = "Last Name:";
+            this.pictureBox1.BackgroundImage = global::Hotel_ManagementIT13.Properties.Resources.logosaIT131;
+            this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pictureBox1.Location = new System.Drawing.Point(8, 8);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(40, 40);
+            this.pictureBox1.TabIndex = 30;
+            this.pictureBox1.TabStop = false;
             // 
-            // lblPhone
+            // btnEditGuest
             // 
-            this.lblPhone.AutoSize = true;
-            this.lblPhone.BackColor = System.Drawing.Color.White;
-            this.lblPhone.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblPhone.Location = new System.Drawing.Point(3, 200);
-            this.lblPhone.Name = "lblPhone";
-            this.lblPhone.Size = new System.Drawing.Size(158, 28);
-            this.lblPhone.TabIndex = 35;
-            this.lblPhone.Text = "Phone Number:";
+            this.btnEditGuest.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnEditGuest.BackColor = System.Drawing.Color.Transparent;
+            this.btnEditGuest.BackgroundImage = global::Hotel_ManagementIT13.Properties.Resources.clarity__pencil_line;
+            this.btnEditGuest.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnEditGuest.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnEditGuest.ForeColor = System.Drawing.Color.White;
+            this.btnEditGuest.Location = new System.Drawing.Point(1833, 11);
+            this.btnEditGuest.Name = "btnEditGuest";
+            this.btnEditGuest.Size = new System.Drawing.Size(35, 35);
+            this.btnEditGuest.TabIndex = 2;
+            this.btnEditGuest.UseVisualStyleBackColor = false;
+            this.btnEditGuest.Click += new System.EventHandler(this.btnEditGuest_Click);
             // 
-            // lblEmail
+            // btnAddGuest
             // 
-            this.lblEmail.AutoSize = true;
-            this.lblEmail.BackColor = System.Drawing.Color.White;
-            this.lblEmail.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblEmail.Location = new System.Drawing.Point(3, 270);
-            this.lblEmail.Name = "lblEmail";
-            this.lblEmail.Size = new System.Drawing.Size(147, 28);
-            this.lblEmail.TabIndex = 36;
-            this.lblEmail.Text = "Email Address:";
+            this.btnAddGuest.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnAddGuest.BackColor = System.Drawing.Color.Transparent;
+            this.btnAddGuest.BackgroundImage = global::Hotel_ManagementIT13.Properties.Resources.clarity__plus_line;
+            this.btnAddGuest.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnAddGuest.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnAddGuest.ForeColor = System.Drawing.Color.White;
+            this.btnAddGuest.Location = new System.Drawing.Point(1792, 11);
+            this.btnAddGuest.Name = "btnAddGuest";
+            this.btnAddGuest.Size = new System.Drawing.Size(35, 35);
+            this.btnAddGuest.TabIndex = 1;
+            this.btnAddGuest.UseVisualStyleBackColor = false;
+            this.btnAddGuest.Click += new System.EventHandler(this.btnAddGuest_Click);
             // 
-            // lblAddress
+            // btnSearch
             // 
-            this.lblAddress.AutoSize = true;
-            this.lblAddress.BackColor = System.Drawing.Color.White;
-            this.lblAddress.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblAddress.Location = new System.Drawing.Point(3, 410);
-            this.lblAddress.Name = "lblAddress";
-            this.lblAddress.Size = new System.Drawing.Size(92, 28);
-            this.lblAddress.TabIndex = 37;
-            this.lblAddress.Text = "Address:";
+            this.btnSearch.BackgroundImage = global::Hotel_ManagementIT13.Properties.Resources.clarity__search_line;
+            this.btnSearch.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnSearch.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnSearch.Location = new System.Drawing.Point(1246, 32);
+            this.btnSearch.Name = "btnSearch";
+            this.btnSearch.Size = new System.Drawing.Size(30, 30);
+            this.btnSearch.TabIndex = 4;
+            this.btnSearch.UseVisualStyleBackColor = true;
+            this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
             // 
-            // lblDOB
+            // btnDeleteGuest
             // 
-            this.lblDOB.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblDOB.AutoSize = true;
-            this.lblDOB.BackColor = System.Drawing.Color.White;
-            this.lblDOB.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDOB.Location = new System.Drawing.Point(314, 60);
-            this.lblDOB.Name = "lblDOB";
-            this.lblDOB.Size = new System.Drawing.Size(137, 28);
-            this.lblDOB.TabIndex = 38;
-            this.lblDOB.Text = "Date of Birth:";
-            // 
-            // lblNationality
-            // 
-            this.lblNationality.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblNationality.AutoSize = true;
-            this.lblNationality.BackColor = System.Drawing.Color.White;
-            this.lblNationality.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblNationality.Location = new System.Drawing.Point(314, 130);
-            this.lblNationality.Name = "lblNationality";
-            this.lblNationality.Size = new System.Drawing.Size(120, 28);
-            this.lblNationality.TabIndex = 39;
-            this.lblNationality.Text = "Nationality:";
-            // 
-            // lblIDType
-            // 
-            this.lblIDType.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblIDType.AutoSize = true;
-            this.lblIDType.BackColor = System.Drawing.Color.White;
-            this.lblIDType.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblIDType.Location = new System.Drawing.Point(314, 200);
-            this.lblIDType.Name = "lblIDType";
-            this.lblIDType.Size = new System.Drawing.Size(86, 28);
-            this.lblIDType.TabIndex = 40;
-            this.lblIDType.Text = "ID Type:";
-            // 
-            // lblIDNum
-            // 
-            this.lblIDNum.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblIDNum.AutoSize = true;
-            this.lblIDNum.BackColor = System.Drawing.Color.White;
-            this.lblIDNum.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblIDNum.Location = new System.Drawing.Point(314, 270);
-            this.lblIDNum.Name = "lblIDNum";
-            this.lblIDNum.Size = new System.Drawing.Size(119, 28);
-            this.lblIDNum.TabIndex = 41;
-            this.lblIDNum.Text = "ID Number:";
-            // 
-            // lblGuestType
-            // 
-            this.lblGuestType.AutoSize = true;
-            this.lblGuestType.BackColor = System.Drawing.Color.White;
-            this.lblGuestType.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblGuestType.Location = new System.Drawing.Point(3, 340);
-            this.lblGuestType.Name = "lblGuestType";
-            this.lblGuestType.Size = new System.Drawing.Size(121, 28);
-            this.lblGuestType.TabIndex = 42;
-            this.lblGuestType.Text = "Guest Type:";
+            this.btnDeleteGuest.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnDeleteGuest.BackColor = System.Drawing.Color.Transparent;
+            this.btnDeleteGuest.BackgroundImage = global::Hotel_ManagementIT13.Properties.Resources.clarity__trash_line;
+            this.btnDeleteGuest.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnDeleteGuest.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnDeleteGuest.ForeColor = System.Drawing.Color.White;
+            this.btnDeleteGuest.Location = new System.Drawing.Point(1874, 11);
+            this.btnDeleteGuest.Name = "btnDeleteGuest";
+            this.btnDeleteGuest.Size = new System.Drawing.Size(35, 35);
+            this.btnDeleteGuest.TabIndex = 3;
+            this.btnDeleteGuest.UseVisualStyleBackColor = false;
+            this.btnDeleteGuest.Click += new System.EventHandler(this.btnDeleteGuest_Click);
             // 
             // frmGuestManagement
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.Thistle;
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(220)))), ((int)(((byte)(242)))));
             this.ClientSize = new System.Drawing.Size(1920, 960);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.panel2);
             this.Controls.Add(this.pnlGuestForm);
             this.Controls.Add(this.pnlGuestList);
             this.Name = "frmGuestManagement";
@@ -582,7 +636,11 @@
             this.pnlGuestForm.PerformLayout();
             this.pnlGuestList.ResumeLayout(false);
             this.pnlGuestList.PerformLayout();
+            this.panel2.ResumeLayout(false);
+            this.panel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -617,7 +675,6 @@
         private System.Windows.Forms.Label lblGuestCount;
         private System.Windows.Forms.Panel pnlGuestList;
         private System.Windows.Forms.Label lblGuestDetails;
-        private System.Windows.Forms.Label lblGuestList;
         private System.Windows.Forms.Label lblFirstNm;
         private System.Windows.Forms.Label lblLastNm;
         private System.Windows.Forms.Label lblAddress;
@@ -628,5 +685,9 @@
         private System.Windows.Forms.Label lblNationality;
         private System.Windows.Forms.Label lblDOB;
         private System.Windows.Forms.Label lblGuestType;
+        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.Label lblMainDash;
+        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.Label label2;
     }
 }
