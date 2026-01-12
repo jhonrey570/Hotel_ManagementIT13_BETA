@@ -14,7 +14,7 @@ namespace Hotel_ManagementIT13.Forms
             InitializeComponent();
             _userRepo = new UserRepository();
         }
-
+        
       
         private void frmLogin_Load(object sender, EventArgs e)
         {
