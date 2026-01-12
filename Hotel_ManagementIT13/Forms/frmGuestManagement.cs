@@ -131,7 +131,7 @@ namespace Hotel_ManagementIT13.Forms
         {
             string searchTerm = txtSearch.Text.Trim();
 
-            // Skip if placeholder text
+            
             if (searchTerm == "Search guests by name, email, or phone..." ||
                 string.IsNullOrWhiteSpace(searchTerm))
             {
@@ -141,7 +141,7 @@ namespace Hotel_ManagementIT13.Forms
 
             try
             {
-                // Directly use repository for search
+                
                 var guests = _guestRepo.SearchGuests(searchTerm);
 
                 if (guests.Count > 0)
@@ -181,7 +181,7 @@ namespace Hotel_ManagementIT13.Forms
 
                 if (_selectedGuest != null)
                 {
-                    // Fill form with guest data
+                    
                     txtFirstName.Text = _selectedGuest.FirstName;
                     txtLastName.Text = _selectedGuest.LastName;
                     txtPhone.Text = _selectedGuest.Phone;
@@ -189,20 +189,20 @@ namespace Hotel_ManagementIT13.Forms
                     txtAddress.Text = _selectedGuest.Address;
                     txtIDNumber.Text = _selectedGuest.IdNumber;
 
-                    // Set ComboBox selections
+                    
                     cmbNationality.SelectedItem = _selectedGuest.Nationality;
                     cmbIDType.SelectedItem = _selectedGuest.IdType;
                     cmbGuestType.SelectedItem = _selectedGuest.GuestTypeName;
 
-                    // Set date
+                    
                     dtpDOB.Value = _selectedGuest.DateOfBirth ?? DateTime.Today.AddYears(-30);
 
-                    // Update form state
+                   
                     _isAddingNew = false;
                     btnSaveGuest.Text = "Update Guest";
                     pnlGuestForm.Enabled = true;
 
-                    // Change text colors to indicate real data
+                   
                     txtFirstName.ForeColor = SystemColors.ControlText;
                     txtLastName.ForeColor = SystemColors.ControlText;
                     txtPhone.ForeColor = SystemColors.ControlText;
@@ -499,7 +499,7 @@ namespace Hotel_ManagementIT13.Forms
             {
                 try
                 {
-                    // You might want to create a separate method or repository for this
+                   
                     var history = _guestManager.GetGuestHistory(_selectedGuest.GuestId);
 
                     string historyText = $"Guest: {_selectedGuest.FullName}\n\n" +
@@ -549,7 +549,7 @@ namespace Hotel_ManagementIT13.Forms
             TextBox textBox = sender as TextBox;
             if (textBox != null)
             {
-                // Clear placeholder text when entering textbox
+                
                 string placeholder = textBox.Tag as string ?? "";
                 if (textBox.Text == placeholder)
                 {
@@ -564,7 +564,7 @@ namespace Hotel_ManagementIT13.Forms
             TextBox textBox = sender as TextBox;
             if (textBox != null)
             {
-                // Restore placeholder text if empty
+              
                 string placeholder = textBox.Tag as string ?? "";
                 if (string.IsNullOrWhiteSpace(textBox.Text) && !string.IsNullOrEmpty(placeholder))
                 {

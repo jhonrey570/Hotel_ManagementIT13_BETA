@@ -7,7 +7,7 @@ namespace Hotel_ManagementIT13.Utilities
 {
     public static class Helper
     {
-        // UI Styling Methods
+     
         public static void SetButtonColors(Button button, Color backColor, Color foreColor)
         {
             button.BackColor = backColor;
@@ -24,7 +24,7 @@ namespace Hotel_ManagementIT13.Utilities
             button.Cursor = Cursors.Hand;
             button.Padding = new Padding(10, 5, 10, 5);
 
-            // Hover effects
+          
             button.MouseEnter += (s, e) =>
             {
                 button.BackColor = Color.FromArgb(
@@ -53,7 +53,7 @@ namespace Hotel_ManagementIT13.Utilities
             }
         }
 
-        // Formatting Methods
+        
         public static string FormatCurrency(decimal amount)
         {
             return amount.ToString("C2");
@@ -73,7 +73,7 @@ namespace Hotel_ManagementIT13.Utilities
         {
             if (string.IsNullOrWhiteSpace(phone)) return "";
 
-            // Remove all non-digit characters
+           
             string digits = Regex.Replace(phone, @"\D", "");
 
             if (digits.Length == 10)
@@ -81,10 +81,10 @@ namespace Hotel_ManagementIT13.Utilities
             else if (digits.Length == 11)
                 return $"{digits.Substring(0, 4)} {digits.Substring(4, 3)} {digits.Substring(7, 4)}";
             else
-                return phone; // Return original if format not recognized
+                return phone;
         }
 
-        // Dialog Methods
+        
         public static DialogResult ConfirmAction(string message)
         {
             return MessageBox.Show(message, "Confirm Action",
@@ -109,7 +109,7 @@ namespace Hotel_ManagementIT13.Utilities
                           MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
-        // Validation Methods
+        
         public static bool IsValidEmail(string email)
         {
             if (string.IsNullOrWhiteSpace(email))
@@ -131,7 +131,7 @@ namespace Hotel_ManagementIT13.Utilities
             if (string.IsNullOrWhiteSpace(phone))
                 return false;
 
-            // Remove all non-digit characters
+           
             string digits = Regex.Replace(phone, @"\D", "");
             return digits.Length >= 10;
         }
@@ -186,7 +186,7 @@ namespace Hotel_ManagementIT13.Utilities
             return true;
         }
 
-        // Calculation Methods
+       
         public static int CalculateNights(DateTime checkIn, DateTime checkOut)
         {
             return (checkOut - checkIn).Days;
@@ -197,7 +197,7 @@ namespace Hotel_ManagementIT13.Utilities
             return nightlyRate * nights * numberOfRooms;
         }
 
-        // String Methods
+       
         public static string TruncateString(string text, int maxLength)
         {
             if (string.IsNullOrEmpty(text)) return text;
@@ -210,7 +210,7 @@ namespace Hotel_ManagementIT13.Utilities
             return char.ToUpper(text[0]) + text.Substring(1).ToLower();
         }
 
-        // File Methods
+        
         public static string GetTimestamp()
         {
             return DateTime.Now.ToString("yyyyMMdd_HHmmss");
@@ -221,7 +221,7 @@ namespace Hotel_ManagementIT13.Utilities
             return $"{reportType}_{GetTimestamp()}.pdf";
         }
 
-        // Color Constants
+      
         public static Color SuccessColor = Color.FromArgb(46, 204, 113); // Green
         public static Color ErrorColor = Color.FromArgb(231, 76, 60);    // Red
         public static Color WarningColor = Color.FromArgb(241, 196, 15); // Yellow

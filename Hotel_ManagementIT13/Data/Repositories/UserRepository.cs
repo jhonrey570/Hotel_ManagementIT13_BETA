@@ -357,8 +357,7 @@ namespace Hotel_ManagementIT13.Data.Repositories
             user.IsActive = Convert.ToBoolean(reader["is_active"]);
             user.CreatedAt = Convert.ToDateTime(reader["created_at"]);
 
-            // FIX: Check if last_login column exists before trying to read it
-            // This prevents the "Could not find specified column" error
+            
             try
             {
                 // Check if the column exists in the result set

@@ -72,8 +72,8 @@ namespace Hotel_ManagementIT13.Data.Repositories
 
                         // Create billing record
                         string billingQuery = @"
-                            INSERT INTO billings (reservation_id, total_amount, paid_amount, balance)
-                            VALUES (@reservationId, @totalAmount, 0, @totalAmount)";
+                            INSERT INTO billings (reservation_id, total_amount, paid_amount, balance, billing_date)
+                            VALUES (@reservationId, @totalAmount, 0, @totalAmount, NOW())";
 
                         using (var billingCmd = new MySqlCommand(billingQuery, conn, transaction))
                         {
@@ -164,13 +164,15 @@ namespace Hotel_ManagementIT13.Data.Repositories
                 string query = @"
                     SELECT r.*, g.first_name, g.last_name, 
                            rs.status_name, rt.type_name as reservation_type,
-                           c.company_name, u.username as user_name
+                           c.company_name, u.username as user_name,
+                           COALESCE(b.total_amount, r.total_amount) as total_amount
                     FROM reservations r
                     JOIN guests g ON r.guest_id = g.guest_id
                     JOIN reservation_statuses rs ON r.status_id = rs.status_id
                     JOIN reservation_types rt ON r.reservation_type_id = rt.reservation_type_id
                     LEFT JOIN companies c ON r.company_id = c.company_id
                     JOIN users u ON r.user_id = u.user_id
+                    LEFT JOIN billings b ON r.reservation_id = b.reservation_id
                     WHERE DATE(r.check_in_date) = CURDATE()
                     AND r.status_id IN (1, 2) -- Confirmed, Pending Payment (reservation_statuses)
                     ORDER BY r.check_in_date";
@@ -203,7 +205,8 @@ namespace Hotel_ManagementIT13.Data.Repositories
                     SELECT DISTINCT r.*, g.first_name, g.last_name, 
                            rs.status_name, rt.type_name as reservation_type,
                            c.company_name, u.username as user_name,
-                           cio.check_in_time, cio.check_out_time
+                           cio.check_in_time, cio.check_out_time,
+                           COALESCE(b.total_amount, r.total_amount) as total_amount
                     FROM reservations r
                     JOIN guests g ON r.guest_id = g.guest_id
                     JOIN reservation_statuses rs ON r.status_id = rs.status_id
@@ -211,6 +214,7 @@ namespace Hotel_ManagementIT13.Data.Repositories
                     LEFT JOIN companies c ON r.company_id = c.company_id
                     JOIN users u ON r.user_id = u.user_id
                     LEFT JOIN check_in_out cio ON r.reservation_id = cio.reservation_id
+                    LEFT JOIN billings b ON r.reservation_id = b.reservation_id
                     WHERE (DATE(r.check_out_date) = CURDATE() 
                            OR cio.check_out_time IS NULL) -- Currently checked in
                     AND r.status_id = 3 -- Checked-in (reservation_statuses)
@@ -245,7 +249,8 @@ namespace Hotel_ManagementIT13.Data.Repositories
                     SELECT DISTINCT r.*, g.first_name, g.last_name, 
                            rs.status_name, rt.type_name as reservation_type,
                            c.company_name, u.username as user_name,
-                           cio.check_in_time
+                           cio.check_in_time,
+                           COALESCE(b.total_amount, r.total_amount) as total_amount
                     FROM reservations r
                     JOIN guests g ON r.guest_id = g.guest_id
                     JOIN reservation_statuses rs ON r.status_id = rs.status_id
@@ -253,6 +258,7 @@ namespace Hotel_ManagementIT13.Data.Repositories
                     LEFT JOIN companies c ON r.company_id = c.company_id
                     JOIN users u ON r.user_id = u.user_id
                     JOIN check_in_out cio ON r.reservation_id = cio.reservation_id
+                    LEFT JOIN billings b ON r.reservation_id = b.reservation_id
                     WHERE r.status_id = 3 -- Checked-in (reservation_statuses)
                     AND cio.check_out_time IS NULL -- Not checked out yet
                     AND cio.status_id = 1 -- Checked-in status
@@ -267,12 +273,12 @@ namespace Hotel_ManagementIT13.Data.Repositories
                             var reservation = CreateReservationFromReader(reader);
                             reservation.Rooms = GetReservationRooms(reservation.ReservationId);
 
-                            // Store check-in time in a custom field in the Tag property
+
                             DateTime checkInTime = reader["check_in_time"] != DBNull.Value
                                 ? Convert.ToDateTime(reader["check_in_time"])
                                 : DateTime.MinValue;
 
-                            // We'll handle this differently in the form
+
                             reservations.Add(reservation);
                         }
                     }
@@ -348,13 +354,15 @@ namespace Hotel_ManagementIT13.Data.Repositories
                 string query = @"
                     SELECT r.*, g.first_name, g.last_name, 
                            rs.status_name, rt.type_name as reservation_type,
-                           c.company_name, u.username as user_name
+                           c.company_name, u.username as user_name,
+                           COALESCE(b.total_amount, r.total_amount) as total_amount
                     FROM reservations r
                     JOIN guests g ON r.guest_id = g.guest_id
                     JOIN reservation_statuses rs ON r.status_id = rs.status_id
                     JOIN reservation_types rt ON r.reservation_type_id = rt.reservation_type_id
                     LEFT JOIN companies c ON r.company_id = c.company_id
                     JOIN users u ON r.user_id = u.user_id
+                    LEFT JOIN billings b ON r.reservation_id = b.reservation_id
                     WHERE r.check_in_date <= @endDate AND r.check_out_date >= @startDate
                     ORDER BY r.check_in_date";
 
@@ -386,13 +394,15 @@ namespace Hotel_ManagementIT13.Data.Repositories
                 string query = @"
                     SELECT r.*, g.first_name, g.last_name, 
                            rs.status_name, rt.type_name as reservation_type,
-                           c.company_name, u.username as user_name
+                           c.company_name, u.username as user_name,
+                           COALESCE(b.total_amount, r.total_amount) as total_amount
                     FROM reservations r
                     JOIN guests g ON r.guest_id = g.guest_id
                     JOIN reservation_statuses rs ON r.status_id = rs.status_id
                     JOIN reservation_types rt ON r.reservation_type_id = rt.reservation_type_id
                     LEFT JOIN companies c ON r.company_id = c.company_id
                     JOIN users u ON r.user_id = u.user_id
+                    LEFT JOIN billings b ON r.reservation_id = b.reservation_id
                     WHERE r.booking_reference = @bookingRef";
 
                 using (var cmd = new MySqlCommand(query, conn))
@@ -523,17 +533,5 @@ namespace Hotel_ManagementIT13.Data.Repositories
 
             return reservation;
         }
-    }
-
-    public class CheckInOutRecord
-    {
-        public int CheckId { get; set; }
-        public int ReservationId { get; set; }
-        public int ProcessedBy { get; set; }
-        public string ProcessedByName { get; set; }
-        public int StatusId { get; set; }
-        public string StatusName { get; set; }
-        public DateTime CheckInTime { get; set; }
-        public DateTime? CheckOutTime { get; set; }
     }
 }

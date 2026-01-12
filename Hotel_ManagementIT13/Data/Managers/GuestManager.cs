@@ -22,7 +22,6 @@ namespace Hotel_ManagementIT13.Data.Managers
 
             try
             {
-                // Validate guest data
                 if (!ValidateGuest(guest, out string validationError))
                 {
                     result.Success = false;
@@ -30,7 +29,6 @@ namespace Hotel_ManagementIT13.Data.Managers
                     return result;
                 }
 
-                // Check for duplicate guest
                 var existingGuests = _guestRepo.SearchGuests(guest.Email);
                 if (existingGuests.Count > 0 && !string.IsNullOrEmpty(guest.Email))
                 {
@@ -40,13 +38,11 @@ namespace Hotel_ManagementIT13.Data.Managers
                     return result;
                 }
 
-                // Set guest type if not specified
                 if (guest.GuestTypeId == 0)
                 {
-                    guest.GuestTypeId = isWalkIn ? 1 : 2; // Regular or VIP
+                    guest.GuestTypeId = isWalkIn ? 1 : 2;
                 }
 
-                // Add guest to database
                 int guestId = _guestRepo.AddGuest(guest);
 
                 result.Success = true;
@@ -97,21 +93,17 @@ namespace Hotel_ManagementIT13.Data.Managers
 
             try
             {
-                // Get guest information
                 history.Guest = _guestRepo.GetGuestById(guestId);
 
                 if (history.Guest != null)
                 {
-                    // Get reservation history (last 6 months)
                     DateTime sixMonthsAgo = DateTime.Now.AddMonths(-6);
                     history.Reservations = _reservationRepo.GetReservationsByDateRange(
                         sixMonthsAgo, DateTime.Now.AddDays(30));
 
-                    // Filter to this guest's reservations
                     history.Reservations = history.Reservations
                         .FindAll(r => r.GuestId == guestId);
 
-                    // Calculate statistics
                     history.TotalReservations = history.Reservations.Count;
                     history.TotalNights = 0;
                     history.TotalSpent = 0;
@@ -128,7 +120,6 @@ namespace Hotel_ManagementIT13.Data.Managers
             }
             catch (Exception ex)
             {
-                // Log error but return partial data
                 Console.WriteLine($"Error getting guest history: {ex.Message}");
             }
 
@@ -157,14 +148,12 @@ namespace Hotel_ManagementIT13.Data.Managers
                 return false;
             }
 
-            // Validate phone format
             if (guest.Phone.Length < 10)
             {
                 errorMessage = "Phone number must be at least 10 digits";
                 return false;
             }
 
-            // Validate email if provided
             if (!string.IsNullOrWhiteSpace(guest.Email))
             {
                 if (!guest.Email.Contains("@") || !guest.Email.Contains("."))
@@ -176,31 +165,5 @@ namespace Hotel_ManagementIT13.Data.Managers
 
             return true;
         }
-    }
-
-    public class GuestRegistrationResult
-    {
-        public bool Success { get; set; }
-        public string Message { get; set; }
-        public int GuestId { get; set; }
-        public Guest Guest { get; set; }
-        public int ExistingGuestId { get; set; }
-    }
-
-    public class GuestSearchResult
-    {
-        public bool Success { get; set; }
-        public string Message { get; set; }
-        public List<Guest> Guests { get; set; }
-    }
-
-    public class GuestHistory
-    {
-        public Guest Guest { get; set; }
-        public List<Reservation> Reservations { get; set; }
-        public int TotalReservations { get; set; }
-        public int TotalNights { get; set; }
-        public decimal TotalSpent { get; set; }
-        public double AverageStayLength { get; set; }
     }
 }

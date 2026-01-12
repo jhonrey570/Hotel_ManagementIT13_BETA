@@ -11,14 +11,14 @@ namespace Hotel_ManagementIT13.Data.Managers
         private readonly ReservationRepository _reservationRepo;
         private readonly RoomRepository _roomRepo;
         private readonly BillingRepository _billingRepo;
-        private readonly PaymentRepository _paymentRepo; // Added PaymentRepository
+        private readonly PaymentRepository _paymentRepo; 
 
         public ReportManager()
         {
             _reservationRepo = new ReservationRepository();
             _roomRepo = new RoomRepository();
             _billingRepo = new BillingRepository();
-            _paymentRepo = new PaymentRepository(); // Initialize PaymentRepository
+            _paymentRepo = new PaymentRepository(); 
         }
 
         public OccupancyReport GenerateOccupancyReport(DateTime startDate, DateTime endDate)
@@ -32,7 +32,7 @@ namespace Hotel_ManagementIT13.Data.Managers
 
             try
             {
-                // Get all reservations in date range
+               
                 var reservations = _reservationRepo.GetReservationsByDateRange(startDate, endDate);
 
                 // Get all rooms
@@ -49,9 +49,9 @@ namespace Hotel_ManagementIT13.Data.Managers
                     {
                         if (date >= reservation.CheckInDate && date <= reservation.CheckOutDate)
                         {
-                            if (reservation.StatusId == 3) // Checked-in
+                            if (reservation.StatusId == 3) 
                                 occupiedRooms += reservation.Rooms.Count;
-                            else if (reservation.StatusId == 1 || reservation.StatusId == 2) // Confirmed or Pending
+                            else if (reservation.StatusId == 1 || reservation.StatusId == 2) 
                                 reservedRooms += reservation.Rooms.Count;
                         }
                     }
@@ -66,7 +66,7 @@ namespace Hotel_ManagementIT13.Data.Managers
                     });
                 }
 
-                // Calculate totals
+              
                 report.TotalOccupiedNights = 0;
                 report.AverageOccupancyRate = 0;
 
@@ -103,13 +103,13 @@ namespace Hotel_ManagementIT13.Data.Managers
 
             try
             {
-                // FIXED: Get total revenue from PaymentRepository instead of BillingRepository
+               
                 report.TotalRevenue = _paymentRepo.GetTotalRevenue(startDate, endDate);
 
-                // Get reservations in period
+               
                 var reservations = _reservationRepo.GetReservationsByDateRange(startDate, endDate);
 
-                // Calculate by room type
+             
                 var roomTypeRevenue = new Dictionary<string, decimal>();
                 var roomTypeCount = new Dictionary<string, int>();
 
@@ -125,8 +125,7 @@ namespace Hotel_ManagementIT13.Data.Managers
                             roomTypeCount[roomType] = 0;
                         }
 
-                        // Calculate revenue based on room rate and nights stayed
-                        // Note: This is estimated revenue, actual revenue should come from payments
+                       
                         int nights = (reservation.CheckOutDate - reservation.CheckInDate).Days;
                         roomTypeRevenue[roomType] += room.RoomRate * nights;
                         roomTypeCount[roomType]++;
@@ -168,23 +167,20 @@ namespace Hotel_ManagementIT13.Data.Managers
 
             try
             {
-                // Get reservations in period
+                
                 var reservations = _reservationRepo.GetReservationsByDateRange(startDate, endDate);
 
-                // Count guests by type
+              
                 var guestTypeCount = new Dictionary<string, int>();
                 var nationalityCount = new Dictionary<string, int>();
 
                 foreach (var reservation in reservations)
                 {
-                    // Note: This is simplified - you'll need to get actual guest type from database
-                    // Assuming guest type is stored in reservation or guest object
-                    string guestType = "Regular"; // Default
-                    string nationality = "Unknown"; // Default
+                   
+                    string guestType = "Regular"; 
+                    string nationality = "Unknown"; 
 
-                    // If you have access to guest object through reservation:
-                    // string guestType = reservation.Guest.GuestType;
-                    // string nationality = reservation.Guest.Nationality;
+                  
 
                     if (!guestTypeCount.ContainsKey(guestType))
                         guestTypeCount[guestType] = 0;
@@ -222,21 +218,21 @@ namespace Hotel_ManagementIT13.Data.Managers
 
             try
             {
-                // Get payments in date range
+               
                 var payments = _paymentRepo.GetPaymentsByDateRange(startDate, endDate);
 
-                // Summarize by payment method
+                
                 var paymentMethodSummary = new Dictionary<string, decimal>();
                 var statusSummary = new Dictionary<string, int>();
 
                 foreach (var payment in payments)
                 {
-                    // Sum by payment method
+                  
                     if (!paymentMethodSummary.ContainsKey(payment.PaymentMethod))
                         paymentMethodSummary[payment.PaymentMethod] = 0;
                     paymentMethodSummary[payment.PaymentMethod] += payment.Amount;
 
-                    // Count by status
+                   
                     if (!statusSummary.ContainsKey(payment.StatusName))
                         statusSummary[payment.StatusName] = 0;
                     statusSummary[payment.StatusName]++;

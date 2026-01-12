@@ -103,18 +103,17 @@ namespace Hotel_ManagementIT13.Data.Managers
 
         private decimal GetRoomRate(int roomTypeId, int guestTypeId)
         {
-            // In real implementation, get rate from rate_configurations table
-            // For now, return base rate with adjustments based on guest type
+            
             decimal baseRate = 100; // Default
             decimal multiplier = 1.0m;
 
             switch (guestTypeId)
             {
-                case 2: // VIP
-                    multiplier = 0.9m; // 10% discount
+                case 2: 
+                    multiplier = 0.9m; 
                     break;
-                case 3: // Corporate
-                    multiplier = 0.85m; // 15% discount
+                case 3: 
+                    multiplier = 0.85m; 
                     break;
             }
 

@@ -36,7 +36,7 @@ namespace Hotel_ManagementIT13.Forms
             LoadTodaysArrivals();
             LoadWalkInAvailableRooms();
 
-            // Wire up events
+           
             dgvTodayArrivals.CellClick += dgvTodayArrivals_CellClick;
             dgvTodayArrivals.SelectionChanged += dgvTodayArrivals_SelectionChanged;
             dgvWalkInAvailable.CellClick += dgvWalkInAvailable_CellClick;
@@ -45,11 +45,11 @@ namespace Hotel_ManagementIT13.Forms
 
         private void InitializeForm()
         {
-            // Set current date/time
+            
             dtpActualCheckIn.Value = DateTime.Now;
             dtpWalkInCheckOut.Value = DateTime.Today.AddDays(1);
 
-            // Initialize payment method dropdowns
+           
             if (cmbPaymentMethod.Items.Count == 0)
             {
                 string[] paymentMethods = { "Cash", "Credit Card", "Debit Card", "Bank Transfer", "Check" };
@@ -60,7 +60,7 @@ namespace Hotel_ManagementIT13.Forms
                 cmbWalkInPaymentMethod.SelectedIndex = 0;
             }
 
-            // Initialize walk-in controls
+         
             nudWalkInAdults.Value = 1;
             nudWalkInChildren.Value = 0;
             nudWalkInDeposit.Value = 0;
@@ -185,7 +185,7 @@ namespace Hotel_ManagementIT13.Forms
                         arrival.CheckInDate.ToString("hh:mm tt")
                     );
 
-                    // Store the reservation ID in the row tag for easy access
+                  
                     dgvTodayArrivals.Rows[rowIndex].Tag = arrival;
                 }
 
@@ -210,7 +210,7 @@ namespace Hotel_ManagementIT13.Forms
 
                 foreach (var room in availableRooms)
                 {
-                    // Format room rate with peso sign
+                   
                     string formattedRate = FormatCurrencyPeso(room.BaseRate);
 
                     dgvWalkInAvailable.Rows.Add(
@@ -233,7 +233,7 @@ namespace Hotel_ManagementIT13.Forms
 
         private void dgvTodayArrivals_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            // Make sure it's a valid row click (not header)
+           
             if (e.RowIndex >= 0 && e.RowIndex < dgvTodayArrivals.Rows.Count)
             {
                 string bookingRef = dgvTodayArrivals.Rows[e.RowIndex].Cells["colBookingRef"].Value?.ToString();
@@ -242,7 +242,7 @@ namespace Hotel_ManagementIT13.Forms
                 {
                     LoadReservationDetails(bookingRef, e.RowIndex);
 
-                    // Also store the selected row index
+                   
                     dgvTodayArrivals.Rows[e.RowIndex].Selected = true;
                 }
                 else
@@ -259,14 +259,14 @@ namespace Hotel_ManagementIT13.Forms
                 string bookingRef = dgvTodayArrivals.SelectedRows[0].Cells["colBookingRef"].Value?.ToString();
                 if (!string.IsNullOrEmpty(bookingRef))
                 {
-                    // Find the row index
+                    
                     int rowIndex = dgvTodayArrivals.SelectedRows[0].Index;
                     LoadReservationDetails(bookingRef, rowIndex);
                 }
             }
             else
             {
-                // Clear selection if nothing is selected
+               
                 _selectedReservation = null;
                 btnProcessCheckIn.Enabled = false;
                 btnPrintKeyCard.Enabled = false;
@@ -300,7 +300,7 @@ namespace Hotel_ManagementIT13.Forms
                     // Highlight the row
                     Helper.HighlightRow(dgvTodayArrivals, rowIndex);
 
-                    // Set the deposit to a default value (e.g., 20% of total)
+                 
                     decimal defaultDeposit = amountDue * 0.2m;
                     nudDeposit.Value = Math.Min(defaultDeposit, nudDeposit.Maximum);
                 }
@@ -388,7 +388,7 @@ namespace Hotel_ManagementIT13.Forms
                     Helper.ShowSuccess(result.Message);
 
                     // Print key card if requested
-                    if (true) // You can add another checkbox for regular check-ins
+                    if (true) 
                     {
                         PrintKeyCard(result.Reservation);
                     }
@@ -514,16 +514,16 @@ namespace Hotel_ManagementIT13.Forms
                 {
                     Helper.ShowSuccess(result.Message);
 
-                    // Print key card if requested
+                    
                     if (chkPrintWalkInKeyCard.Checked && result.Reservation != null)
                     {
                         PrintKeyCard(result.Reservation);
                     }
 
-                    // Reset form
+                    
                     ResetWalkInForm();
 
-                    // Reload data
+                  
                     LoadTodaysArrivals();
                     LoadWalkInAvailableRooms();
                 }
@@ -584,16 +584,16 @@ namespace Hotel_ManagementIT13.Forms
             btnProcessCheckIn.Enabled = false;
             btnPrintKeyCard.Enabled = false;
 
-            // Clear selection
+            
             dgvTodayArrivals.ClearSelection();
 
-            // Reload arrivals
+           
             LoadTodaysArrivals();
         }
 
         private void ResetWalkInForm()
         {
-            // Reset walk-in form controls
+          
             txtWalkInFirstName.Clear();
             txtWalkInLastName.Clear();
             txtWalkInPhone.Clear();
@@ -605,7 +605,7 @@ namespace Hotel_ManagementIT13.Forms
             nudWalkInPaymentAmount.Value = 0;
             cmbWalkInPaymentMethod.SelectedIndex = 0;
 
-            // Clear selection
+            
             dgvWalkInAvailable.ClearSelection();
         }
 
@@ -631,7 +631,7 @@ namespace Hotel_ManagementIT13.Forms
         {
             if (e.RowIndex >= 0)
             {
-                // Highlight selected row for walk-in
+                
                 Helper.HighlightRow(dgvWalkInAvailable, e.RowIndex);
             }
         }
@@ -673,7 +673,7 @@ namespace Hotel_ManagementIT13.Forms
             {
                 dgvTodayArrivals_CellClick(sender, e);
 
-                // Auto-process check-in if a reservation is selected
+               
                 if (_selectedReservation != null && btnProcessCheckIn.Enabled)
                 {
                     btnProcessCheckIn_Click(sender, e);
@@ -683,7 +683,7 @@ namespace Hotel_ManagementIT13.Forms
 
         private void pnlReservationDetails_Paint(object sender, PaintEventArgs e)
         {
-            // Optional: Add custom painting if needed
+            
         }
 
         private void lblDate_Click(object sender, EventArgs e)
@@ -701,7 +701,6 @@ namespace Hotel_ManagementIT13.Forms
 
         }
 
-        // Helper method to format currency with peso sign
         private string FormatCurrencyPeso(decimal amount)
         {
             return amount.ToString("₱0.00");

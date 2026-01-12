@@ -9,7 +9,7 @@ namespace Hotel_ManagementIT13.Utilities
         public static bool ValidateEmail(string email)
         {
             if (string.IsNullOrWhiteSpace(email))
-                return true; // Email is optional
+                return true; 
 
             string pattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
             return Regex.IsMatch(email, pattern);
@@ -20,7 +20,7 @@ namespace Hotel_ManagementIT13.Utilities
             if (string.IsNullOrWhiteSpace(phone))
                 return false;
 
-            // Remove all non-digit characters
+            
             string digits = Regex.Replace(phone, @"\D", "");
             return digits.Length >= 10;
         }

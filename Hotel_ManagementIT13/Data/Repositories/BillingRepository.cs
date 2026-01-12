@@ -36,7 +36,6 @@ namespace Hotel_ManagementIT13.Data.Repositories
                                 BillingDate = Convert.ToDateTime(reader["billing_date"])
                             };
 
-                            // Load billing items
                             billing.Items = GetBillingItems(billing.BillingId);
 
                             return billing;
@@ -68,14 +67,24 @@ namespace Hotel_ManagementIT13.Data.Repositories
                     {
                         while (reader.Read())
                         {
-                            items.Add(new BillingItem
+                            var item = new BillingItem
                             {
                                 ItemId = Convert.ToInt32(reader["item_id"]),
                                 BillingId = Convert.ToInt32(reader["billing_id"]),
                                 Description = reader["description"].ToString(),
-                                Amount = Convert.ToDecimal(reader["amount"]),
-                                CreatedAt = Convert.ToDateTime(reader["created_at"])
-                            });
+                                Amount = Convert.ToDecimal(reader["amount"])
+                            };
+
+                            if (reader.GetSchemaTable().Select("ColumnName = 'created_at'").Length > 0)
+                            {
+                                item.CreatedAt = Convert.ToDateTime(reader["created_at"]);
+                            }
+                            else
+                            {
+                                item.CreatedAt = DateTime.Now;
+                            }
+
+                            items.Add(item);
                         }
                     }
                 }
@@ -89,16 +98,67 @@ namespace Hotel_ManagementIT13.Data.Repositories
             using (var conn = DatabaseHelper.GetConnection())
             {
                 conn.Open();
-                // UPDATED: Added created_at column with NOW()
                 string query = @"
-                    INSERT INTO billing_items (billing_id, description, amount, created_at)
-                    VALUES (@billingId, @description, @amount, NOW());
+                    INSERT INTO billing_items (billing_id, description, amount)
+                    VALUES (@billingId, @description, @amount);
                     UPDATE billings SET 
                     total_amount = total_amount + @amount,
                     balance = balance + @amount
                     WHERE billing_id = @billingId";
 
                 using (var cmd = new MySqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@billingId", billingId);
+                    cmd.Parameters.AddWithValue("@description", description);
+                    cmd.Parameters.AddWithValue("@amount", amount);
+
+                    return cmd.ExecuteNonQuery() > 0;
+                }
+            }
+        }
+
+        public bool AddBillingItemByReservation(int reservationId, string description, decimal amount)
+        {
+            using (var conn = DatabaseHelper.GetConnection())
+            {
+                conn.Open();
+
+                string getBillingIdQuery = "SELECT billing_id FROM billings WHERE reservation_id = @reservationId";
+                int billingId = 0;
+
+                using (var cmd = new MySqlCommand(getBillingIdQuery, conn))
+                {
+                    cmd.Parameters.AddWithValue("@reservationId", reservationId);
+                    var result = cmd.ExecuteScalar();
+                    if (result != null && result != DBNull.Value)
+                    {
+                        billingId = Convert.ToInt32(result);
+                    }
+                }
+
+                if (billingId == 0)
+                {
+                    string createQuery = @"
+                        INSERT INTO billings (reservation_id, total_amount, paid_amount, balance, billing_date)
+                        VALUES (@reservationId, 0, 0, 0, NOW());
+                        SELECT LAST_INSERT_ID();";
+
+                    using (var createCmd = new MySqlCommand(createQuery, conn))
+                    {
+                        createCmd.Parameters.AddWithValue("@reservationId", reservationId);
+                        billingId = Convert.ToInt32(createCmd.ExecuteScalar());
+                    }
+                }
+
+                string addItemQuery = @"
+                    INSERT INTO billing_items (billing_id, description, amount)
+                    VALUES (@billingId, @description, @amount);
+                    UPDATE billings SET 
+                    total_amount = total_amount + @amount,
+                    balance = balance + @amount
+                    WHERE billing_id = @billingId";
+
+                using (var cmd = new MySqlCommand(addItemQuery, conn))
                 {
                     cmd.Parameters.AddWithValue("@billingId", billingId);
                     cmd.Parameters.AddWithValue("@description", description);
@@ -128,7 +188,6 @@ namespace Hotel_ManagementIT13.Data.Repositories
             }
         }
 
-        // Additional useful method to get billing by billing ID
         public Billing GetBillingById(int billingId)
         {
             using (var conn = DatabaseHelper.GetConnection())
@@ -164,7 +223,6 @@ namespace Hotel_ManagementIT13.Data.Repositories
             return null;
         }
 
-        // Method to update billing totals (useful for recalculations)
         public bool UpdateBillingTotals(int billingId)
         {
             using (var conn = DatabaseHelper.GetConnection())
@@ -183,6 +241,14 @@ namespace Hotel_ManagementIT13.Data.Repositories
                     return cmd.ExecuteNonQuery() > 0;
                 }
             }
+        }
+
+        public bool AddRoomCharge(int reservationId, string roomNumber, int nights, decimal nightlyRate)
+        {
+            decimal totalCharge = nightlyRate * nights;
+            string description = $"Room {roomNumber} - {nights} night(s) @ {nightlyRate:₱0.00}/night";
+
+            return AddBillingItemByReservation(reservationId, description, totalCharge);
         }
     }
 }

@@ -11,7 +11,7 @@ namespace Hotel_ManagementIT13.Utilities
 
         static Logger()
         {
-            // Create logs directory if it doesn't exist
+           
             string logDir = Path.GetDirectoryName(logFilePath);
             if (!Directory.Exists(logDir))
             {
@@ -56,14 +56,14 @@ namespace Hotel_ManagementIT13.Utilities
                     writer.WriteLine(logEntry);
                 }
 
-                // Also write to console in debug mode
+                
 #if DEBUG
                 Console.WriteLine(logEntry);
 #endif
             }
             catch (Exception)
             {
-                // If logging fails, we don't want to crash the application
+              
             }
         }
     }

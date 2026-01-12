@@ -1,5 +1,6 @@
 ﻿using Hotel_ManagementIT13.Data.Models;
 using Hotel_ManagementIT13.Data.Repositories;
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 
@@ -29,7 +30,6 @@ namespace Hotel_ManagementIT13.Data.Managers
 
             try
             {
-                // Get reservation
                 var reservation = _reservationRepo.GetReservationByReference(bookingReference);
                 if (reservation == null)
                 {
@@ -38,27 +38,22 @@ namespace Hotel_ManagementIT13.Data.Managers
                     return result;
                 }
 
-                // Check if already checked in
-                if (reservation.StatusId == 3) // Checked-in (reservation_statuses)
+                if (reservation.StatusId == 3)
                 {
                     result.Success = false;
                     result.Message = "Guest already checked in";
                     return result;
                 }
 
-                // Update reservation status to Checked-in (reservation_statuses.status_id = 3)
                 _reservationRepo.UpdateReservationStatus(reservation.ReservationId, 3);
 
-                // Update room status to Occupied (room_statuses.status_id = 2)
                 foreach (var room in reservation.Rooms)
                 {
-                    _roomRepo.UpdateRoomStatus(room.RoomId, 2); // Occupied
+                    _roomRepo.UpdateRoomStatus(room.RoomId, 2);
                 }
 
-                // Record check-in in check_in_out table (check_in_statuses.status_id = 1)
-                _reservationRepo.RecordCheckIn(reservation.ReservationId, processedByUserId, 1); // Status: Checked-in
+                _reservationRepo.RecordCheckIn(reservation.ReservationId, processedByUserId, 1);
 
-                // Process deposit payment if any
                 if (depositAmount > 0)
                 {
                     _paymentRepo.ProcessPayment(reservation.ReservationId, depositAmount,
@@ -87,20 +82,21 @@ namespace Hotel_ManagementIT13.Data.Managers
 
             try
             {
-                // Check room availability
                 var room = _roomRepo.GetRoomById(roomId);
-                if (room == null || room.StatusId != 1) // Not Available (room_statuses.status_id = 1)
+                if (room == null || room.StatusId != 1)
                 {
                     result.Success = false;
                     result.Message = $"Room is not available";
                     return result;
                 }
 
-                // Create guest if not exists
+                int nights = (checkOut - checkIn).Days;
+                if (nights == 0) nights = 1;
+                decimal roomCharge = room.BaseRate * nights;
+
                 int guestId;
                 if (guest.GuestId == 0)
                 {
-                    // Set default values for walk-in guest
                     if (string.IsNullOrEmpty(guest.Phone)) guest.Phone = "000-000-0000";
                     if (string.IsNullOrEmpty(guest.Email)) guest.Email = "walkin@hotel.com";
                     guestId = _guestRepo.AddGuest(guest);
@@ -110,51 +106,103 @@ namespace Hotel_ManagementIT13.Data.Managers
                     guestId = guest.GuestId;
                 }
 
-                // Create instant reservation
                 var reservationManager = new ReservationManager();
                 string reservationResult = reservationManager.CreateReservation(
                     guestId, processedByUserId, checkIn, checkOut,
                     new List<int> { roomId }, adults, children);
 
-                // Extract booking reference from result
                 string bookingRef = "";
                 if (reservationResult.Contains("Booking Reference:"))
                 {
                     int startIndex = reservationResult.IndexOf("Booking Reference:") + "Booking Reference:".Length;
                     bookingRef = reservationResult.Substring(startIndex).Trim();
                 }
-                else if (reservationResult.Contains("RES")) // Check if result is the booking reference itself
+                else if (reservationResult.Contains("RES"))
                 {
                     bookingRef = reservationResult;
                 }
 
                 if (!string.IsNullOrEmpty(bookingRef))
                 {
-                    // Process deposit payment if any
+                    var reservation = _reservationRepo.GetReservationByReference(bookingRef);
+                    if (reservation == null)
+                    {
+                        result.Success = false;
+                        result.Message = "Failed to retrieve created reservation";
+                        return result;
+                    }
+
+                    bool billingUpdated = false;
+                    try
+                    {
+                        billingUpdated = _billingRepo.AddRoomCharge(
+                            reservation.ReservationId,
+                            room.RoomNumber,
+                            nights,
+                            room.BaseRate);
+
+                        if (!billingUpdated)
+                        {
+                            Console.WriteLine("Warning: Room charge not added to billing");
+                        }
+                    }
+                    catch (Exception billingEx)
+                    {
+                        Console.WriteLine($"Warning: Failed to update billing: {billingEx.Message}");
+                    }
+
+                    if (billingUpdated)
+                    {
+                        try
+                        {
+                            var billing = _billingRepo.GetBillingByReservationId(reservation.ReservationId);
+                            if (billing != null)
+                            {
+                                UpdateReservationTotal(reservation.ReservationId, billing.TotalAmount);
+                                reservation.TotalAmount = billing.TotalAmount;
+                            }
+                        }
+                        catch (Exception updateEx)
+                        {
+                            Console.WriteLine($"Warning: Failed to update reservation total: {updateEx.Message}");
+                        }
+                    }
+
                     if (depositAmount > 0)
                     {
-                        // Get the newly created reservation
-                        var reservation = _reservationRepo.GetReservationByReference(bookingRef);
-                        if (reservation != null)
-                        {
-                            _paymentRepo.ProcessPayment(reservation.ReservationId, depositAmount,
-                                                      paymentMethod, "Walk-in deposit payment at check-in");
-                        }
+                        _paymentRepo.ProcessPayment(reservation.ReservationId, depositAmount,
+                                                  paymentMethod, "Walk-in deposit payment at check-in");
                     }
 
-                    // Process additional payment if any
                     if (paymentAmount > 0)
                     {
-                        var reservation = _reservationRepo.GetReservationByReference(bookingRef);
-                        if (reservation != null)
+                        _paymentRepo.ProcessPayment(reservation.ReservationId, paymentAmount,
+                                                  paymentMethod, "Walk-in payment at check-in");
+                    }
+
+                    var checkInResult = ProcessCheckIn(bookingRef, processedByUserId, 0, paymentMethod);
+
+                    if (checkInResult.Success)
+                    {
+                        var updatedReservation = _reservationRepo.GetReservationByReference(bookingRef);
+                        if (updatedReservation != null)
                         {
-                            _paymentRepo.ProcessPayment(reservation.ReservationId, paymentAmount,
-                                                      paymentMethod, "Walk-in payment at check-in");
+                            var finalBilling = _billingRepo.GetBillingByReservationId(updatedReservation.ReservationId);
+                            if (finalBilling != null)
+                            {
+                                updatedReservation.TotalAmount = finalBilling.TotalAmount;
+                            }
+
+                            checkInResult.Reservation = updatedReservation;
+                            result.Reservation = updatedReservation;
+                        }
+                        else
+                        {
+                            checkInResult.Reservation = reservation;
                         }
                     }
 
-                    // Process immediate check-in
-                    return ProcessCheckIn(bookingRef, processedByUserId, 0, paymentMethod); // Deposit already processed above
+                    return checkInResult;
                 }
 
                 result.Success = false;
@@ -169,6 +217,30 @@ namespace Hotel_ManagementIT13.Data.Managers
             return result;
         }
 
+        private bool UpdateReservationTotal(int reservationId, decimal totalAmount)
+        {
+            try
+            {
+                using (var conn = DatabaseHelper.GetConnection())
+                {
+                    conn.Open();
+                    string query = "UPDATE reservations SET total_amount = @totalAmount WHERE reservation_id = @reservationId";
+
+                    using (var cmd = new MySqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@reservationId", reservationId);
+                        cmd.Parameters.AddWithValue("@totalAmount", totalAmount);
+                        return cmd.ExecuteNonQuery() > 0;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error updating reservation total: {ex.Message}");
+                return false;
+            }
+        }
+
         public CheckInResult ProcessGroupCheckIn(string bookingReference, List<int> roomIds,
                                                int processedByUserId, decimal depositAmount = 0)
         {
@@ -176,7 +248,6 @@ namespace Hotel_ManagementIT13.Data.Managers
 
             try
             {
-                // Get reservation
                 var reservation = _reservationRepo.GetReservationByReference(bookingReference);
                 if (reservation == null)
                 {
@@ -185,7 +256,6 @@ namespace Hotel_ManagementIT13.Data.Managers
                     return result;
                 }
 
-                // Verify all rooms are part of the reservation
                 foreach (int roomId in roomIds)
                 {
                     bool roomFound = false;
@@ -206,19 +276,15 @@ namespace Hotel_ManagementIT13.Data.Managers
                     }
                 }
 
-                // Update each room status to Occupied
                 foreach (int roomId in roomIds)
                 {
-                    _roomRepo.UpdateRoomStatus(roomId, 2); // Occupied
+                    _roomRepo.UpdateRoomStatus(roomId, 2);
                 }
 
-                // Update reservation status to Checked-in
                 _reservationRepo.UpdateReservationStatus(reservation.ReservationId, 3);
 
-                // Record check-in
                 _reservationRepo.RecordCheckIn(reservation.ReservationId, processedByUserId, 1);
 
-                // Process deposit payment if any
                 if (depositAmount > 0)
                 {
                     _paymentRepo.ProcessPayment(reservation.ReservationId, depositAmount,
@@ -237,12 +303,5 @@ namespace Hotel_ManagementIT13.Data.Managers
 
             return result;
         }
-    }
-
-    public class CheckInResult
-    {
-        public bool Success { get; set; }
-        public string Message { get; set; }
-        public Reservation Reservation { get; set; }
     }
 }

@@ -18,6 +18,50 @@ namespace Hotel_ManagementIT13.Data.Repositories
                 {
                     try
                     {
+                       
+                        string checkQuery = @"
+                            SELECT total_amount, paid_amount 
+                            FROM billings 
+                            WHERE reservation_id = @reservationId";
+
+                        decimal totalAmount = 0;
+                        decimal currentPaidAmount = 0;
+
+                        using (var checkCmd = new MySqlCommand(checkQuery, conn, transaction))
+                        {
+                            checkCmd.Parameters.AddWithValue("@reservationId", reservationId);
+
+                            using (var reader = checkCmd.ExecuteReader())
+                            {
+                                if (reader.Read())
+                                {
+                                    totalAmount = Convert.ToDecimal(reader["total_amount"]);
+                                    currentPaidAmount = Convert.ToDecimal(reader["paid_amount"]);
+                                }
+                                else
+                                {
+                                 
+                                    reader.Close();
+                                    string createBillingQuery = @"
+                                        INSERT INTO billings 
+                                        (reservation_id, total_amount, paid_amount, balance, billing_date)
+                                        VALUES (@reservationId, 0, 0, 0, NOW())";
+
+                                    using (var createCmd = new MySqlCommand(createBillingQuery, conn, transaction))
+                                    {
+                                        createCmd.Parameters.AddWithValue("@reservationId", reservationId);
+                                        createCmd.ExecuteNonQuery();
+                                    }
+                                }
+                            }
+                        }
+
+                      
+                        decimal newPaidAmount = currentPaidAmount + amount;
+                        decimal newBalance = totalAmount - newPaidAmount;
+
+                      
+
                         // Insert payment record
                         string paymentQuery = @"
                             INSERT INTO payments 
@@ -34,7 +78,6 @@ namespace Hotel_ManagementIT13.Data.Repositories
                             cmd.ExecuteNonQuery();
                         }
 
-                        // Update billing table
                         string billingQuery = @"
                             UPDATE billings SET 
                             paid_amount = paid_amount + @amount,
@@ -51,6 +94,42 @@ namespace Hotel_ManagementIT13.Data.Repositories
                         transaction.Commit();
                         return true;
                     }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        throw new Exception($"Payment processing failed: {ex.Message}", ex);
+                    }
+                }
+            }
+        }
+
+        
+        public bool UpdateBillingTotal(int reservationId, decimal roomCharge)
+        {
+            using (var conn = DatabaseHelper.GetConnection())
+            {
+                conn.Open();
+                using (var transaction = conn.BeginTransaction())
+                {
+                    try
+                    {
+                        // Add room charge to billing total
+                        string updateQuery = @"
+                            UPDATE billings SET 
+                            total_amount = total_amount + @roomCharge,
+                            balance = (total_amount + @roomCharge) - paid_amount
+                            WHERE reservation_id = @reservationId";
+
+                        using (var cmd = new MySqlCommand(updateQuery, conn, transaction))
+                        {
+                            cmd.Parameters.AddWithValue("@reservationId", reservationId);
+                            cmd.Parameters.AddWithValue("@roomCharge", roomCharge);
+                            cmd.ExecuteNonQuery();
+                        }
+
+                        transaction.Commit();
+                        return true;
+                    }
                     catch (Exception)
                     {
                         transaction.Rollback();
@@ -60,6 +139,7 @@ namespace Hotel_ManagementIT13.Data.Repositories
             }
         }
 
+      
         public List<Payment> GetPaymentsByReservation(int reservationId)
         {
             var payments = new List<Payment>();

@@ -43,22 +43,22 @@
             this.cmbRoomTypeFilter = new System.Windows.Forms.ComboBox();
             this.cmbGuestTypeFilter = new System.Windows.Forms.ComboBox();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.lblData = new System.Windows.Forms.Label();
+            this.lblRates = new System.Windows.Forms.Label();
             this.lblFilte = new System.Windows.Forms.Label();
             this.lblReportTypes = new System.Windows.Forms.Label();
             this.lblDatess = new System.Windows.Forms.Label();
-            this.lblRates = new System.Windows.Forms.Label();
             this.lblReports = new System.Windows.Forms.Label();
             this.pnlReportForms = new System.Windows.Forms.Panel();
+            this.label1 = new System.Windows.Forms.Label();
+            this.btnClearFilters = new System.Windows.Forms.Button();
+            this.lblDateTo = new System.Windows.Forms.Label();
+            this.lblReportForms = new System.Windows.Forms.Label();
             this.pnlHeaderUser = new System.Windows.Forms.Panel();
             this.lblMainDash = new System.Windows.Forms.Label();
-            this.lblReportForms = new System.Windows.Forms.Label();
-            this.lblDateTo = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.btnPrint = new System.Windows.Forms.Button();
             this.btnExport = new System.Windows.Forms.Button();
-            this.btnClearFilters = new System.Windows.Forms.Button();
-            this.lblData = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
             this.tabReports.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chartReport)).BeginInit();
@@ -120,7 +120,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 37);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(1232, 232);
+            this.tabPage2.Size = new System.Drawing.Size(1232, 302);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Detailed Reports";
             // 
@@ -191,6 +191,8 @@
             // 
             // cmbRoomTypeFilter
             // 
+            this.cmbRoomTypeFilter.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.cmbRoomTypeFilter.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmbRoomTypeFilter.FormattingEnabled = true;
             this.cmbRoomTypeFilter.Location = new System.Drawing.Point(39, 271);
@@ -202,6 +204,8 @@
             // 
             // cmbGuestTypeFilter
             // 
+            this.cmbGuestTypeFilter.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.cmbGuestTypeFilter.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmbGuestTypeFilter.FormattingEnabled = true;
             this.cmbGuestTypeFilter.Location = new System.Drawing.Point(39, 341);
@@ -224,6 +228,28 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(1318, 814);
             this.panel1.TabIndex = 11;
+            // 
+            // lblData
+            // 
+            this.lblData.AutoSize = true;
+            this.lblData.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblData.Location = new System.Drawing.Point(34, 3);
+            this.lblData.Name = "lblData";
+            this.lblData.Size = new System.Drawing.Size(56, 28);
+            this.lblData.TabIndex = 47;
+            this.lblData.Text = "Data";
+            this.lblData.Click += new System.EventHandler(this.lblData_Click);
+            // 
+            // lblRates
+            // 
+            this.lblRates.AutoSize = true;
+            this.lblRates.BackColor = System.Drawing.Color.Transparent;
+            this.lblRates.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblRates.Location = new System.Drawing.Point(34, 411);
+            this.lblRates.Name = "lblRates";
+            this.lblRates.Size = new System.Drawing.Size(63, 28);
+            this.lblRates.TabIndex = 40;
+            this.lblRates.Text = "Chart";
             // 
             // lblFilte
             // 
@@ -257,17 +283,6 @@
             this.lblDatess.Size = new System.Drawing.Size(116, 28);
             this.lblDatess.TabIndex = 41;
             this.lblDatess.Text = "Date From:";
-            // 
-            // lblRates
-            // 
-            this.lblRates.AutoSize = true;
-            this.lblRates.BackColor = System.Drawing.Color.Transparent;
-            this.lblRates.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblRates.Location = new System.Drawing.Point(34, 411);
-            this.lblRates.Name = "lblRates";
-            this.lblRates.Size = new System.Drawing.Size(63, 28);
-            this.lblRates.TabIndex = 40;
-            this.lblRates.Text = "Chart";
             // 
             // lblReports
             // 
@@ -304,6 +319,53 @@
             this.pnlReportForms.Size = new System.Drawing.Size(500, 509);
             this.pnlReportForms.TabIndex = 12;
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.BackColor = System.Drawing.Color.Transparent;
+            this.label1.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(34, 310);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(183, 28);
+            this.label1.TabIndex = 53;
+            this.label1.Text = "Filter Guest Types:";
+            // 
+            // btnClearFilters
+            // 
+            this.btnClearFilters.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnClearFilters.BackColor = System.Drawing.Color.Thistle;
+            this.btnClearFilters.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnClearFilters.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnClearFilters.Location = new System.Drawing.Point(261, 425);
+            this.btnClearFilters.Name = "btnClearFilters";
+            this.btnClearFilters.Size = new System.Drawing.Size(200, 50);
+            this.btnClearFilters.TabIndex = 45;
+            this.btnClearFilters.Text = "Clear Filters";
+            this.btnClearFilters.UseVisualStyleBackColor = false;
+            this.btnClearFilters.Click += new System.EventHandler(this.btnClearFilters_Click);
+            // 
+            // lblDateTo
+            // 
+            this.lblDateTo.AutoSize = true;
+            this.lblDateTo.BackColor = System.Drawing.Color.Transparent;
+            this.lblDateTo.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDateTo.Location = new System.Drawing.Point(34, 100);
+            this.lblDateTo.Name = "lblDateTo";
+            this.lblDateTo.Size = new System.Drawing.Size(88, 28);
+            this.lblDateTo.TabIndex = 52;
+            this.lblDateTo.Text = "Date To:";
+            // 
+            // lblReportForms
+            // 
+            this.lblReportForms.AutoSize = true;
+            this.lblReportForms.Font = new System.Drawing.Font("Georgia", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblReportForms.ForeColor = System.Drawing.Color.DarkGoldenrod;
+            this.lblReportForms.Location = new System.Drawing.Point(34, 3);
+            this.lblReportForms.Name = "lblReportForms";
+            this.lblReportForms.Size = new System.Drawing.Size(235, 27);
+            this.lblReportForms.TabIndex = 42;
+            this.lblReportForms.Text = "Report Control Forms";
+            // 
             // pnlHeaderUser
             // 
             this.pnlHeaderUser.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -326,31 +388,9 @@
             this.lblMainDash.ForeColor = System.Drawing.Color.DarkGoldenrod;
             this.lblMainDash.Location = new System.Drawing.Point(54, 9);
             this.lblMainDash.Name = "lblMainDash";
-            this.lblMainDash.Size = new System.Drawing.Size(211, 39);
+            this.lblMainDash.Size = new System.Drawing.Size(206, 38);
             this.lblMainDash.TabIndex = 31;
             this.lblMainDash.Text = "JMS HOTEL";
-            // 
-            // lblReportForms
-            // 
-            this.lblReportForms.AutoSize = true;
-            this.lblReportForms.Font = new System.Drawing.Font("Georgia", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblReportForms.ForeColor = System.Drawing.Color.DarkGoldenrod;
-            this.lblReportForms.Location = new System.Drawing.Point(34, 3);
-            this.lblReportForms.Name = "lblReportForms";
-            this.lblReportForms.Size = new System.Drawing.Size(235, 27);
-            this.lblReportForms.TabIndex = 42;
-            this.lblReportForms.Text = "Report Control Forms";
-            // 
-            // lblDateTo
-            // 
-            this.lblDateTo.AutoSize = true;
-            this.lblDateTo.BackColor = System.Drawing.Color.Transparent;
-            this.lblDateTo.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDateTo.Location = new System.Drawing.Point(34, 100);
-            this.lblDateTo.Name = "lblDateTo";
-            this.lblDateTo.Size = new System.Drawing.Size(88, 28);
-            this.lblDateTo.TabIndex = 52;
-            this.lblDateTo.Text = "Date To:";
             // 
             // pictureBox1
             // 
@@ -387,42 +427,6 @@
             this.btnExport.TabIndex = 5;
             this.btnExport.UseVisualStyleBackColor = true;
             this.btnExport.Click += new System.EventHandler(this.btnExport_Click);
-            // 
-            // btnClearFilters
-            // 
-            this.btnClearFilters.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnClearFilters.BackColor = System.Drawing.Color.Thistle;
-            this.btnClearFilters.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnClearFilters.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnClearFilters.Location = new System.Drawing.Point(261, 425);
-            this.btnClearFilters.Name = "btnClearFilters";
-            this.btnClearFilters.Size = new System.Drawing.Size(200, 50);
-            this.btnClearFilters.TabIndex = 45;
-            this.btnClearFilters.Text = "Clear Filters";
-            this.btnClearFilters.UseVisualStyleBackColor = false;
-            this.btnClearFilters.Click += new System.EventHandler(this.btnClearFilters_Click);
-            // 
-            // lblData
-            // 
-            this.lblData.AutoSize = true;
-            this.lblData.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblData.Location = new System.Drawing.Point(34, 3);
-            this.lblData.Name = "lblData";
-            this.lblData.Size = new System.Drawing.Size(56, 28);
-            this.lblData.TabIndex = 47;
-            this.lblData.Text = "Data";
-            this.lblData.Click += new System.EventHandler(this.lblData_Click);
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.BackColor = System.Drawing.Color.Transparent;
-            this.label1.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(34, 310);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(183, 28);
-            this.label1.TabIndex = 53;
-            this.label1.Text = "Filter Guest Types:";
             // 
             // frmReports
             // 

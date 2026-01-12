@@ -27,7 +27,6 @@ namespace Hotel_ManagementIT13.Data.Managers
 
             try
             {
-                // Get reservation
                 var reservation = _reservationRepo.GetReservationByReference(bookingReference);
                 if (reservation == null)
                 {
@@ -36,19 +35,16 @@ namespace Hotel_ManagementIT13.Data.Managers
                     return result;
                 }
 
-                // Check if already checked out
-                if (reservation.StatusId == 4) // Checked-out (reservation_statuses)
+                if (reservation.StatusId == 4)
                 {
                     result.Success = false;
                     result.Message = "Guest already checked out";
                     return result;
                 }
 
-                // Calculate late checkout fee if applicable
                 decimal lateFee = CalculateLateCheckoutFee(reservation, actualCheckOut);
                 if (lateFee > 0)
                 {
-                    // Add late fee to billing
                     var billing = _billingRepo.GetBillingByReservationId(reservation.ReservationId);
                     if (billing != null)
                     {
@@ -57,7 +53,6 @@ namespace Hotel_ManagementIT13.Data.Managers
                     }
                 }
 
-                // Get updated billing information
                 var updatedBilling = _billingRepo.GetBillingByReservationId(reservation.ReservationId);
                 if (updatedBilling == null)
                 {
@@ -66,26 +61,21 @@ namespace Hotel_ManagementIT13.Data.Managers
                     return result;
                 }
 
-                // Process final payment
                 if (paymentAmount > 0)
                 {
                     _paymentRepo.ProcessPayment(reservation.ReservationId, paymentAmount,
                                               paymentMethod, notes);
 
-                    // Get final billing after payment
                     updatedBilling = _billingRepo.GetBillingByReservationId(reservation.ReservationId);
                 }
 
-                // Update reservation status to Checked-out (reservation_statuses.status_id = 4)
                 _reservationRepo.UpdateReservationStatus(reservation.ReservationId, 4);
 
-                // Update room status to Cleaning in Progress (room_statuses.status_id = 6)
                 foreach (var room in reservation.Rooms)
                 {
-                    _roomRepo.UpdateRoomStatus(room.RoomId, 6); // Cleaning in Progress
+                    _roomRepo.UpdateRoomStatus(room.RoomId, 6);
                 }
 
-                // Record check-out in check_in_out table (check_in_statuses.status_id = 2)
                 _reservationRepo.RecordCheckOut(reservation.ReservationId, processedByUserId, 2, actualCheckOut);
 
                 result.Success = true;
@@ -106,7 +96,7 @@ namespace Hotel_ManagementIT13.Data.Managers
 
         private decimal CalculateLateCheckoutFee(Reservation reservation, DateTime actualCheckOut)
         {
-            DateTime standardCheckOut = reservation.CheckOutDate.Date.AddHours(12); // Assuming 12:00 PM checkout
+            DateTime standardCheckOut = reservation.CheckOutDate.Date.AddHours(12);
 
             if (actualCheckOut <= standardCheckOut)
                 return 0;
@@ -114,7 +104,6 @@ namespace Hotel_ManagementIT13.Data.Managers
             TimeSpan lateDuration = actualCheckOut - standardCheckOut;
             int lateHours = (int)Math.Ceiling(lateDuration.TotalHours);
 
-            // Fee structure: $50 for first hour, $25 for each additional hour
             if (lateHours <= 1)
                 return 50;
             else
@@ -125,15 +114,5 @@ namespace Hotel_ManagementIT13.Data.Managers
         {
             return "RCPT" + DateTime.Now.ToString("yyMMddHHmmss") + new Random().Next(100, 999);
         }
-    }
-
-    public class CheckOutResult
-    {
-        public bool Success { get; set; }
-        public string Message { get; set; }
-        public Reservation Reservation { get; set; }
-        public Billing Billing { get; set; }
-        public decimal LateFee { get; set; }
-        public string ReceiptNumber { get; set; }
     }
 }

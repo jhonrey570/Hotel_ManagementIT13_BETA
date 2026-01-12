@@ -15,11 +15,10 @@ namespace Hotel_ManagementIT13.Forms
             _userRepo = new UserRepository();
         }
 
-        // ADD THIS METHOD TO FIX THE ERROR
+      
         private void frmLogin_Load(object sender, EventArgs e)
         {
-            // Optional initialization code
-            // You can add focus to username field or other setup
+            
             txtUsername.Focus();
         }
 
@@ -41,10 +40,9 @@ namespace Hotel_ManagementIT13.Forms
 
                 if (user != null)
                 {
-                    // Store current user in application context
+
                     ApplicationContext.CurrentUser = user;
 
-                    // Open main dashboard
                     frmMainDashboard dashboard = new frmMainDashboard();
                     dashboard.Show();
                     this.Hide();
@@ -69,14 +67,14 @@ namespace Hotel_ManagementIT13.Forms
 
         private void txtPassword_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (e.KeyChar == (char)13) // Enter key
+            if (e.KeyChar == (char)13)
             {
                 btnLogin.PerformClick();
             }
         }
     }
 
-    // Application context class for storing global data
+    
     public static class ApplicationContext
     {
         public static User CurrentUser { get; set; }

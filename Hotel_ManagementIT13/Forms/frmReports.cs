@@ -35,7 +35,7 @@ namespace Hotel_ManagementIT13.Forms
 
         private void InitializeControls()
         {
-            // Set default dates (last 7 days)
+            
             dtpReportFrom.Value = DateTime.Today.AddDays(-7);
             dtpReportTo.Value = DateTime.Today;
 
@@ -54,13 +54,11 @@ namespace Hotel_ManagementIT13.Forms
             cmbGuestTypeFilter.Items.AddRange(reportHelper.GetGuestTypes().ToArray());
             cmbGuestTypeFilter.SelectedIndex = 0;
 
-            // Configure chart
+            
             ConfigureChart();
 
-            // Configure detailed reports tab
+           
             ConfigureDetailedReportsTab();
-
-            // Note: CenterPanel() call removed - panel will stay at its designer position
         }
 
         private void ConfigureChart()
@@ -104,7 +102,7 @@ namespace Hotel_ManagementIT13.Forms
                 AutoSize = false
             };
 
-            // Create a TableLayoutPanel for organized display
+            
             TableLayoutPanel tableLayout = new TableLayoutPanel
             {
                 Dock = DockStyle.Fill,
@@ -123,21 +121,11 @@ namespace Hotel_ManagementIT13.Forms
             detailPanel.Controls.Add(lblInstructions);
             detailPanel.Controls.Add(tableLayout);
 
-            // Store references for later use
+            
             tabPage2.Tag = new { Panel = detailPanel, TableLayout = tableLayout, Label = lblInstructions };
 
-            // Add detailPanel to tabPage2
+            
             tabPage2.Controls.Add(detailPanel);
-        }
-
-        private void CenterPanel()
-        {
-            // This method is kept but no longer called
-            if (panel1 != null)
-            {
-                panel1.Left = Math.Max(0, (this.ClientSize.Width - panel1.Width) / 2);
-                panel1.Top = Math.Max(0, (this.ClientSize.Height - panel1.Height) / 2);
-            }
         }
 
         private void btnGenerate_Click(object sender, EventArgs e)
@@ -169,7 +157,7 @@ namespace Hotel_ManagementIT13.Forms
                 string roomTypeFilter = cmbRoomTypeFilter.SelectedItem?.ToString() ?? "All Room Types";
                 string guestTypeFilter = cmbGuestTypeFilter.SelectedItem?.ToString() ?? "All Guest Types";
 
-                // Generate report based on type
+                
                 switch (currentReportType)
                 {
                     case Hotel_ManagementIT13.Data.ReportHelper.OCCUPANCY_REPORT:
@@ -185,21 +173,23 @@ namespace Hotel_ManagementIT13.Forms
                         break;
 
                     case Hotel_ManagementIT13.Data.ReportHelper.DAILY_SALES:
-                        // For daily sales, use only from date
+                       
                         currentReportData = reportHelper.GenerateDailySalesReport(fromDate, roomTypeFilter, guestTypeFilter);
                         DisplayReport(currentReportData, "Daily Sales Report");
                         reportHelper.PopulateChart(chartReport, currentReportData, Hotel_ManagementIT13.Data.ReportHelper.DAILY_SALES);
                         break;
 
                     case Hotel_ManagementIT13.Data.ReportHelper.GUEST_REPORT:
-                        MessageBox.Show("Guest Report feature coming soon!", "Information",
-                            MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        return;
+                        currentReportData = reportHelper.GenerateGuestReport(fromDate, toDate, roomTypeFilter, guestTypeFilter);
+                        DisplayReport(currentReportData, "Guest Report");
+                        reportHelper.PopulateChart(chartReport, currentReportData, Hotel_ManagementIT13.Data.ReportHelper.GUEST_REPORT);
+                        break;
 
                     case Hotel_ManagementIT13.Data.ReportHelper.ROOM_REPORT:
-                        MessageBox.Show("Room Utilization Report feature coming soon!", "Information",
-                            MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        return;
+                        currentReportData = reportHelper.GenerateRoomUtilizationReport(fromDate, toDate, roomTypeFilter, guestTypeFilter);
+                        DisplayReport(currentReportData, "Room Utilization Report");
+                        reportHelper.PopulateChart(chartReport, currentReportData, Hotel_ManagementIT13.Data.ReportHelper.ROOM_REPORT);
+                        break;
 
                     default:
                         MessageBox.Show("Please select a valid report type.", "Error",
@@ -209,7 +199,7 @@ namespace Hotel_ManagementIT13.Forms
 
                 UpdateSummaryLabels();
 
-                // Switch to graphical reports tab
+                
                 tabReports.SelectedTab = tabPage1;
 
                 MessageBox.Show($"Report generated successfully!\n{currentReportData.Rows.Count} records found.",
@@ -238,23 +228,33 @@ namespace Hotel_ManagementIT13.Forms
             dgvReport.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
             dgvReport.EnableHeadersVisualStyles = false;
 
-            // Format currency columns - USING PESO SIGN (₱)
+            
             foreach (DataGridViewColumn column in dgvReport.Columns)
             {
-                if (column.Name.Contains("Amount") || column.Name.Contains("Revenue") || column.Name.Contains("Paid"))
+                if (column.Name.Contains("Amount") || column.Name.Contains("Revenue") ||
+                    column.Name.Contains("Paid") || column.Name.Contains("Spent") ||
+                    column.Name.Contains("Rate") && column.Name != "OccupancyRate")
                 {
                     // Set custom format for Peso
                     column.DefaultCellStyle.Format = "\"₱\"#,##0.00";
                     column.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
                     column.DefaultCellStyle.ForeColor = Color.Green;
                 }
-                else if (column.Name.Contains("Rate"))
+                else if (column.Name.Contains("Percent") || column.Name.Contains("Rate") &&
+                         column.Name != "OccupancyRate")
                 {
+                    column.DefaultCellStyle.Format = "0.00%";
                     column.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
                 }
-                else if (column.Name.Contains("Date"))
+                else if (column.Name.Contains("Date") || column.Name.Contains("LastVisit") ||
+                         column.Name.Contains("LastReservation"))
                 {
                     column.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+                }
+                else if (column.Name.Contains("OccupancyRate"))
+                {
+                    column.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                    column.DefaultCellStyle.ForeColor = Color.Blue;
                 }
 
                 column.DefaultCellStyle.Font = new Font("Calibri", 10F);
@@ -325,6 +325,14 @@ namespace Hotel_ManagementIT13.Forms
             else if (currentReportType == Hotel_ManagementIT13.Data.ReportHelper.DAILY_SALES)
             {
                 DisplayDailySalesSummary(data, tableLayout);
+            }
+            else if (currentReportType == Hotel_ManagementIT13.Data.ReportHelper.GUEST_REPORT)
+            {
+                DisplayGuestSummary(data, tableLayout);
+            }
+            else if (currentReportType == Hotel_ManagementIT13.Data.ReportHelper.ROOM_REPORT)
+            {
+                DisplayRoomUtilizationSummary(data, tableLayout);
             }
 
             // Add separator
@@ -453,6 +461,172 @@ namespace Hotel_ManagementIT13.Forms
             }
         }
 
+        private void DisplayGuestSummary(DataTable data, TableLayoutPanel tableLayout)
+        {
+            int totalGuests = data.Rows.Count;
+            decimal totalSpent = 0;
+            int totalVisits = 0;
+            int totalNights = 0;
+            Dictionary<string, int> guestsByType = new Dictionary<string, int>();
+            Dictionary<string, int> guestsByNationality = new Dictionary<string, int>();
+            List<int> ages = new List<int>();
+
+            foreach (DataRow row in data.Rows)
+            {
+                // Total spent
+                if (data.Columns.Contains("TotalSpent"))
+                {
+                    totalSpent += Convert.ToDecimal(row["TotalSpent"]);
+                }
+
+                // Total visits
+                if (data.Columns.Contains("TotalReservations"))
+                {
+                    totalVisits += Convert.ToInt32(row["TotalReservations"]);
+                }
+
+                // Total nights
+                if (data.Columns.Contains("TotalNights"))
+                {
+                    totalNights += Convert.ToInt32(row["TotalNights"]);
+                }
+
+                // Guests by type
+                if (data.Columns.Contains("GuestType"))
+                {
+                    string guestType = row["GuestType"].ToString();
+                    if (!guestsByType.ContainsKey(guestType))
+                        guestsByType[guestType] = 0;
+                    guestsByType[guestType]++;
+                }
+
+                // Guests by nationality
+                if (data.Columns.Contains("Nationality"))
+                {
+                    string nationality = row["Nationality"].ToString();
+                    if (!guestsByNationality.ContainsKey(nationality))
+                        guestsByNationality[nationality] = 0;
+                    guestsByNationality[nationality]++;
+                }
+            }
+
+            // Add summary rows
+            AddTableRow(tableLayout, "Total Guests", totalGuests.ToString(), false);
+
+            if (totalSpent > 0)
+            {
+                AddTableRow(tableLayout, "Total Revenue", $"₱{totalSpent:N2}", false);
+                AddTableRow(tableLayout, "Average per Guest", $"₱{(totalGuests > 0 ? totalSpent / totalGuests : 0):N2}", false);
+            }
+
+            if (totalVisits > 0)
+            {
+                AddTableRow(tableLayout, "Total Visits", totalVisits.ToString(), false);
+                AddTableRow(tableLayout, "Average Visits/Guest", $"{((decimal)totalVisits / totalGuests):F1}", false);
+            }
+
+            if (totalNights > 0)
+            {
+                AddTableRow(tableLayout, "Total Nights", totalNights.ToString(), false);
+                AddTableRow(tableLayout, "Avg Stay Length", $"{((decimal)totalNights / totalVisits):F1} nights", false);
+            }
+
+            // Add guest type distribution
+            foreach (var kvp in guestsByType.OrderByDescending(x => x.Value))
+            {
+                decimal percentage = (decimal)kvp.Value / totalGuests * 100;
+                AddTableRow(tableLayout, $"{kvp.Key} Guests",
+                           $"{kvp.Value} ({percentage:F1}%)", false);
+            }
+        }
+
+        private void DisplayRoomUtilizationSummary(DataTable data, TableLayoutPanel tableLayout)
+        {
+            int totalRooms = 0;
+            decimal totalRevenue = 0;
+            decimal totalOccupancy = 0;
+            int roomTypesCount = data.Rows.Count;
+            string mostOccupiedRoom = "";
+            decimal maxOccupancy = 0;
+            string highestRevenueRoom = "";
+            decimal maxRevenue = 0;
+
+            foreach (DataRow row in data.Rows)
+            {
+                int rooms = Convert.ToInt32(row["TotalRooms"]);
+                totalRooms += rooms;
+
+                // Revenue
+                if (data.Columns.Contains("Revenue"))
+                {
+                    decimal revenue = Convert.ToDecimal(row["Revenue"]);
+                    totalRevenue += revenue;
+
+                    if (revenue > maxRevenue)
+                    {
+                        maxRevenue = revenue;
+                        highestRevenueRoom = row["RoomType"].ToString();
+                    }
+                }
+
+                
+                if (data.Columns.Contains("OccupancyRate"))
+                {
+                    string occupancyStr = row["OccupancyRate"].ToString().Replace("%", "");
+                    if (decimal.TryParse(occupancyStr, out decimal occupancyRate))
+                    {
+                        totalOccupancy += occupancyRate;
+
+                        if (occupancyRate > maxOccupancy)
+                        {
+                            maxOccupancy = occupancyRate;
+                            mostOccupiedRoom = row["RoomType"].ToString();
+                        }
+                    }
+                }
+            }
+
+            AddTableRow(tableLayout, "Total Room Types", roomTypesCount.ToString(), false);
+            AddTableRow(tableLayout, "Total Rooms", totalRooms.ToString(), false);
+
+            if (totalRevenue > 0)
+            {
+                AddTableRow(tableLayout, "Total Revenue", $"₱{totalRevenue:N2}", false);
+                AddTableRow(tableLayout, "Avg Revenue/Room", $"₱{(totalRooms > 0 ? totalRevenue / totalRooms : 0):N2}", false);
+                AddTableRow(tableLayout, "Highest Revenue", $"{highestRevenueRoom}: ₱{maxRevenue:N2}", false);
+            }
+
+            if (roomTypesCount > 0)
+            {
+                decimal avgOccupancy = totalOccupancy / roomTypesCount;
+                AddTableRow(tableLayout, "Avg Occupancy", $"{avgOccupancy:F2}%", false);
+                AddTableRow(tableLayout, "Most Occupied", $"{mostOccupiedRoom}: {maxOccupancy:F2}%", false);
+            }
+
+            
+            foreach (DataRow row in data.Rows)
+            {
+                string roomType = row["RoomType"].ToString();
+                int rooms = Convert.ToInt32(row["TotalRooms"]);
+                string occupancyRate = row["OccupancyRate"].ToString();
+                int available = Convert.ToInt32(row["AvailableRooms"]);
+                int occupied = Convert.ToInt32(row["OccupiedRooms"]);
+                int maintenance = Convert.ToInt32(row["Maintenance"]);
+
+                if (data.Columns.Contains("Revenue"))
+                {
+                    decimal revenue = Convert.ToDecimal(row["Revenue"]);
+                    AddTableRow(tableLayout, roomType,
+                               $"{rooms} rooms (Avail: {available}, Occ: {occupied}, Maint: {maintenance}), {occupancyRate}, Revenue: ₱{revenue:N2}", false);
+                }
+                else
+                {
+                    AddTableRow(tableLayout, roomType,
+                               $"{rooms} rooms (Avail: {available}, Occ: {occupied}, Maint: {maintenance}), {occupancyRate}", false);
+                }
+            }
+        }
+
         private void AddTableRow(TableLayoutPanel tableLayout, string label, string value, bool isHeader)
         {
             int rowIndex = tableLayout.RowCount;
@@ -490,10 +664,9 @@ namespace Hotel_ManagementIT13.Forms
                 if (currentReportType == Hotel_ManagementIT13.Data.ReportHelper.FINANCIAL_REPORT)
                 {
                     decimal totalRevenue = reportHelper.CalculateTotalRevenue(currentReportData);
-                    lblRates.Text = $"Total Revenue: ₱{totalRevenue:N2}"; // Peso sign
+                    lblRates.Text = $"Total Revenue: ₱{totalRevenue:N2}";
                     lblRates.ForeColor = Color.Green;
 
-                    // Also show total for the period
                     decimal periodRevenue = reportHelper.GetTotalRevenueForPeriod(dtpReportFrom.Value, dtpReportTo.Value);
                     lblDatess.Text = $"Dates: {dtpReportFrom.Value:yyyy-MM-dd} to {dtpReportTo.Value:yyyy-MM-dd} (Total: ₱{periodRevenue:N2})";
                 }
@@ -501,7 +674,6 @@ namespace Hotel_ManagementIT13.Forms
                 {
                     if (currentReportData.Columns.Contains("OccupancyRate"))
                     {
-                        // Calculate average occupancy
                         decimal totalRate = 0;
                         int count = 0;
 
@@ -520,7 +692,6 @@ namespace Hotel_ManagementIT13.Forms
                             decimal avgOccupancy = totalRate / count;
                             lblRates.Text = $"Average Occupancy: {avgOccupancy:F2}%";
 
-                            // Color code based on occupancy
                             if (avgOccupancy > 80)
                                 lblRates.ForeColor = Color.Red;
                             else if (avgOccupancy > 60)
@@ -535,11 +706,81 @@ namespace Hotel_ManagementIT13.Forms
                     if (currentReportData.Columns.Contains("Amount"))
                     {
                         decimal totalSales = reportHelper.CalculateTotalRevenue(currentReportData);
-                        lblRates.Text = $"Total Daily Sales: ₱{totalSales:N2}"; // Peso sign
+                        lblRates.Text = $"Total Daily Sales: ₱{totalSales:N2}";
                         lblRates.ForeColor = Color.Blue;
-
-                        // Update date label
                         lblDatess.Text = $"Date: {dtpReportFrom.Value:yyyy-MM-dd}";
+                    }
+                }
+                else if (currentReportType == Hotel_ManagementIT13.Data.ReportHelper.GUEST_REPORT)
+                {
+                    int guestCount = currentReportData.Rows.Count;
+
+                    
+                    decimal totalSpent = 0;
+                    int guestsWithSpending = 0;
+
+                    foreach (DataRow row in currentReportData.Rows)
+                    {
+                        if (currentReportData.Columns.Contains("TotalSpent"))
+                        {
+                            decimal spent = Convert.ToDecimal(row["TotalSpent"]);
+                            totalSpent += spent;
+                            if (spent > 0) guestsWithSpending++;
+                        }
+                    }
+
+                    lblRates.Text = $"Total Guests: {guestCount}";
+                    lblRates.ForeColor = Color.Purple;
+
+                    if (guestsWithSpending > 0)
+                    {
+                        lblDatess.Text = $"Avg Spending: ₱{(totalSpent / guestsWithSpending):N2}";
+                    }
+                    else
+                    {
+                        lblDatess.Text = $"Dates: {dtpReportFrom.Value:yyyy-MM-dd} to {dtpReportTo.Value:yyyy-MM-dd}";
+                    }
+                }
+                else if (currentReportType == Hotel_ManagementIT13.Data.ReportHelper.ROOM_REPORT)
+                {
+                    int totalRooms = 0;
+                    decimal totalRevenue = 0;
+                    decimal totalOccupancy = 0;
+                    int roomTypesCount = currentReportData.Rows.Count;
+
+                    foreach (DataRow row in currentReportData.Rows)
+                    {
+                        totalRooms += Convert.ToInt32(row["TotalRooms"]);
+                        if (currentReportData.Columns.Contains("Revenue"))
+                        {
+                            totalRevenue += Convert.ToDecimal(row["Revenue"]);
+                        }
+                        if (currentReportData.Columns.Contains("OccupancyRate"))
+                        {
+                            string occupancyStr = row["OccupancyRate"].ToString().Replace("%", "");
+                            if (decimal.TryParse(occupancyStr, out decimal occupancy))
+                            {
+                                totalOccupancy += occupancy;
+                            }
+                        }
+                    }
+
+                    lblRates.Text = $"Total Rooms: {totalRooms}";
+                    lblRates.ForeColor = Color.Teal;
+
+                    if (roomTypesCount > 0)
+                    {
+                        decimal avgOccupancy = totalOccupancy / roomTypesCount;
+                        lblDatess.Text = $"Avg Occupancy: {avgOccupancy:F2}%";
+
+                        if (totalRevenue > 0)
+                        {
+                            lblDatess.Text += $", Revenue: ₱{totalRevenue:N2}";
+                        }
+                    }
+                    else
+                    {
+                        lblDatess.Text = $"Dates: {dtpReportFrom.Value:yyyy-MM-dd} to {dtpReportTo.Value:yyyy-MM-dd}";
                     }
                 }
             }
@@ -547,6 +788,7 @@ namespace Hotel_ManagementIT13.Forms
             {
                 lblRates.Text = "No data available";
                 lblRates.ForeColor = Color.Gray;
+                lblDatess.Text = "Dates:";
             }
         }
 
@@ -597,14 +839,14 @@ namespace Hotel_ManagementIT13.Forms
 
         private void cmbReportType_SelectedIndexChanged(object sender, EventArgs e)
         {
-            // Reset chart when report type changes
+            
             if (chartReport.Series.Count > 0)
             {
                 chartReport.Series.Clear();
                 chartReport.Titles.Clear();
             }
 
-            // Update date picker visibility for daily sales
+           
             if (cmbReportType.SelectedItem?.ToString() == Hotel_ManagementIT13.Data.ReportHelper.DAILY_SALES)
             {
                 lblDatess.Text = "Date:";
@@ -620,7 +862,7 @@ namespace Hotel_ManagementIT13.Forms
 
         private void dtpReportFrom_ValueChanged(object sender, EventArgs e)
         {
-            // Enable/disable generate button based on date validity
+            
             if (cmbReportType.SelectedItem?.ToString() == Hotel_ManagementIT13.Data.ReportHelper.DAILY_SALES)
             {
                 btnGenerate.Enabled = true;
@@ -633,7 +875,7 @@ namespace Hotel_ManagementIT13.Forms
 
         private void dtpReportTo_ValueChanged(object sender, EventArgs e)
         {
-            // Enable/disable generate button based on date validity
+            
             btnGenerate.Enabled = dtpReportFrom.Value <= dtpReportTo.Value;
         }
 
@@ -643,13 +885,13 @@ namespace Hotel_ManagementIT13.Forms
             {
                 if (chartReport.Series.Count == 0 && currentReportData != null)
                 {
-                    // Re-populate chart if data exists
+                    
                     reportHelper.PopulateChart(chartReport, currentReportData, currentReportType);
                 }
             }
             else if (tabReports.SelectedTab == tabPage2) // Detailed Reports tab
             {
-                // Ensure detailed tab is updated with current data
+             
                 if (currentReportData != null)
                 {
                     UpdateDetailedReportsTab(currentReportData, currentReportType);
@@ -659,17 +901,17 @@ namespace Hotel_ManagementIT13.Forms
 
         private void cmbRoomTypeFilter_SelectedIndexChanged(object sender, EventArgs e)
         {
-            // Filter applied - you can regenerate report automatically or wait for generate button
+            
         }
 
         private void cmbGuestTypeFilter_SelectedIndexChanged(object sender, EventArgs e)
         {
-            // Filter applied - you can regenerate report automatically or wait for generate button
+            
         }
 
         private void frmReports_Resize(object sender, EventArgs e)
         {
-            // Note: CenterPanel() call removed - panel will stay at its current position
+            
         }
 
         private void btnClearFilters_Click(object sender, EventArgs e)
@@ -686,7 +928,7 @@ namespace Hotel_ManagementIT13.Forms
             chartReport.Series.Clear();
             chartReport.Titles.Clear();
 
-            // Clear detailed reports tab
+            
             if (tabPage2.Tag != null)
             {
                 dynamic tabControls = tabPage2.Tag;
@@ -703,7 +945,7 @@ namespace Hotel_ManagementIT13.Forms
                 tableLayout.RowCount = 0;
             }
 
-            // Reset labels
+           
             lblRates.Text = "Chart";
             lblData.Text = "Reports";
             lblDatess.Text = "Dates:";
@@ -714,7 +956,7 @@ namespace Hotel_ManagementIT13.Forms
 
         private void lblData_Click(object sender, EventArgs e)
         {
-
+            
         }
     }
 }
