@@ -13,27 +13,28 @@ namespace Hotel_ManagementIT13.Data.Repositories
             using (var conn = DatabaseHelper.GetConnection())
             {
                 conn.Open();
-                string query = @"
-                    SELECT rc.rate_amount
-                    FROM rate_configurations rc
-                    WHERE rc.room_type_id = @roomTypeId
-                    AND rc.start_date <= CURDATE()
-                    AND rc.end_date >= CURDATE()
-                    ORDER BY rc.start_date DESC
-                    LIMIT 1";
 
-                using (var cmd = new MySqlCommand(query, conn))
+                using (var cmd = new MySqlCommand("sp_GetCurrentRate", conn))
                 {
-                    cmd.Parameters.AddWithValue("@roomTypeId", roomTypeId);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@p_room_type_id", roomTypeId);
+                    cmd.Parameters.AddWithValue("@p_guest_type_id", guestTypeId);
 
-                    object result = cmd.ExecuteScalar();
-                    if (result != null && result != DBNull.Value)
+                    var resultParam = new MySqlParameter("@p_current_rate", MySqlDbType.Decimal);
+                    resultParam.Precision = 10;
+                    resultParam.Scale = 2;
+                    resultParam.Direction = ParameterDirection.Output;
+                    cmd.Parameters.Add(resultParam);
+
+                    cmd.ExecuteNonQuery();
+
+                    if (resultParam.Value != DBNull.Value)
                     {
-                        decimal baseRate = Convert.ToDecimal(result);
-                        return ApplyGuestTypeDiscount(baseRate, guestTypeId);
+                        return Convert.ToDecimal(resultParam.Value);
                     }
                 }
             }
+
             return GetDefaultRate(roomTypeId);
         }
 
@@ -63,20 +64,16 @@ namespace Hotel_ManagementIT13.Data.Repositories
 
             try
             {
+                Console.WriteLine("DEBUG: Loading rate configurations...");
+
                 using (var conn = DatabaseHelper.GetConnection())
                 {
                     conn.Open();
-                    string query = @"
-                        SELECT rc.*, rt.type_name, rp.plan_name
-                        FROM rate_configurations rc
-                        JOIN room_types rt ON rc.room_type_id = rt.room_type_id
-                        JOIN rate_plans rp ON rc.rate_plan_id = rp.rate_plan_id
-                        ORDER BY rc.start_date DESC, rt.type_name";
 
-                    Console.WriteLine("DEBUG: Loading rate configurations...");
-
-                    using (var cmd = new MySqlCommand(query, conn))
+                    using (var cmd = new MySqlCommand("sp_GetRateConfigurations", conn))
                     {
+                        cmd.CommandType = CommandType.StoredProcedure;
+
                         using (var reader = cmd.ExecuteReader())
                         {
                             int count = 0;
@@ -118,19 +115,15 @@ namespace Hotel_ManagementIT13.Data.Repositories
                 using (var conn = DatabaseHelper.GetConnection())
                 {
                     conn.Open();
-                    string query = @"
-                        INSERT INTO rate_configurations 
-                        (room_type_id, rate_plan_id, rate_amount, start_date, end_date)
-                        VALUES 
-                        (@roomTypeId, @ratePlanId, @rateAmount, @startDate, @endDate)";
 
-                    using (var cmd = new MySqlCommand(query, conn))
+                    using (var cmd = new MySqlCommand("sp_AddRateConfiguration", conn))
                     {
-                        cmd.Parameters.AddWithValue("@roomTypeId", rate.RoomTypeId);
-                        cmd.Parameters.AddWithValue("@ratePlanId", rate.RatePlanId);
-                        cmd.Parameters.AddWithValue("@rateAmount", rate.RateAmount);
-                        cmd.Parameters.AddWithValue("@startDate", rate.StartDate);
-                        cmd.Parameters.AddWithValue("@endDate", rate.EndDate);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("@p_room_type_id", rate.RoomTypeId);
+                        cmd.Parameters.AddWithValue("@p_rate_plan_id", rate.RatePlanId);
+                        cmd.Parameters.AddWithValue("@p_rate_amount", rate.RateAmount);
+                        cmd.Parameters.AddWithValue("@p_start_date", rate.StartDate);
+                        cmd.Parameters.AddWithValue("@p_end_date", rate.EndDate);
 
                         int rowsAffected = cmd.ExecuteNonQuery();
                         Console.WriteLine($"DEBUG: Added rate configuration, rows affected: {rowsAffected}");
@@ -150,23 +143,16 @@ namespace Hotel_ManagementIT13.Data.Repositories
             using (var conn = DatabaseHelper.GetConnection())
             {
                 conn.Open();
-                string query = @"
-                    UPDATE rate_configurations SET
-                    room_type_id = @roomTypeId,
-                    rate_plan_id = @ratePlanId,
-                    rate_amount = @rateAmount,
-                    start_date = @startDate,
-                    end_date = @endDate
-                    WHERE rate_id = @rateId";
 
-                using (var cmd = new MySqlCommand(query, conn))
+                using (var cmd = new MySqlCommand("sp_UpdateRateConfiguration", conn))
                 {
-                    cmd.Parameters.AddWithValue("@rateId", rate.RateId);
-                    cmd.Parameters.AddWithValue("@roomTypeId", rate.RoomTypeId);
-                    cmd.Parameters.AddWithValue("@ratePlanId", rate.RatePlanId);
-                    cmd.Parameters.AddWithValue("@rateAmount", rate.RateAmount);
-                    cmd.Parameters.AddWithValue("@startDate", rate.StartDate);
-                    cmd.Parameters.AddWithValue("@endDate", rate.EndDate);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@p_rate_id", rate.RateId);
+                    cmd.Parameters.AddWithValue("@p_room_type_id", rate.RoomTypeId);
+                    cmd.Parameters.AddWithValue("@p_rate_plan_id", rate.RatePlanId);
+                    cmd.Parameters.AddWithValue("@p_rate_amount", rate.RateAmount);
+                    cmd.Parameters.AddWithValue("@p_start_date", rate.StartDate);
+                    cmd.Parameters.AddWithValue("@p_end_date", rate.EndDate);
 
                     return cmd.ExecuteNonQuery() > 0;
                 }
@@ -178,11 +164,12 @@ namespace Hotel_ManagementIT13.Data.Repositories
             using (var conn = DatabaseHelper.GetConnection())
             {
                 conn.Open();
-                string query = "DELETE FROM rate_configurations WHERE rate_id = @rateId";
 
-                using (var cmd = new MySqlCommand(query, conn))
+                using (var cmd = new MySqlCommand("sp_DeleteRateConfiguration", conn))
                 {
-                    cmd.Parameters.AddWithValue("@rateId", rateId);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@p_rate_id", rateId);
+
                     return cmd.ExecuteNonQuery() > 0;
                 }
             }
@@ -193,16 +180,11 @@ namespace Hotel_ManagementIT13.Data.Repositories
             using (var conn = DatabaseHelper.GetConnection())
             {
                 conn.Open();
-                string query = @"
-                    SELECT rc.*, rt.type_name, rp.plan_name
-                    FROM rate_configurations rc
-                    JOIN room_types rt ON rc.room_type_id = rt.room_type_id
-                    JOIN rate_plans rp ON rc.rate_plan_id = rp.rate_plan_id
-                    WHERE rc.rate_id = @rateId";
 
-                using (var cmd = new MySqlCommand(query, conn))
+                using (var cmd = new MySqlCommand("sp_GetRateConfigurationById", conn))
                 {
-                    cmd.Parameters.AddWithValue("@rateId", rateId);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@p_rate_id", rateId);
 
                     using (var reader = cmd.ExecuteReader())
                     {
@@ -237,10 +219,11 @@ namespace Hotel_ManagementIT13.Data.Repositories
                 using (var conn = DatabaseHelper.GetConnection())
                 {
                     conn.Open();
-                    string query = "SELECT * FROM room_types ORDER BY type_name";
 
-                    using (var cmd = new MySqlCommand(query, conn))
+                    using (var cmd = new MySqlCommand("sp_GetRoomTypes", conn))
                     {
+                        cmd.CommandType = CommandType.StoredProcedure;
+
                         using (var reader = cmd.ExecuteReader())
                         {
                             int count = 0;
@@ -280,10 +263,11 @@ namespace Hotel_ManagementIT13.Data.Repositories
                 using (var conn = DatabaseHelper.GetConnection())
                 {
                     conn.Open();
-                    string query = "SELECT * FROM rate_plans ORDER BY plan_name";
 
-                    using (var cmd = new MySqlCommand(query, conn))
+                    using (var cmd = new MySqlCommand("sp_GetRatePlans", conn))
                     {
+                        cmd.CommandType = CommandType.StoredProcedure;
+
                         using (var reader = cmd.ExecuteReader())
                         {
                             int count = 0;
@@ -313,7 +297,6 @@ namespace Hotel_ManagementIT13.Data.Repositories
             return ratePlans;
         }
 
-        // NEW METHOD: Update room type base rate
         public bool UpdateRoomTypeBaseRate(int roomTypeId, decimal newBaseRate)
         {
             try
@@ -323,12 +306,12 @@ namespace Hotel_ManagementIT13.Data.Repositories
                 using (var conn = DatabaseHelper.GetConnection())
                 {
                     conn.Open();
-                    string query = "UPDATE room_types SET base_rate = @baseRate WHERE room_type_id = @roomTypeId";
 
-                    using (var cmd = new MySqlCommand(query, conn))
+                    using (var cmd = new MySqlCommand("sp_UpdateRoomTypeBaseRate", conn))
                     {
-                        cmd.Parameters.AddWithValue("@roomTypeId", roomTypeId);
-                        cmd.Parameters.AddWithValue("@baseRate", newBaseRate);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("@p_room_type_id", roomTypeId);
+                        cmd.Parameters.AddWithValue("@p_base_rate", newBaseRate);
 
                         int rowsAffected = cmd.ExecuteNonQuery();
                         Console.WriteLine($"DEBUG: Updated base rate, rows affected: {rowsAffected}");

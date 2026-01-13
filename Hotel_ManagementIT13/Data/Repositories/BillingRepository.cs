@@ -13,14 +13,11 @@ namespace Hotel_ManagementIT13.Data.Repositories
             using (var conn = DatabaseHelper.GetConnection())
             {
                 conn.Open();
-                string query = @"
-                    SELECT b.*
-                    FROM billings b
-                    WHERE b.reservation_id = @reservationId";
 
-                using (var cmd = new MySqlCommand(query, conn))
+                using (var cmd = new MySqlCommand("sp_GetBillingByReservationId", conn))
                 {
-                    cmd.Parameters.AddWithValue("@reservationId", reservationId);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@p_reservation_id", reservationId);
 
                     using (var reader = cmd.ExecuteReader())
                     {
@@ -54,14 +51,11 @@ namespace Hotel_ManagementIT13.Data.Repositories
             using (var conn = DatabaseHelper.GetConnection())
             {
                 conn.Open();
-                string query = @"
-                    SELECT * FROM billing_items 
-                    WHERE billing_id = @billingId
-                    ORDER BY item_id";
 
-                using (var cmd = new MySqlCommand(query, conn))
+                using (var cmd = new MySqlCommand("sp_GetBillingItems", conn))
                 {
-                    cmd.Parameters.AddWithValue("@billingId", billingId);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@p_billing_id", billingId);
 
                     using (var reader = cmd.ExecuteReader())
                     {
@@ -98,19 +92,13 @@ namespace Hotel_ManagementIT13.Data.Repositories
             using (var conn = DatabaseHelper.GetConnection())
             {
                 conn.Open();
-                string query = @"
-                    INSERT INTO billing_items (billing_id, description, amount)
-                    VALUES (@billingId, @description, @amount);
-                    UPDATE billings SET 
-                    total_amount = total_amount + @amount,
-                    balance = balance + @amount
-                    WHERE billing_id = @billingId";
 
-                using (var cmd = new MySqlCommand(query, conn))
+                using (var cmd = new MySqlCommand("sp_AddBillingItem", conn))
                 {
-                    cmd.Parameters.AddWithValue("@billingId", billingId);
-                    cmd.Parameters.AddWithValue("@description", description);
-                    cmd.Parameters.AddWithValue("@amount", amount);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@p_billing_id", billingId);
+                    cmd.Parameters.AddWithValue("@p_description", description);
+                    cmd.Parameters.AddWithValue("@p_amount", amount);
 
                     return cmd.ExecuteNonQuery() > 0;
                 }
@@ -123,46 +111,12 @@ namespace Hotel_ManagementIT13.Data.Repositories
             {
                 conn.Open();
 
-                string getBillingIdQuery = "SELECT billing_id FROM billings WHERE reservation_id = @reservationId";
-                int billingId = 0;
-
-                using (var cmd = new MySqlCommand(getBillingIdQuery, conn))
+                using (var cmd = new MySqlCommand("sp_AddBillingItemByReservation", conn))
                 {
-                    cmd.Parameters.AddWithValue("@reservationId", reservationId);
-                    var result = cmd.ExecuteScalar();
-                    if (result != null && result != DBNull.Value)
-                    {
-                        billingId = Convert.ToInt32(result);
-                    }
-                }
-
-                if (billingId == 0)
-                {
-                    string createQuery = @"
-                        INSERT INTO billings (reservation_id, total_amount, paid_amount, balance, billing_date)
-                        VALUES (@reservationId, 0, 0, 0, NOW());
-                        SELECT LAST_INSERT_ID();";
-
-                    using (var createCmd = new MySqlCommand(createQuery, conn))
-                    {
-                        createCmd.Parameters.AddWithValue("@reservationId", reservationId);
-                        billingId = Convert.ToInt32(createCmd.ExecuteScalar());
-                    }
-                }
-
-                string addItemQuery = @"
-                    INSERT INTO billing_items (billing_id, description, amount)
-                    VALUES (@billingId, @description, @amount);
-                    UPDATE billings SET 
-                    total_amount = total_amount + @amount,
-                    balance = balance + @amount
-                    WHERE billing_id = @billingId";
-
-                using (var cmd = new MySqlCommand(addItemQuery, conn))
-                {
-                    cmd.Parameters.AddWithValue("@billingId", billingId);
-                    cmd.Parameters.AddWithValue("@description", description);
-                    cmd.Parameters.AddWithValue("@amount", amount);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@p_reservation_id", reservationId);
+                    cmd.Parameters.AddWithValue("@p_description", description);
+                    cmd.Parameters.AddWithValue("@p_amount", amount);
 
                     return cmd.ExecuteNonQuery() > 0;
                 }
@@ -174,14 +128,12 @@ namespace Hotel_ManagementIT13.Data.Repositories
             using (var conn = DatabaseHelper.GetConnection())
             {
                 conn.Open();
-                string query = @"
-                    INSERT INTO billings (reservation_id, total_amount, paid_amount, balance, billing_date)
-                    VALUES (@reservationId, @totalAmount, 0, @totalAmount, NOW())";
 
-                using (var cmd = new MySqlCommand(query, conn))
+                using (var cmd = new MySqlCommand("sp_CreateBilling", conn))
                 {
-                    cmd.Parameters.AddWithValue("@reservationId", reservationId);
-                    cmd.Parameters.AddWithValue("@totalAmount", totalAmount);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@p_reservation_id", reservationId);
+                    cmd.Parameters.AddWithValue("@p_total_amount", totalAmount);
 
                     return cmd.ExecuteNonQuery() > 0;
                 }
@@ -193,14 +145,11 @@ namespace Hotel_ManagementIT13.Data.Repositories
             using (var conn = DatabaseHelper.GetConnection())
             {
                 conn.Open();
-                string query = @"
-                    SELECT b.*
-                    FROM billings b
-                    WHERE b.billing_id = @billingId";
 
-                using (var cmd = new MySqlCommand(query, conn))
+                using (var cmd = new MySqlCommand("sp_GetBillingById", conn))
                 {
-                    cmd.Parameters.AddWithValue("@billingId", billingId);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@p_billing_id", billingId);
 
                     using (var reader = cmd.ExecuteReader())
                     {
@@ -228,16 +177,12 @@ namespace Hotel_ManagementIT13.Data.Repositories
             using (var conn = DatabaseHelper.GetConnection())
             {
                 conn.Open();
-                string query = @"
-                    UPDATE billings b
-                    SET 
-                        total_amount = (SELECT COALESCE(SUM(amount), 0) FROM billing_items WHERE billing_id = @billingId),
-                        balance = total_amount - paid_amount
-                    WHERE b.billing_id = @billingId";
 
-                using (var cmd = new MySqlCommand(query, conn))
+                using (var cmd = new MySqlCommand("sp_UpdateBillingTotals", conn))
                 {
-                    cmd.Parameters.AddWithValue("@billingId", billingId);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@p_billing_id", billingId);
+
                     return cmd.ExecuteNonQuery() > 0;
                 }
             }

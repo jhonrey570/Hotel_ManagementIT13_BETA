@@ -145,17 +145,14 @@
   <data name="clarity--printer-line" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\clarity--printer-line.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="clarity--bar-chart-line" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\clarity--bar-chart-line.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="check" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\check.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="clarity--trash-line" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\clarity--trash-line.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="bi--person-add" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\bi--person-add.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="material-symbols-light--person-edit-outline-rounded" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\material-symbols-light--person-edit-outline-rounded.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="clarity--pie-chart-line" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\clarity--pie-chart-line.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="clarity--warning-line" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\clarity--warning-line.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -163,14 +160,17 @@
   <data name="logosaIT131" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\logosaIT131.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="clarity--pie-chart-line" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\clarity--pie-chart-line.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="material-symbols-light--person-edit-outline-rounded" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\material-symbols-light--person-edit-outline-rounded.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="imagenikuyacg" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\imagenikuyacg.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="material-symbols-light--percent" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\material-symbols-light--percent.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="clarity--bar-chart-line1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\clarity--bar-chart-line1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="clarity--bar-chart-line" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\clarity--bar-chart-line.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="fluent--edit-person-16-regular" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\fluent--edit-person-16-regular.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -196,17 +196,20 @@
   <data name="imagenikuyacg1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\imagenikuyacg1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="tdesign--filter-clear" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\tdesign--filter-clear.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="Smart-Hotel-Room" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Smart-Hotel-Room.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="fluent--person-board-add-16-regular" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\fluent--person-board-add-16-regular.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="bi--person-add" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\bi--person-add.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="imagenikuyacg" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\imagenikuyacg.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="clarity--bar-chart-line1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\clarity--bar-chart-line1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="check" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\check.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="fluent--person-delete-20-regular" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\fluent--person-delete-20-regular.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="material-symbols-light--percent1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\material-symbols-light--percent1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -214,8 +217,8 @@
   <data name="clarity--plus-line" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\clarity--plus-line.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="fluent--person-delete-20-regular" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\fluent--person-delete-20-regular.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="fluent--person-board-add-16-regular" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\fluent--person-board-add-16-regular.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="clarity--pencil-line" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\clarity--pencil-line.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -226,7 +229,7 @@
   <data name="people" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\people.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="tdesign--filter-clear" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\tdesign--filter-clear.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="clarity--eye-line" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\clarity--eye-line.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

@@ -18,76 +18,14 @@ namespace Hotel_ManagementIT13.Data.Repositories
                 {
                     try
                     {
-                       
-                        string checkQuery = @"
-                            SELECT total_amount, paid_amount 
-                            FROM billings 
-                            WHERE reservation_id = @reservationId";
-
-                        decimal totalAmount = 0;
-                        decimal currentPaidAmount = 0;
-
-                        using (var checkCmd = new MySqlCommand(checkQuery, conn, transaction))
+                        using (var cmd = new MySqlCommand("sp_ProcessPayment", conn, transaction))
                         {
-                            checkCmd.Parameters.AddWithValue("@reservationId", reservationId);
+                            cmd.CommandType = CommandType.StoredProcedure;
+                            cmd.Parameters.AddWithValue("@p_reservation_id", reservationId);
+                            cmd.Parameters.AddWithValue("@p_amount", amount);
+                            cmd.Parameters.AddWithValue("@p_payment_method", paymentMethod);
+                            cmd.Parameters.AddWithValue("@p_notes", notes ?? "");
 
-                            using (var reader = checkCmd.ExecuteReader())
-                            {
-                                if (reader.Read())
-                                {
-                                    totalAmount = Convert.ToDecimal(reader["total_amount"]);
-                                    currentPaidAmount = Convert.ToDecimal(reader["paid_amount"]);
-                                }
-                                else
-                                {
-                                 
-                                    reader.Close();
-                                    string createBillingQuery = @"
-                                        INSERT INTO billings 
-                                        (reservation_id, total_amount, paid_amount, balance, billing_date)
-                                        VALUES (@reservationId, 0, 0, 0, NOW())";
-
-                                    using (var createCmd = new MySqlCommand(createBillingQuery, conn, transaction))
-                                    {
-                                        createCmd.Parameters.AddWithValue("@reservationId", reservationId);
-                                        createCmd.ExecuteNonQuery();
-                                    }
-                                }
-                            }
-                        }
-
-                      
-                        decimal newPaidAmount = currentPaidAmount + amount;
-                        decimal newBalance = totalAmount - newPaidAmount;
-
-                      
-
-                        // Insert payment record
-                        string paymentQuery = @"
-                            INSERT INTO payments 
-                            (reservation_id, payment_status_id, amount, payment_method, notes)
-                            VALUES 
-                            (@reservationId, 2, @amount, @paymentMethod, @notes)";
-
-                        using (var cmd = new MySqlCommand(paymentQuery, conn, transaction))
-                        {
-                            cmd.Parameters.AddWithValue("@reservationId", reservationId);
-                            cmd.Parameters.AddWithValue("@amount", amount);
-                            cmd.Parameters.AddWithValue("@paymentMethod", paymentMethod);
-                            cmd.Parameters.AddWithValue("@notes", notes);
-                            cmd.ExecuteNonQuery();
-                        }
-
-                        string billingQuery = @"
-                            UPDATE billings SET 
-                            paid_amount = paid_amount + @amount,
-                            balance = total_amount - (paid_amount + @amount)
-                            WHERE reservation_id = @reservationId";
-
-                        using (var cmd = new MySqlCommand(billingQuery, conn, transaction))
-                        {
-                            cmd.Parameters.AddWithValue("@reservationId", reservationId);
-                            cmd.Parameters.AddWithValue("@amount", amount);
                             cmd.ExecuteNonQuery();
                         }
 
@@ -103,7 +41,6 @@ namespace Hotel_ManagementIT13.Data.Repositories
             }
         }
 
-        
         public bool UpdateBillingTotal(int reservationId, decimal roomCharge)
         {
             using (var conn = DatabaseHelper.GetConnection())
@@ -113,17 +50,12 @@ namespace Hotel_ManagementIT13.Data.Repositories
                 {
                     try
                     {
-                        // Add room charge to billing total
-                        string updateQuery = @"
-                            UPDATE billings SET 
-                            total_amount = total_amount + @roomCharge,
-                            balance = (total_amount + @roomCharge) - paid_amount
-                            WHERE reservation_id = @reservationId";
-
-                        using (var cmd = new MySqlCommand(updateQuery, conn, transaction))
+                        using (var cmd = new MySqlCommand("sp_UpdateBillingTotal", conn, transaction))
                         {
-                            cmd.Parameters.AddWithValue("@reservationId", reservationId);
-                            cmd.Parameters.AddWithValue("@roomCharge", roomCharge);
+                            cmd.CommandType = CommandType.StoredProcedure;
+                            cmd.Parameters.AddWithValue("@p_reservation_id", reservationId);
+                            cmd.Parameters.AddWithValue("@p_room_charge", roomCharge);
+
                             cmd.ExecuteNonQuery();
                         }
 
@@ -139,7 +71,6 @@ namespace Hotel_ManagementIT13.Data.Repositories
             }
         }
 
-      
         public List<Payment> GetPaymentsByReservation(int reservationId)
         {
             var payments = new List<Payment>();
@@ -147,16 +78,11 @@ namespace Hotel_ManagementIT13.Data.Repositories
             using (var conn = DatabaseHelper.GetConnection())
             {
                 conn.Open();
-                string query = @"
-                    SELECT p.*, ps.status_name
-                    FROM payments p
-                    JOIN payment_statuses ps ON p.payment_status_id = ps.payment_status_id
-                    WHERE p.reservation_id = @reservationId
-                    ORDER BY p.payment_date DESC";
 
-                using (var cmd = new MySqlCommand(query, conn))
+                using (var cmd = new MySqlCommand("sp_GetPaymentsByReservation", conn))
                 {
-                    cmd.Parameters.AddWithValue("@reservationId", reservationId);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@p_reservation_id", reservationId);
 
                     using (var reader = cmd.ExecuteReader())
                     {
@@ -188,20 +114,12 @@ namespace Hotel_ManagementIT13.Data.Repositories
             using (var conn = DatabaseHelper.GetConnection())
             {
                 conn.Open();
-                string query = @"
-                    SELECT p.*, ps.status_name, r.booking_reference, 
-                           CONCAT(g.first_name, ' ', g.last_name) as guest_name
-                    FROM payments p
-                    JOIN payment_statuses ps ON p.payment_status_id = ps.payment_status_id
-                    JOIN reservations r ON p.reservation_id = r.reservation_id
-                    JOIN guests g ON r.guest_id = g.guest_id
-                    WHERE DATE(p.payment_date) BETWEEN @startDate AND @endDate
-                    ORDER BY p.payment_date DESC";
 
-                using (var cmd = new MySqlCommand(query, conn))
+                using (var cmd = new MySqlCommand("sp_GetPaymentsByDateRange", conn))
                 {
-                    cmd.Parameters.AddWithValue("@startDate", startDate);
-                    cmd.Parameters.AddWithValue("@endDate", endDate);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@p_start_date", startDate);
+                    cmd.Parameters.AddWithValue("@p_end_date", endDate);
 
                     using (var reader = cmd.ExecuteReader())
                     {
@@ -233,19 +151,22 @@ namespace Hotel_ManagementIT13.Data.Repositories
             using (var conn = DatabaseHelper.GetConnection())
             {
                 conn.Open();
-                string query = @"
-                    SELECT COALESCE(SUM(amount), 0) as total_revenue
-                    FROM payments 
-                    WHERE payment_status_id = 2 -- Paid
-                    AND DATE(payment_date) BETWEEN @startDate AND @endDate";
 
-                using (var cmd = new MySqlCommand(query, conn))
+                using (var cmd = new MySqlCommand("sp_GetTotalRevenue", conn))
                 {
-                    cmd.Parameters.AddWithValue("@startDate", startDate);
-                    cmd.Parameters.AddWithValue("@endDate", endDate);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@p_start_date", startDate);
+                    cmd.Parameters.AddWithValue("@p_end_date", endDate);
 
-                    object result = cmd.ExecuteScalar();
-                    return result != DBNull.Value ? Convert.ToDecimal(result) : 0;
+                    var resultParam = new MySqlParameter("@p_total_revenue", MySqlDbType.Decimal);
+                    resultParam.Precision = 10;
+                    resultParam.Scale = 2;
+                    resultParam.Direction = ParameterDirection.Output;
+                    cmd.Parameters.Add(resultParam);
+
+                    cmd.ExecuteNonQuery();
+
+                    return resultParam.Value != DBNull.Value ? Convert.ToDecimal(resultParam.Value) : 0;
                 }
             }
         }

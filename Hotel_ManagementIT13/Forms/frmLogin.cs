@@ -8,17 +8,16 @@ namespace Hotel_ManagementIT13.Forms
     public partial class frmLogin : Form
     {
         private UserRepository _userRepo;
+        private bool _passwordVisible = false;
 
         public frmLogin()
         {
             InitializeComponent();
             _userRepo = new UserRepository();
         }
-        
-      
+
         private void frmLogin_Load(object sender, EventArgs e)
         {
-            
             txtUsername.Focus();
         }
 
@@ -40,7 +39,6 @@ namespace Hotel_ManagementIT13.Forms
 
                 if (user != null)
                 {
-
                     ApplicationContext.CurrentUser = user;
 
                     frmMainDashboard dashboard = new frmMainDashboard();
@@ -72,9 +70,29 @@ namespace Hotel_ManagementIT13.Forms
                 btnLogin.PerformClick();
             }
         }
+
+        private void btnShowPass_Click(object sender, EventArgs e)
+        {
+            _passwordVisible = !_passwordVisible;
+
+            if (_passwordVisible)
+            {
+                
+                txtPassword.PasswordChar = '\0';
+               
+            }
+            else
+            {
+               
+                txtPassword.PasswordChar = '*';
+               
+            }
+
+            
+            txtPassword.Focus();
+        }
     }
 
-    
     public static class ApplicationContext
     {
         public static User CurrentUser { get; set; }

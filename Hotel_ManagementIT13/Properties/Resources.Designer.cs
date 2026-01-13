@@ -133,6 +133,16 @@ namespace Hotel_ManagementIT13.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap clarity__eye_line {
+            get {
+                object obj = ResourceManager.GetObject("clarity--eye-line", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap clarity__house_line {
             get {
                 object obj = ResourceManager.GetObject("clarity--house-line", resourceCulture);

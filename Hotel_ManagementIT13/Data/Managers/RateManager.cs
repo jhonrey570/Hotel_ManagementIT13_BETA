@@ -237,3 +237,4 @@ namespace Hotel_ManagementIT13.Data.Managers
         }
     }
 }
+

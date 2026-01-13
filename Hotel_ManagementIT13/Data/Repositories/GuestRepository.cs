@@ -15,14 +15,11 @@ namespace Hotel_ManagementIT13.Data.Repositories
             using (var conn = DatabaseHelper.GetConnection())
             {
                 conn.Open();
-                string query = @"
-                    SELECT g.*, gt.guest_type_name
-                    FROM guests g
-                    JOIN guest_types gt ON g.guest_type_id = gt.guest_type_id
-                    ORDER BY g.last_name, g.first_name";
 
-                using (var cmd = new MySqlCommand(query, conn))
+                using (var cmd = new MySqlCommand("sp_GetAllGuests", conn))
                 {
+                    cmd.CommandType = CommandType.StoredProcedure;
+
                     using (var reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())
@@ -41,15 +38,11 @@ namespace Hotel_ManagementIT13.Data.Repositories
             using (var conn = DatabaseHelper.GetConnection())
             {
                 conn.Open();
-                string query = @"
-                    SELECT g.*, gt.guest_type_name
-                    FROM guests g
-                    JOIN guest_types gt ON g.guest_type_id = gt.guest_type_id
-                    WHERE g.guest_id = @guestId";
 
-                using (var cmd = new MySqlCommand(query, conn))
+                using (var cmd = new MySqlCommand("sp_GetGuestById", conn))
                 {
-                    cmd.Parameters.AddWithValue("@guestId", guestId);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@p_guest_id", guestId);
 
                     using (var reader = cmd.ExecuteReader())
                     {
@@ -71,19 +64,11 @@ namespace Hotel_ManagementIT13.Data.Repositories
             using (var conn = DatabaseHelper.GetConnection())
             {
                 conn.Open();
-                string query = @"
-                    SELECT g.*, gt.guest_type_name
-                    FROM guests g
-                    JOIN guest_types gt ON g.guest_type_id = gt.guest_type_id
-                    WHERE g.first_name LIKE @search 
-                       OR g.last_name LIKE @search
-                       OR g.email LIKE @search
-                       OR g.phone LIKE @search
-                    ORDER BY g.last_name, g.first_name";
 
-                using (var cmd = new MySqlCommand(query, conn))
+                using (var cmd = new MySqlCommand("sp_SearchGuests", conn))
                 {
-                    cmd.Parameters.AddWithValue("@search", $"%{searchTerm}%");
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@p_search_term", $"%{searchTerm}%");
 
                     using (var reader = cmd.ExecuteReader())
                     {
@@ -103,30 +88,29 @@ namespace Hotel_ManagementIT13.Data.Repositories
             using (var conn = DatabaseHelper.GetConnection())
             {
                 conn.Open();
-                string query = @"
-                    INSERT INTO guests 
-                    (guest_type_id, first_name, last_name, phone, email, 
-                     address, nationality, date_of_birth, id_type, id_number)
-                    VALUES 
-                    (@typeId, @firstName, @lastName, @phone, @email,
-                     @address, @nationality, @dob, @idType, @idNumber);
-                    SELECT LAST_INSERT_ID();";
 
-                using (var cmd = new MySqlCommand(query, conn))
+                using (var cmd = new MySqlCommand("sp_AddGuest", conn))
                 {
-                    cmd.Parameters.AddWithValue("@typeId", guest.GuestTypeId);
-                    cmd.Parameters.AddWithValue("@firstName", guest.FirstName);
-                    cmd.Parameters.AddWithValue("@lastName", guest.LastName);
-                    cmd.Parameters.AddWithValue("@phone", guest.Phone);
-                    cmd.Parameters.AddWithValue("@email", guest.Email ?? "");
-                    cmd.Parameters.AddWithValue("@address", guest.Address ?? "");
-                    cmd.Parameters.AddWithValue("@nationality", guest.Nationality ?? "");
-                    cmd.Parameters.AddWithValue("@dob", guest.DateOfBirth.HasValue ?
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@p_guest_type_id", guest.GuestTypeId);
+                    cmd.Parameters.AddWithValue("@p_first_name", guest.FirstName);
+                    cmd.Parameters.AddWithValue("@p_last_name", guest.LastName);
+                    cmd.Parameters.AddWithValue("@p_phone", guest.Phone);
+                    cmd.Parameters.AddWithValue("@p_email", guest.Email ?? "");
+                    cmd.Parameters.AddWithValue("@p_address", guest.Address ?? "");
+                    cmd.Parameters.AddWithValue("@p_nationality", guest.Nationality ?? "");
+                    cmd.Parameters.AddWithValue("@p_date_of_birth", guest.DateOfBirth.HasValue ?
                         (object)guest.DateOfBirth.Value : DBNull.Value);
-                    cmd.Parameters.AddWithValue("@idType", guest.IdType ?? "");
-                    cmd.Parameters.AddWithValue("@idNumber", guest.IdNumber ?? "");
+                    cmd.Parameters.AddWithValue("@p_id_type", guest.IdType ?? "");
+                    cmd.Parameters.AddWithValue("@p_id_number", guest.IdNumber ?? "");
 
-                    return Convert.ToInt32(cmd.ExecuteScalar());
+                    var outputParam = new MySqlParameter("@p_new_guest_id", MySqlDbType.Int32);
+                    outputParam.Direction = ParameterDirection.Output;
+                    cmd.Parameters.Add(outputParam);
+
+                    cmd.ExecuteNonQuery();
+
+                    return outputParam.Value != DBNull.Value ? Convert.ToInt32(outputParam.Value) : 0;
                 }
             }
         }
@@ -136,34 +120,22 @@ namespace Hotel_ManagementIT13.Data.Repositories
             using (var conn = DatabaseHelper.GetConnection())
             {
                 conn.Open();
-                string query = @"
-                    UPDATE guests SET
-                    guest_type_id = @typeId,
-                    first_name = @firstName,
-                    last_name = @lastName,
-                    phone = @phone,
-                    email = @email,
-                    address = @address,
-                    nationality = @nationality,
-                    date_of_birth = @dob,
-                    id_type = @idType,
-                    id_number = @idNumber
-                    WHERE guest_id = @guestId";
 
-                using (var cmd = new MySqlCommand(query, conn))
+                using (var cmd = new MySqlCommand("sp_UpdateGuest", conn))
                 {
-                    cmd.Parameters.AddWithValue("@guestId", guest.GuestId);
-                    cmd.Parameters.AddWithValue("@typeId", guest.GuestTypeId);
-                    cmd.Parameters.AddWithValue("@firstName", guest.FirstName);
-                    cmd.Parameters.AddWithValue("@lastName", guest.LastName);
-                    cmd.Parameters.AddWithValue("@phone", guest.Phone);
-                    cmd.Parameters.AddWithValue("@email", guest.Email ?? "");
-                    cmd.Parameters.AddWithValue("@address", guest.Address ?? "");
-                    cmd.Parameters.AddWithValue("@nationality", guest.Nationality ?? "");
-                    cmd.Parameters.AddWithValue("@dob", guest.DateOfBirth.HasValue ?
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@p_guest_id", guest.GuestId);
+                    cmd.Parameters.AddWithValue("@p_guest_type_id", guest.GuestTypeId);
+                    cmd.Parameters.AddWithValue("@p_first_name", guest.FirstName);
+                    cmd.Parameters.AddWithValue("@p_last_name", guest.LastName);
+                    cmd.Parameters.AddWithValue("@p_phone", guest.Phone);
+                    cmd.Parameters.AddWithValue("@p_email", guest.Email ?? "");
+                    cmd.Parameters.AddWithValue("@p_address", guest.Address ?? "");
+                    cmd.Parameters.AddWithValue("@p_nationality", guest.Nationality ?? "");
+                    cmd.Parameters.AddWithValue("@p_date_of_birth", guest.DateOfBirth.HasValue ?
                         (object)guest.DateOfBirth.Value : DBNull.Value);
-                    cmd.Parameters.AddWithValue("@idType", guest.IdType ?? "");
-                    cmd.Parameters.AddWithValue("@idNumber", guest.IdNumber ?? "");
+                    cmd.Parameters.AddWithValue("@p_id_type", guest.IdType ?? "");
+                    cmd.Parameters.AddWithValue("@p_id_number", guest.IdNumber ?? "");
 
                     return cmd.ExecuteNonQuery() > 0;
                 }
@@ -175,11 +147,12 @@ namespace Hotel_ManagementIT13.Data.Repositories
             using (var conn = DatabaseHelper.GetConnection())
             {
                 conn.Open();
-                string query = "DELETE FROM guests WHERE guest_id = @guestId";
 
-                using (var cmd = new MySqlCommand(query, conn))
+                using (var cmd = new MySqlCommand("sp_DeleteGuest", conn))
                 {
-                    cmd.Parameters.AddWithValue("@guestId", guestId);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@p_guest_id", guestId);
+
                     return cmd.ExecuteNonQuery() > 0;
                 }
             }
@@ -190,13 +163,19 @@ namespace Hotel_ManagementIT13.Data.Repositories
             using (var conn = DatabaseHelper.GetConnection())
             {
                 conn.Open();
-                string query = "SELECT COUNT(*) FROM reservations WHERE guest_id = @guestId";
 
-                using (var cmd = new MySqlCommand(query, conn))
+                using (var cmd = new MySqlCommand("sp_GuestHasReservations", conn))
                 {
-                    cmd.Parameters.AddWithValue("@guestId", guestId);
-                    int count = Convert.ToInt32(cmd.ExecuteScalar());
-                    return count > 0;
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@p_guest_id", guestId);
+
+                    var resultParam = new MySqlParameter("@p_has_reservations", MySqlDbType.Int32);
+                    resultParam.Direction = ParameterDirection.Output;
+                    cmd.Parameters.Add(resultParam);
+
+                    cmd.ExecuteNonQuery();
+
+                    return resultParam.Value != DBNull.Value && Convert.ToInt32(resultParam.Value) > 0;
                 }
             }
         }

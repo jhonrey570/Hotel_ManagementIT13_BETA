@@ -22,68 +22,46 @@ namespace Hotel_ManagementIT13.Data.Repositories
                 {
                     try
                     {
-                        // Insert reservation
-                        string query = @"
-                            INSERT INTO reservations 
-                            (guest_id, user_id, company_id, status_id, reservation_type_id, 
-                             booking_reference, check_in_date, check_out_date, adults, children, 
-                             special_requests, total_amount)
-                            VALUES 
-                            (@guestId, @userId, @companyId, @statusId, @reservationTypeId,
-                             @bookingRef, @checkIn, @checkOut, @adults, @children, 
-                             @specialRequests, @totalAmount);
-                            SELECT LAST_INSERT_ID();";
-
-                        int reservationId;
-
-                        using (var cmd = new MySqlCommand(query, conn, transaction))
+                        // Convert rooms list to comma-separated string
+                        string roomIds = "";
+                        if (reservation.Rooms != null && reservation.Rooms.Count > 0)
                         {
-                            cmd.Parameters.AddWithValue("@guestId", reservation.GuestId);
-                            cmd.Parameters.AddWithValue("@userId", reservation.UserId);
-                            cmd.Parameters.AddWithValue("@companyId", reservation.CompanyId);
-                            cmd.Parameters.AddWithValue("@statusId", reservation.StatusId);
-                            cmd.Parameters.AddWithValue("@reservationTypeId", reservation.ReservationTypeId);
-                            cmd.Parameters.AddWithValue("@bookingRef", reservation.BookingReference);
-                            cmd.Parameters.AddWithValue("@checkIn", reservation.CheckInDate);
-                            cmd.Parameters.AddWithValue("@checkOut", reservation.CheckOutDate);
-                            cmd.Parameters.AddWithValue("@adults", reservation.Adults);
-                            cmd.Parameters.AddWithValue("@children", reservation.Children);
-                            cmd.Parameters.AddWithValue("@specialRequests", reservation.SpecialRequests);
-                            cmd.Parameters.AddWithValue("@totalAmount", reservation.TotalAmount);
-
-                            reservationId = Convert.ToInt32(cmd.ExecuteScalar());
-                        }
-
-                        // Insert reservation rooms
-                        foreach (var room in reservation.Rooms)
-                        {
-                            string roomQuery = @"
-                                INSERT INTO reservation_rooms (reservation_id, room_id)
-                                VALUES (@reservationId, @roomId);
-                                UPDATE rooms SET status_id = 3 WHERE room_id = @roomId"; // Set to Reserved
-
-                            using (var roomCmd = new MySqlCommand(roomQuery, conn, transaction))
+                            List<string> idList = new List<string>();
+                            foreach (var room in reservation.Rooms)
                             {
-                                roomCmd.Parameters.AddWithValue("@reservationId", reservationId);
-                                roomCmd.Parameters.AddWithValue("@roomId", room.RoomId);
-                                roomCmd.ExecuteNonQuery();
+                                idList.Add(room.RoomId.ToString());
                             }
+                            roomIds = string.Join(",", idList);
                         }
 
-                        // Create billing record
-                        string billingQuery = @"
-                            INSERT INTO billings (reservation_id, total_amount, paid_amount, balance, billing_date)
-                            VALUES (@reservationId, @totalAmount, 0, @totalAmount, NOW())";
-
-                        using (var billingCmd = new MySqlCommand(billingQuery, conn, transaction))
+                        using (var cmd = new MySqlCommand("sp_CreateReservation", conn, transaction))
                         {
-                            billingCmd.Parameters.AddWithValue("@reservationId", reservationId);
-                            billingCmd.Parameters.AddWithValue("@totalAmount", reservation.TotalAmount);
-                            billingCmd.ExecuteNonQuery();
-                        }
+                            cmd.CommandType = CommandType.StoredProcedure;
+                            cmd.Parameters.AddWithValue("@p_guest_id", reservation.GuestId);
+                            cmd.Parameters.AddWithValue("@p_user_id", reservation.UserId);
+                            cmd.Parameters.AddWithValue("@p_company_id", reservation.CompanyId);
+                            cmd.Parameters.AddWithValue("@p_status_id", reservation.StatusId);
+                            cmd.Parameters.AddWithValue("@p_reservation_type_id", reservation.ReservationTypeId);
+                            cmd.Parameters.AddWithValue("@p_booking_reference", reservation.BookingReference);
+                            cmd.Parameters.AddWithValue("@p_check_in_date", reservation.CheckInDate);
+                            cmd.Parameters.AddWithValue("@p_check_out_date", reservation.CheckOutDate);
+                            cmd.Parameters.AddWithValue("@p_adults", reservation.Adults);
+                            cmd.Parameters.AddWithValue("@p_children", reservation.Children);
+                            cmd.Parameters.AddWithValue("@p_special_requests", reservation.SpecialRequests);
+                            cmd.Parameters.AddWithValue("@p_total_amount", reservation.TotalAmount);
+                            cmd.Parameters.AddWithValue("@p_room_ids", string.IsNullOrEmpty(roomIds) ? null : roomIds);
 
-                        transaction.Commit();
-                        return reservationId;
+                            var outputParam = new MySqlParameter("@p_reservation_id", MySqlDbType.Int32);
+                            outputParam.Direction = ParameterDirection.Output;
+                            cmd.Parameters.Add(outputParam);
+
+                            cmd.ExecuteNonQuery();
+
+                            int reservationId = outputParam.Value != DBNull.Value ? Convert.ToInt32(outputParam.Value) : 0;
+
+                            transaction.Commit();
+                            return reservationId;
+                        }
                     }
                     catch (Exception)
                     {
@@ -99,12 +77,12 @@ namespace Hotel_ManagementIT13.Data.Repositories
             using (var conn = DatabaseHelper.GetConnection())
             {
                 conn.Open();
-                string query = "UPDATE reservations SET status_id = @statusId WHERE reservation_id = @reservationId";
 
-                using (var cmd = new MySqlCommand(query, conn))
+                using (var cmd = new MySqlCommand("sp_UpdateReservationStatus", conn))
                 {
-                    cmd.Parameters.AddWithValue("@reservationId", reservationId);
-                    cmd.Parameters.AddWithValue("@statusId", statusId);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@p_reservation_id", reservationId);
+                    cmd.Parameters.AddWithValue("@p_status_id", statusId);
 
                     return cmd.ExecuteNonQuery() > 0;
                 }
@@ -116,15 +94,13 @@ namespace Hotel_ManagementIT13.Data.Repositories
             using (var conn = DatabaseHelper.GetConnection())
             {
                 conn.Open();
-                string query = @"
-                    INSERT INTO check_in_out (reservation_id, processed_by, status_id, check_in_time)
-                    VALUES (@reservationId, @processedBy, @statusId, NOW())";
 
-                using (var cmd = new MySqlCommand(query, conn))
+                using (var cmd = new MySqlCommand("sp_RecordCheckIn", conn))
                 {
-                    cmd.Parameters.AddWithValue("@reservationId", reservationId);
-                    cmd.Parameters.AddWithValue("@processedBy", processedBy);
-                    cmd.Parameters.AddWithValue("@statusId", statusId);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@p_reservation_id", reservationId);
+                    cmd.Parameters.AddWithValue("@p_processed_by", processedBy);
+                    cmd.Parameters.AddWithValue("@p_status_id", statusId);
 
                     return cmd.ExecuteNonQuery() > 0;
                 }
@@ -136,18 +112,14 @@ namespace Hotel_ManagementIT13.Data.Repositories
             using (var conn = DatabaseHelper.GetConnection())
             {
                 conn.Open();
-                string query = @"
-                    UPDATE check_in_out 
-                    SET status_id = @statusId, check_out_time = @checkOutTime 
-                    WHERE reservation_id = @reservationId
-                    AND check_out_time IS NULL";
 
-                using (var cmd = new MySqlCommand(query, conn))
+                using (var cmd = new MySqlCommand("sp_RecordCheckOut", conn))
                 {
-                    cmd.Parameters.AddWithValue("@reservationId", reservationId);
-                    cmd.Parameters.AddWithValue("@processedBy", processedBy);
-                    cmd.Parameters.AddWithValue("@statusId", statusId);
-                    cmd.Parameters.AddWithValue("@checkOutTime", checkOutTime);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@p_reservation_id", reservationId);
+                    cmd.Parameters.AddWithValue("@p_processed_by", processedBy);
+                    cmd.Parameters.AddWithValue("@p_status_id", statusId);
+                    cmd.Parameters.AddWithValue("@p_check_out_time", checkOutTime);
 
                     return cmd.ExecuteNonQuery() > 0;
                 }
@@ -161,24 +133,11 @@ namespace Hotel_ManagementIT13.Data.Repositories
             using (var conn = DatabaseHelper.GetConnection())
             {
                 conn.Open();
-                string query = @"
-                    SELECT r.*, g.first_name, g.last_name, 
-                           rs.status_name, rt.type_name as reservation_type,
-                           c.company_name, u.username as user_name,
-                           COALESCE(b.total_amount, r.total_amount) as total_amount
-                    FROM reservations r
-                    JOIN guests g ON r.guest_id = g.guest_id
-                    JOIN reservation_statuses rs ON r.status_id = rs.status_id
-                    JOIN reservation_types rt ON r.reservation_type_id = rt.reservation_type_id
-                    LEFT JOIN companies c ON r.company_id = c.company_id
-                    JOIN users u ON r.user_id = u.user_id
-                    LEFT JOIN billings b ON r.reservation_id = b.reservation_id
-                    WHERE DATE(r.check_in_date) = CURDATE()
-                    AND r.status_id IN (1, 2) -- Confirmed, Pending Payment (reservation_statuses)
-                    ORDER BY r.check_in_date";
 
-                using (var cmd = new MySqlCommand(query, conn))
+                using (var cmd = new MySqlCommand("sp_GetTodaysArrivals", conn))
                 {
+                    cmd.CommandType = CommandType.StoredProcedure;
+
                     using (var reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())
@@ -201,28 +160,11 @@ namespace Hotel_ManagementIT13.Data.Repositories
             using (var conn = DatabaseHelper.GetConnection())
             {
                 conn.Open();
-                string query = @"
-                    SELECT DISTINCT r.*, g.first_name, g.last_name, 
-                           rs.status_name, rt.type_name as reservation_type,
-                           c.company_name, u.username as user_name,
-                           cio.check_in_time, cio.check_out_time,
-                           COALESCE(b.total_amount, r.total_amount) as total_amount
-                    FROM reservations r
-                    JOIN guests g ON r.guest_id = g.guest_id
-                    JOIN reservation_statuses rs ON r.status_id = rs.status_id
-                    JOIN reservation_types rt ON r.reservation_type_id = rt.reservation_type_id
-                    LEFT JOIN companies c ON r.company_id = c.company_id
-                    JOIN users u ON r.user_id = u.user_id
-                    LEFT JOIN check_in_out cio ON r.reservation_id = cio.reservation_id
-                    LEFT JOIN billings b ON r.reservation_id = b.reservation_id
-                    WHERE (DATE(r.check_out_date) = CURDATE() 
-                           OR cio.check_out_time IS NULL) -- Currently checked in
-                    AND r.status_id = 3 -- Checked-in (reservation_statuses)
-                    AND (cio.check_out_time IS NULL OR cio.status_id = 1) -- Currently checked in
-                    ORDER BY r.check_out_date, cio.check_in_time DESC";
 
-                using (var cmd = new MySqlCommand(query, conn))
+                using (var cmd = new MySqlCommand("sp_GetTodaysDepartures", conn))
                 {
+                    cmd.CommandType = CommandType.StoredProcedure;
+
                     using (var reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())
@@ -245,40 +187,17 @@ namespace Hotel_ManagementIT13.Data.Repositories
             using (var conn = DatabaseHelper.GetConnection())
             {
                 conn.Open();
-                string query = @"
-                    SELECT DISTINCT r.*, g.first_name, g.last_name, 
-                           rs.status_name, rt.type_name as reservation_type,
-                           c.company_name, u.username as user_name,
-                           cio.check_in_time,
-                           COALESCE(b.total_amount, r.total_amount) as total_amount
-                    FROM reservations r
-                    JOIN guests g ON r.guest_id = g.guest_id
-                    JOIN reservation_statuses rs ON r.status_id = rs.status_id
-                    JOIN reservation_types rt ON r.reservation_type_id = rt.reservation_type_id
-                    LEFT JOIN companies c ON r.company_id = c.company_id
-                    JOIN users u ON r.user_id = u.user_id
-                    JOIN check_in_out cio ON r.reservation_id = cio.reservation_id
-                    LEFT JOIN billings b ON r.reservation_id = b.reservation_id
-                    WHERE r.status_id = 3 -- Checked-in (reservation_statuses)
-                    AND cio.check_out_time IS NULL -- Not checked out yet
-                    AND cio.status_id = 1 -- Checked-in status
-                    ORDER BY cio.check_in_time DESC";
 
-                using (var cmd = new MySqlCommand(query, conn))
+                using (var cmd = new MySqlCommand("sp_GetCurrentlyCheckedIn", conn))
                 {
+                    cmd.CommandType = CommandType.StoredProcedure;
+
                     using (var reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())
                         {
                             var reservation = CreateReservationFromReader(reader);
                             reservation.Rooms = GetReservationRooms(reservation.ReservationId);
-
-
-                            DateTime checkInTime = reader["check_in_time"] != DBNull.Value
-                                ? Convert.ToDateTime(reader["check_in_time"])
-                                : DateTime.MinValue;
-
-
                             reservations.Add(reservation);
                         }
                     }
@@ -293,22 +212,21 @@ namespace Hotel_ManagementIT13.Data.Repositories
             using (var conn = DatabaseHelper.GetConnection())
             {
                 conn.Open();
-                string query = @"
-                    SELECT check_in_time 
-                    FROM check_in_out 
-                    WHERE reservation_id = @reservationId 
-                    AND check_out_time IS NULL
-                    ORDER BY check_in_time DESC 
-                    LIMIT 1";
 
-                using (var cmd = new MySqlCommand(query, conn))
+                using (var cmd = new MySqlCommand("sp_GetCheckInTime", conn))
                 {
-                    cmd.Parameters.AddWithValue("@reservationId", reservationId);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@p_reservation_id", reservationId);
 
-                    var result = cmd.ExecuteScalar();
-                    if (result != null && result != DBNull.Value)
+                    var resultParam = new MySqlParameter("@p_check_in_time", MySqlDbType.DateTime);
+                    resultParam.Direction = ParameterDirection.Output;
+                    cmd.Parameters.Add(resultParam);
+
+                    cmd.ExecuteNonQuery();
+
+                    if (resultParam.Value != DBNull.Value)
                     {
-                        return Convert.ToDateTime(result);
+                        return Convert.ToDateTime(resultParam.Value);
                     }
                 }
             }
@@ -321,22 +239,21 @@ namespace Hotel_ManagementIT13.Data.Repositories
             using (var conn = DatabaseHelper.GetConnection())
             {
                 conn.Open();
-                string query = @"
-                    SELECT check_out_time 
-                    FROM check_in_out 
-                    WHERE reservation_id = @reservationId 
-                    AND check_out_time IS NOT NULL
-                    ORDER BY check_out_time DESC 
-                    LIMIT 1";
 
-                using (var cmd = new MySqlCommand(query, conn))
+                using (var cmd = new MySqlCommand("sp_GetCheckOutTime", conn))
                 {
-                    cmd.Parameters.AddWithValue("@reservationId", reservationId);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@p_reservation_id", reservationId);
 
-                    var result = cmd.ExecuteScalar();
-                    if (result != null && result != DBNull.Value)
+                    var resultParam = new MySqlParameter("@p_check_out_time", MySqlDbType.DateTime);
+                    resultParam.Direction = ParameterDirection.Output;
+                    cmd.Parameters.Add(resultParam);
+
+                    cmd.ExecuteNonQuery();
+
+                    if (resultParam.Value != DBNull.Value)
                     {
-                        return Convert.ToDateTime(result);
+                        return Convert.ToDateTime(resultParam.Value);
                     }
                 }
             }
@@ -351,25 +268,12 @@ namespace Hotel_ManagementIT13.Data.Repositories
             using (var conn = DatabaseHelper.GetConnection())
             {
                 conn.Open();
-                string query = @"
-                    SELECT r.*, g.first_name, g.last_name, 
-                           rs.status_name, rt.type_name as reservation_type,
-                           c.company_name, u.username as user_name,
-                           COALESCE(b.total_amount, r.total_amount) as total_amount
-                    FROM reservations r
-                    JOIN guests g ON r.guest_id = g.guest_id
-                    JOIN reservation_statuses rs ON r.status_id = rs.status_id
-                    JOIN reservation_types rt ON r.reservation_type_id = rt.reservation_type_id
-                    LEFT JOIN companies c ON r.company_id = c.company_id
-                    JOIN users u ON r.user_id = u.user_id
-                    LEFT JOIN billings b ON r.reservation_id = b.reservation_id
-                    WHERE r.check_in_date <= @endDate AND r.check_out_date >= @startDate
-                    ORDER BY r.check_in_date";
 
-                using (var cmd = new MySqlCommand(query, conn))
+                using (var cmd = new MySqlCommand("sp_GetReservationsByDateRange", conn))
                 {
-                    cmd.Parameters.AddWithValue("@startDate", startDate);
-                    cmd.Parameters.AddWithValue("@endDate", endDate);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@p_start_date", startDate);
+                    cmd.Parameters.AddWithValue("@p_end_date", endDate);
 
                     using (var reader = cmd.ExecuteReader())
                     {
@@ -391,23 +295,11 @@ namespace Hotel_ManagementIT13.Data.Repositories
             using (var conn = DatabaseHelper.GetConnection())
             {
                 conn.Open();
-                string query = @"
-                    SELECT r.*, g.first_name, g.last_name, 
-                           rs.status_name, rt.type_name as reservation_type,
-                           c.company_name, u.username as user_name,
-                           COALESCE(b.total_amount, r.total_amount) as total_amount
-                    FROM reservations r
-                    JOIN guests g ON r.guest_id = g.guest_id
-                    JOIN reservation_statuses rs ON r.status_id = rs.status_id
-                    JOIN reservation_types rt ON r.reservation_type_id = rt.reservation_type_id
-                    LEFT JOIN companies c ON r.company_id = c.company_id
-                    JOIN users u ON r.user_id = u.user_id
-                    LEFT JOIN billings b ON r.reservation_id = b.reservation_id
-                    WHERE r.booking_reference = @bookingRef";
 
-                using (var cmd = new MySqlCommand(query, conn))
+                using (var cmd = new MySqlCommand("sp_GetReservationByReference", conn))
                 {
-                    cmd.Parameters.AddWithValue("@bookingRef", bookingReference);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@p_booking_reference", bookingReference);
 
                     using (var reader = cmd.ExecuteReader())
                     {
@@ -431,16 +323,11 @@ namespace Hotel_ManagementIT13.Data.Repositories
             using (var conn = DatabaseHelper.GetConnection())
             {
                 conn.Open();
-                string query = @"
-                    SELECT rr.*, r.room_number, rt.type_name as room_type_name
-                    FROM reservation_rooms rr
-                    JOIN rooms r ON rr.room_id = r.room_id
-                    JOIN room_types rt ON r.room_type_id = rt.room_type_id
-                    WHERE rr.reservation_id = @reservationId";
 
-                using (var cmd = new MySqlCommand(query, conn))
+                using (var cmd = new MySqlCommand("sp_GetReservationRooms", conn))
                 {
-                    cmd.Parameters.AddWithValue("@reservationId", reservationId);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@p_reservation_id", reservationId);
 
                     using (var reader = cmd.ExecuteReader())
                     {
@@ -469,17 +356,11 @@ namespace Hotel_ManagementIT13.Data.Repositories
             using (var conn = DatabaseHelper.GetConnection())
             {
                 conn.Open();
-                string query = @"
-                    SELECT cio.*, u.username as processed_by_name, cis.status_name
-                    FROM check_in_out cio
-                    JOIN users u ON cio.processed_by = u.user_id
-                    JOIN check_in_statuses cis ON cio.status_id = cis.status_id
-                    WHERE cio.reservation_id = @reservationId
-                    ORDER BY cio.check_in_time DESC";
 
-                using (var cmd = new MySqlCommand(query, conn))
+                using (var cmd = new MySqlCommand("sp_GetCheckInOutHistory", conn))
                 {
-                    cmd.Parameters.AddWithValue("@reservationId", reservationId);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@p_reservation_id", reservationId);
 
                     using (var reader = cmd.ExecuteReader())
                     {

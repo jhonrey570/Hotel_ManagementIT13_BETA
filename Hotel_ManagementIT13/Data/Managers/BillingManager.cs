@@ -6,12 +6,12 @@ namespace Hotel_ManagementIT13.Data.Managers
     public class BillingManager
     {
         private readonly BillingRepository _billingRepo;
-        private readonly PaymentRepository _paymentRepo; 
+        private readonly PaymentRepository _paymentRepo;
 
         public BillingManager()
         {
             _billingRepo = new BillingRepository();
-            _paymentRepo = new PaymentRepository(); 
+            _paymentRepo = new PaymentRepository();
         }
 
         public Billing GetBillingByReservationId(int reservationId)
@@ -22,7 +22,7 @@ namespace Hotel_ManagementIT13.Data.Managers
         public bool ProcessPayment(int reservationId, decimal amount,
                                  string paymentMethod, string notes)
         {
-            
+
             return _paymentRepo.ProcessPayment(reservationId, amount, paymentMethod, notes);
         }
 
@@ -43,7 +43,7 @@ namespace Hotel_ManagementIT13.Data.Managers
 
             if (billing != null)
             {
-               
+
                 return billing;
             }
 
@@ -72,7 +72,7 @@ namespace Hotel_ManagementIT13.Data.Managers
             if (billing == null)
                 return false;
 
-           
+
             return _billingRepo.AddBillingItem(billing.BillingId,
                 $"Discount: {discountReason}", -amount);
         }

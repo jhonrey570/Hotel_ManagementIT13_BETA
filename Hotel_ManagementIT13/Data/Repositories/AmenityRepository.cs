@@ -17,22 +17,25 @@ namespace Hotel_ManagementIT13.Data.Repositories
                 using (var conn = DatabaseHelper.GetConnection())
                 {
                     conn.Open();
-                    string query = "SELECT amenity_id, amenity_name FROM amenities ORDER BY amenity_name";
-
-                    using (var cmd = new MySqlCommand(query, conn))
-                    using (var reader = cmd.ExecuteReader())
+                    
+                    using (var cmd = new MySqlCommand("sp_GetAllAmenities", conn))
                     {
-                        while (reader.Read())
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+                        using (var reader = cmd.ExecuteReader())
                         {
-                            var amenity = new Amenity
+                            while (reader.Read())
                             {
-                                AmenityId = Convert.ToInt32(reader["amenity_id"]),
-                                AmenityName = reader["amenity_name"].ToString(),
-                                // Database doesn't have these fields, so we'll set defaults
-                                Category = "General",
-                                IsStandard = true
-                            };
-                            amenities.Add(amenity);
+                                var amenity = new Amenity
+                                {
+                                    AmenityId = Convert.ToInt32(reader["amenity_id"]),
+                                    AmenityName = reader["amenity_name"].ToString(),
+                                    
+                                    Category = "General",
+                                    IsStandard = true
+                                };
+                                amenities.Add(amenity);
+                            }
                         }
                     }
                 }
@@ -54,16 +57,11 @@ namespace Hotel_ManagementIT13.Data.Repositories
                 using (var conn = DatabaseHelper.GetConnection())
                 {
                     conn.Open();
-                    string query = @"
-                        SELECT a.amenity_id, a.amenity_name
-                        FROM amenities a
-                        INNER JOIN room_amenities ra ON a.amenity_id = ra.amenity_id
-                        WHERE ra.room_id = @roomId
-                        ORDER BY a.amenity_name";
-
-                    using (var cmd = new MySqlCommand(query, conn))
+                   
+                    using (var cmd = new MySqlCommand("sp_GetAmenitiesForRoom", conn))
                     {
-                        cmd.Parameters.AddWithValue("@roomId", roomId);
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("@p_room_id", roomId);
 
                         using (var reader = cmd.ExecuteReader())
                         {
@@ -102,32 +100,28 @@ namespace Hotel_ManagementIT13.Data.Repositories
                     conn.Open();
                 }
 
-                // First, delete existing amenities for this room
-                string deleteQuery = "DELETE FROM room_amenities WHERE room_id = @roomId";
-                using (var deleteCmd = transaction != null
-                    ? new MySqlCommand(deleteQuery, conn, transaction)
-                    : new MySqlCommand(deleteQuery, conn))
-                {
-                    deleteCmd.Parameters.AddWithValue("@roomId", roomId);
-                    deleteCmd.ExecuteNonQuery();
-                }
-
-                // Then insert new amenities
+               
+                string amenityIds = "";
                 if (amenities != null && amenities.Count > 0)
                 {
-                    string insertQuery = "INSERT INTO room_amenities (room_id, amenity_id) VALUES (@roomId, @amenityId)";
-
+                    List<string> idList = new List<string>();
                     foreach (var amenity in amenities)
                     {
-                        using (var insertCmd = transaction != null
-                            ? new MySqlCommand(insertQuery, conn, transaction)
-                            : new MySqlCommand(insertQuery, conn))
-                        {
-                            insertCmd.Parameters.AddWithValue("@roomId", roomId);
-                            insertCmd.Parameters.AddWithValue("@amenityId", amenity.AmenityId);
-                            insertCmd.ExecuteNonQuery();
-                        }
+                        idList.Add(amenity.AmenityId.ToString());
                     }
+                    amenityIds = string.Join(",", idList);
+                }
+
+               
+                using (var cmd = transaction != null
+                    ? new MySqlCommand("sp_SaveRoomAmenities", conn, transaction)
+                    : new MySqlCommand("sp_SaveRoomAmenities", conn))
+                {
+                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@p_room_id", roomId);
+                    cmd.Parameters.AddWithValue("@p_amenity_ids", string.IsNullOrEmpty(amenityIds) ? null : amenityIds);
+
+                    cmd.ExecuteNonQuery();
                 }
             }
             finally

@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using System.Data;
 
 namespace Hotel_ManagementIT13.Services
 {
@@ -273,33 +274,12 @@ namespace Hotel_ManagementIT13.Services
                 using (var conn = DatabaseHelper.GetConnection())
                 {
                     conn.Open();
-                    string query = @"
-                        SELECT 
-                            r.*, 
-                            COALESCE(g.first_name, 'Unknown') as first_name, 
-                            COALESCE(g.last_name, 'Guest') as last_name,
-                            CASE 
-                                WHEN r.status_id = 1 THEN 'Confirmed'
-                                WHEN r.status_id = 2 THEN 'Pending Payment'
-                                WHEN r.status_id = 3 THEN 'Checked-in'
-                                WHEN r.status_id = 4 THEN 'Checked-out'
-                                WHEN r.status_id = 5 THEN 'Cancelled'
-                                WHEN r.status_id = 6 THEN 'No-Show'
-                                ELSE 'Confirmed'
-                            END as status_name,
-                            'Standard' as reservation_type,
-                            NULL as company_name,
-                            'System' as user_name
-                        FROM reservations r
-                        LEFT JOIN guests g ON r.guest_id = g.guest_id
-                        WHERE (@fromDate IS NULL OR r.created_at >= @fromDate)
-                          AND (@toDate IS NULL OR r.created_at <= @toDate)
-                        ORDER BY r.created_at DESC";
 
-                    using (var cmd = new MySqlCommand(query, conn))
+                    using (var cmd = new MySqlCommand("sp_GetAllReservationsDirectly", conn))
                     {
-                        cmd.Parameters.AddWithValue("@fromDate", fromDate ?? (object)DBNull.Value);
-                        cmd.Parameters.AddWithValue("@toDate", toDate ?? (object)DBNull.Value);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("@p_from_date", fromDate ?? (object)DBNull.Value);
+                        cmd.Parameters.AddWithValue("@p_to_date", toDate ?? (object)DBNull.Value);
 
                         using (var reader = cmd.ExecuteReader())
                         {
@@ -359,18 +339,11 @@ namespace Hotel_ManagementIT13.Services
                 using (var conn = DatabaseHelper.GetConnection())
                 {
                     conn.Open();
-                    string query = @"
-                        SELECT rr.*, 
-                               COALESCE(r.room_number, 'Unknown') as room_number, 
-                               COALESCE(rt.type_name, 'Standard') as room_type_name
-                        FROM reservation_rooms rr
-                        LEFT JOIN rooms r ON rr.room_id = r.room_id
-                        LEFT JOIN room_types rt ON r.room_type_id = rt.room_type_id
-                        WHERE rr.reservation_id = @reservationId";
 
-                    using (var cmd = new MySqlCommand(query, conn))
+                    using (var cmd = new MySqlCommand("sp_GetReservationRoomsDirectly", conn))
                     {
-                        cmd.Parameters.AddWithValue("@reservationId", reservationId);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("@p_reservation_id", reservationId);
 
                         using (var reader = cmd.ExecuteReader())
                         {
@@ -404,12 +377,19 @@ namespace Hotel_ManagementIT13.Services
                 using (var conn = DatabaseHelper.GetConnection())
                 {
                     conn.Open();
-                    string query = "SELECT reservation_id FROM reservations WHERE booking_reference = @bookingReference";
-                    using (var cmd = new MySqlCommand(query, conn))
+
+                    using (var cmd = new MySqlCommand("sp_GetReservationIdFromReference", conn))
                     {
-                        cmd.Parameters.AddWithValue("@bookingReference", bookingReference);
-                        object result = cmd.ExecuteScalar();
-                        return result != null ? Convert.ToInt32(result) : 0;
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("@p_booking_reference", bookingReference);
+
+                        var resultParam = new MySqlParameter("@p_reservation_id", MySqlDbType.Int32);
+                        resultParam.Direction = ParameterDirection.Output;
+                        cmd.Parameters.Add(resultParam);
+
+                        cmd.ExecuteNonQuery();
+
+                        return resultParam.Value != DBNull.Value ? Convert.ToInt32(resultParam.Value) : 0;
                     }
                 }
             }
@@ -429,50 +409,31 @@ namespace Hotel_ManagementIT13.Services
                 {
                     try
                     {
-                        // 1. Update the reservation status
-                        string updateReservationQuery = "UPDATE reservations SET status_id = @statusId WHERE reservation_id = @reservationId";
-                        using (var reservationCmd = new MySqlCommand(updateReservationQuery, conn, transaction))
+                        using (var cmd = new MySqlCommand("sp_UpdateReservationStatusWithRooms", conn, transaction))
                         {
-                            reservationCmd.Parameters.AddWithValue("@statusId", statusId);
-                            reservationCmd.Parameters.AddWithValue("@reservationId", reservationId);
-                            int reservationRowsAffected = reservationCmd.ExecuteNonQuery();
+                            cmd.CommandType = CommandType.StoredProcedure;
+                            cmd.Parameters.AddWithValue("@p_reservation_id", reservationId);
+                            cmd.Parameters.AddWithValue("@p_status_id", statusId);
 
-                            if (reservationRowsAffected <= 0)
+                            var outputParam = new MySqlParameter("@p_success", MySqlDbType.Int32);
+                            outputParam.Direction = ParameterDirection.Output;
+                            cmd.Parameters.Add(outputParam);
+
+                            cmd.ExecuteNonQuery();
+
+                            bool success = outputParam.Value != DBNull.Value && Convert.ToInt32(outputParam.Value) == 1;
+
+                            if (success)
+                            {
+                                transaction.Commit();
+                            }
+                            else
                             {
                                 transaction.Rollback();
-                                return false;
                             }
+
+                            return success;
                         }
-
-                        // 2. Get all room IDs from this reservation
-                        List<int> roomIds = new List<int>();
-                        string getRoomsQuery = "SELECT room_id FROM reservation_rooms WHERE reservation_id = @reservationId";
-                        using (var roomsCmd = new MySqlCommand(getRoomsQuery, conn, transaction))
-                        {
-                            roomsCmd.Parameters.AddWithValue("@reservationId", reservationId);
-
-                            using (var reader = roomsCmd.ExecuteReader())
-                            {
-                                while (reader.Read())
-                                {
-                                    roomIds.Add(Convert.ToInt32(reader["room_id"]));
-                                }
-                            }
-                        }
-
-                        // 3. Update each room's status to Available (status_id = 1)
-                        foreach (int roomId in roomIds)
-                        {
-                            bool roomUpdated = _roomRepo.UpdateRoomStatus(roomId, 1); // 1 = Available
-
-                            if (!roomUpdated)
-                            {
-                                // Log warning but continue
-                            }
-                        }
-
-                        transaction.Commit();
-                        return true;
                     }
                     catch
                     {

@@ -461,6 +461,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Data\DatabaseScripts\" />
     <Folder Include="Resources\Icons\" />
     <Folder Include="Resources\Images\" />
   </ItemGroup>
@@ -502,6 +503,7 @@
     <None Include="Resources\clarity--export-line.png" />
     <None Include="Resources\clarity--printer-line.png" />
     <None Include="Resources\tdesign--filter-clear.png" />
+    <None Include="Resources\clarity--eye-line.png" />
     <Content Include="SqlServerTypes\readme.htm" />
     <Content Include="SqlServerTypes\x64\msvcr120.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

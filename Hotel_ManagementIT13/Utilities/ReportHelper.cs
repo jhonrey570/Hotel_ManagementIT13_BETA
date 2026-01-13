@@ -42,7 +42,7 @@ namespace Hotel_ManagementIT13.Data
         public const string GUEST_REPORT = "Guest Report";
         public const string ROOM_REPORT = "Room Utilization Report";
 
-        // ==================== PUBLIC INTERFACE METHODS ====================
+       
 
         public List<string> GetReportTypes()
         {
@@ -87,7 +87,7 @@ namespace Hotel_ManagementIT13.Data
             return GenerateRoomUtilizationData(fromDate, toDate, roomTypeFilter);
         }
 
-        // ==================== CHART METHODS ====================
+        
 
         public void PopulateChart(Chart chart, DataTable data, string reportType)
         {
@@ -120,7 +120,7 @@ namespace Hotel_ManagementIT13.Data
             }
         }
 
-        // ==================== UTILITY METHODS ====================
+       
 
         public decimal CalculateTotalRevenue(DataTable data)
         {
@@ -168,7 +168,7 @@ namespace Hotel_ManagementIT13.Data
             return RetrieveTotalRevenue(startDate, endDate);
         }
 
-        // ==================== PRIVATE DATA GENERATION METHODS ====================
+       
 
         private DataTable GenerateDailyOccupancyData(DateTime fromDate, DateTime toDate, string roomTypeFilter)
         {
@@ -458,17 +458,26 @@ namespace Hotel_ManagementIT13.Data
         {
             try
             {
-                var reservations = GetReservationsForDate(date, date, roomTypeFilter, "All Guest Types");
-                int occupiedRooms = 0;
-
-                foreach (var reservation in reservations)
+                using (var conn = DatabaseHelper.GetConnection())
                 {
-                    if (reservation.CheckInDate <= date && reservation.CheckOutDate > date)
+                    conn.Open();
+
+                    using (var cmd = new MySqlCommand("sp_CalculateOccupiedRoomsForDate", conn))
                     {
-                        occupiedRooms += reservation.Rooms != null ? reservation.Rooms.Count : 0;
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("@p_date", date);
+                        cmd.Parameters.AddWithValue("@p_room_type_filter",
+                            roomTypeFilter == "All Room Types" ? (object)DBNull.Value : roomTypeFilter);
+
+                        var resultParam = new MySqlParameter("@p_occupied_rooms", MySqlDbType.Int32);
+                        resultParam.Direction = ParameterDirection.Output;
+                        cmd.Parameters.Add(resultParam);
+
+                        cmd.ExecuteNonQuery();
+
+                        return resultParam.Value != DBNull.Value ? Convert.ToInt32(resultParam.Value) : 0;
                     }
                 }
-                return occupiedRooms;
             }
             catch (Exception)
             {
@@ -500,36 +509,44 @@ namespace Hotel_ManagementIT13.Data
                 using (var conn = DatabaseHelper.GetConnection())
                 {
                     conn.Open();
-                    string query = @"
-                        SELECT payment_method, payment_date, amount 
-                        FROM payments 
-                        WHERE reservation_id = @reservationId 
-                        ORDER BY payment_date DESC LIMIT 1";
 
-                    using (var cmd = new MySqlCommand(query, conn))
+                    using (var cmd = new MySqlCommand("sp_GetPaymentInfo", conn))
                     {
-                        cmd.Parameters.AddWithValue("@reservationId", reservationId);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("@p_reservation_id", reservationId);
 
-                        using (var reader = cmd.ExecuteReader())
-                        {
-                            if (reader.Read())
-                            {
-                                return (
-                                    reader["payment_method"].ToString(),
-                                    Convert.ToDateTime(reader["payment_date"]).ToString("yyyy-MM-dd"),
-                                    Convert.ToDecimal(reader["amount"])
-                                );
-                            }
-                        }
+                        var paymentMethodParam = new MySqlParameter("@p_payment_method", MySqlDbType.VarChar, 50);
+                        paymentMethodParam.Direction = ParameterDirection.Output;
+                        cmd.Parameters.Add(paymentMethodParam);
+
+                        var paymentDateParam = new MySqlParameter("@p_payment_date", MySqlDbType.DateTime);
+                        paymentDateParam.Direction = ParameterDirection.Output;
+                        cmd.Parameters.Add(paymentDateParam);
+
+                        var amountParam = new MySqlParameter("@p_amount", MySqlDbType.Decimal);
+                        amountParam.Precision = 10;
+                        amountParam.Scale = 2;
+                        amountParam.Direction = ParameterDirection.Output;
+                        cmd.Parameters.Add(amountParam);
+
+                        cmd.ExecuteNonQuery();
+
+                        string paymentMethod = paymentMethodParam.Value != DBNull.Value ?
+                            paymentMethodParam.Value.ToString() : "Not Paid";
+                        string paymentDate = paymentDateParam.Value != DBNull.Value ?
+                            Convert.ToDateTime(paymentDateParam.Value).ToString("yyyy-MM-dd") : "N/A";
+                        decimal amount = amountParam.Value != DBNull.Value ?
+                            Convert.ToDecimal(amountParam.Value) : 0;
+
+                        return (paymentMethod, paymentDate, amount);
                     }
                 }
             }
             catch (Exception)
             {
                 // Return default values
+                return ("Not Paid", "N/A", 0);
             }
-
-            return ("Not Paid", "N/A", 0);
         }
 
         private string GetRoomTypes(Reservation reservation)
@@ -612,26 +629,28 @@ namespace Hotel_ManagementIT13.Data
         {
             try
             {
-                var reservations = _reservationRepo.GetReservationsByDateRange(fromDate, toDate);
-
-                decimal totalRevenue = 0;
-                foreach (var reservation in reservations)
+                using (var conn = DatabaseHelper.GetConnection())
                 {
-                    if (reservation.Rooms != null && reservation.Rooms.Any(r => r.RoomTypeName == roomType))
-                    {
-                        // If reservation has multiple rooms, calculate proportion
-                        int matchingRooms = reservation.Rooms.Count(r => r.RoomTypeName == roomType);
-                        int totalReservationRooms = reservation.Rooms.Count;
+                    conn.Open();
 
-                        if (totalReservationRooms > 0)
-                        {
-                            decimal proportion = (decimal)matchingRooms / totalReservationRooms;
-                            totalRevenue += reservation.TotalAmount * proportion;
-                        }
+                    using (var cmd = new MySqlCommand("sp_CalculateRevenueForRoomType", conn))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("@p_room_type", roomType);
+                        cmd.Parameters.AddWithValue("@p_from_date", fromDate);
+                        cmd.Parameters.AddWithValue("@p_to_date", toDate);
+
+                        var resultParam = new MySqlParameter("@p_revenue", MySqlDbType.Decimal);
+                        resultParam.Precision = 10;
+                        resultParam.Scale = 2;
+                        resultParam.Direction = ParameterDirection.Output;
+                        cmd.Parameters.Add(resultParam);
+
+                        cmd.ExecuteNonQuery();
+
+                        return resultParam.Value != DBNull.Value ? Convert.ToDecimal(resultParam.Value) : 0;
                     }
                 }
-
-                return totalRevenue;
             }
             catch (Exception)
             {
@@ -820,19 +839,23 @@ namespace Hotel_ManagementIT13.Data
                 using (var conn = DatabaseHelper.GetConnection())
                 {
                     conn.Open();
-                    string query = "SELECT type_name FROM room_types ORDER BY type_name";
-                    var roomTypes = new List<string> { "All Room Types" };
 
-                    using (var cmd = new MySqlCommand(query, conn))
-                    using (var reader = cmd.ExecuteReader())
+                    using (var cmd = new MySqlCommand("sp_GetRoomTypesForReports", conn))
                     {
-                        while (reader.Read())
-                        {
-                            roomTypes.Add(reader["type_name"].ToString());
-                        }
-                    }
+                        cmd.CommandType = CommandType.StoredProcedure;
 
-                    return roomTypes;
+                        var roomTypes = new List<string> { "All Room Types" };
+
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                roomTypes.Add(reader["type_name"].ToString());
+                            }
+                        }
+
+                        return roomTypes;
+                    }
                 }
             }
             catch (Exception)
@@ -855,19 +878,23 @@ namespace Hotel_ManagementIT13.Data
                 using (var conn = DatabaseHelper.GetConnection())
                 {
                     conn.Open();
-                    string query = "SELECT guest_type_name FROM guest_types ORDER BY guest_type_name";
-                    var guestTypes = new List<string> { "All Guest Types" };
 
-                    using (var cmd = new MySqlCommand(query, conn))
-                    using (var reader = cmd.ExecuteReader())
+                    using (var cmd = new MySqlCommand("sp_GetGuestTypesForReports", conn))
                     {
-                        while (reader.Read())
-                        {
-                            guestTypes.Add(reader["guest_type_name"].ToString());
-                        }
-                    }
+                        cmd.CommandType = CommandType.StoredProcedure;
 
-                    return guestTypes;
+                        var guestTypes = new List<string> { "All Guest Types" };
+
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                guestTypes.Add(reader["guest_type_name"].ToString());
+                            }
+                        }
+
+                        return guestTypes;
+                    }
                 }
             }
             catch (Exception)

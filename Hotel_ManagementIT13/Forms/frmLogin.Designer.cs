@@ -35,10 +35,10 @@
             this.txtPassword = new System.Windows.Forms.TextBox();
             this.btnLogin = new System.Windows.Forms.Button();
             this.btnExit = new System.Windows.Forms.Button();
-            this.chkRemember = new System.Windows.Forms.CheckBox();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.lblStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.panelMain = new System.Windows.Forms.Panel();
+            this.btnShowPass = new System.Windows.Forms.Button();
             this.picLogo = new System.Windows.Forms.PictureBox();
             this.lblRights = new System.Windows.Forms.Label();
             this.statusStrip.SuspendLayout();
@@ -53,7 +53,7 @@
             this.lblTitle.ForeColor = System.Drawing.Color.DarkGoldenrod;
             this.lblTitle.Location = new System.Drawing.Point(76, 38);
             this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(329, 39);
+            this.lblTitle.Size = new System.Drawing.Size(321, 38);
             this.lblTitle.TabIndex = 0;
             this.lblTitle.Text = "JMS HOTEL LOGIN";
             this.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -136,18 +136,6 @@
             this.btnExit.UseVisualStyleBackColor = false;
             this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
             // 
-            // chkRemember
-            // 
-            this.chkRemember.AutoSize = true;
-            this.chkRemember.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.chkRemember.Location = new System.Drawing.Point(39, 369);
-            this.chkRemember.Margin = new System.Windows.Forms.Padding(3, 20, 3, 10);
-            this.chkRemember.Name = "chkRemember";
-            this.chkRemember.Size = new System.Drawing.Size(171, 32);
-            this.chkRemember.TabIndex = 7;
-            this.chkRemember.Text = "Remember Me";
-            this.chkRemember.UseVisualStyleBackColor = true;
-            // 
             // statusStrip
             // 
             this.statusStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
@@ -170,10 +158,10 @@
             // 
             this.panelMain.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
             this.panelMain.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(247)))), ((int)(((byte)(252)))));
+            this.panelMain.Controls.Add(this.btnShowPass);
             this.panelMain.Controls.Add(this.picLogo);
             this.panelMain.Controls.Add(this.lblTitle);
             this.panelMain.Controls.Add(this.lblRights);
-            this.panelMain.Controls.Add(this.chkRemember);
             this.panelMain.Controls.Add(this.lblUsername);
             this.panelMain.Controls.Add(this.btnExit);
             this.panelMain.Controls.Add(this.txtUsername);
@@ -184,6 +172,20 @@
             this.panelMain.Name = "panelMain";
             this.panelMain.Size = new System.Drawing.Size(500, 578);
             this.panelMain.TabIndex = 10;
+            // 
+            // btnShowPass
+            // 
+            this.btnShowPass.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnShowPass.BackColor = System.Drawing.Color.Transparent;
+            this.btnShowPass.BackgroundImage = global::Hotel_ManagementIT13.Properties.Resources.clarity__eye_line;
+            this.btnShowPass.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnShowPass.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnShowPass.Location = new System.Drawing.Point(428, 306);
+            this.btnShowPass.Name = "btnShowPass";
+            this.btnShowPass.Size = new System.Drawing.Size(30, 30);
+            this.btnShowPass.TabIndex = 10;
+            this.btnShowPass.UseVisualStyleBackColor = false;
+            this.btnShowPass.Click += new System.EventHandler(this.btnShowPass_Click);
             // 
             // picLogo
             // 
@@ -244,11 +246,11 @@
         private System.Windows.Forms.TextBox txtPassword;
         private System.Windows.Forms.Button btnLogin;
         private System.Windows.Forms.Button btnExit;
-        private System.Windows.Forms.CheckBox chkRemember;
         private System.Windows.Forms.PictureBox picLogo;
         private System.Windows.Forms.StatusStrip statusStrip;
         private System.Windows.Forms.ToolStripStatusLabel lblStatus;
         private System.Windows.Forms.Panel panelMain;
         private System.Windows.Forms.Label lblRights;
+        private System.Windows.Forms.Button btnShowPass;
     }
 }

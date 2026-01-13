@@ -14,16 +14,11 @@ namespace Hotel_ManagementIT13.Data.Repositories
             using (var conn = DatabaseHelper.GetConnection())
             {
                 conn.Open();
-                string query = @"
-                    SELECT rb.*, bt.bed_type_name
-                    FROM room_beds rb
-                    LEFT JOIN bed_types bt ON rb.bed_type_id = bt.bed_type_id
-                    WHERE rb.room_id = @roomId
-                    ORDER BY rb.room_bed_id";
 
-                using (var cmd = new MySqlCommand(query, conn))
+                using (var cmd = new MySqlCommand("sp_GetBedsForRoom", conn))
                 {
-                    cmd.Parameters.AddWithValue("@roomId", roomId);
+                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@p_room_id", roomId);
 
                     using (var reader = cmd.ExecuteReader())
                     {
@@ -54,20 +49,23 @@ namespace Hotel_ManagementIT13.Data.Repositories
             using (var conn = DatabaseHelper.GetConnection())
             {
                 conn.Open();
-                string query = "SELECT * FROM bed_types ORDER BY bed_type_id";
 
-                using (var cmd = new MySqlCommand(query, conn))
-                using (var reader = cmd.ExecuteReader())
+                using (var cmd = new MySqlCommand("sp_GetAllBedTypes", conn))
                 {
-                    while (reader.Read())
-                    {
-                        var bedType = new BedType
-                        {
-                            BedTypeId = Convert.ToInt32(reader["bed_type_id"]),
-                            TypeName = reader["bed_type_name"].ToString()
-                        };
+                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
 
-                        bedTypes.Add(bedType);
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            var bedType = new BedType
+                            {
+                                BedTypeId = Convert.ToInt32(reader["bed_type_id"]),
+                                TypeName = reader["bed_type_name"].ToString()
+                            };
+
+                            bedTypes.Add(bedType);
+                        }
                     }
                 }
             }
@@ -80,11 +78,11 @@ namespace Hotel_ManagementIT13.Data.Repositories
             using (var conn = DatabaseHelper.GetConnection())
             {
                 conn.Open();
-                string query = "SELECT * FROM bed_types WHERE bed_type_id = @bedTypeId";
 
-                using (var cmd = new MySqlCommand(query, conn))
+                using (var cmd = new MySqlCommand("sp_GetBedTypeById", conn))
                 {
-                    cmd.Parameters.AddWithValue("@bedTypeId", bedTypeId);
+                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@p_bed_type_id", bedTypeId);
 
                     using (var reader = cmd.ExecuteReader())
                     {
@@ -116,21 +114,28 @@ namespace Hotel_ManagementIT13.Data.Repositories
                     shouldCloseConnection = true;
                 }
 
-                string query = @"
-                    INSERT INTO room_beds (room_id, bed_type_id, quantity)
-                    VALUES (@roomId, @bedTypeId, @quantity);
-                    SELECT LAST_INSERT_ID();";
-
                 using (var cmd = transaction != null
-                    ? new MySqlCommand(query, conn, transaction)
-                    : new MySqlCommand(query, conn))
+                    ? new MySqlCommand("sp_AddRoomBed", conn, transaction)
+                    : new MySqlCommand("sp_AddRoomBed", conn))
                 {
-                    cmd.Parameters.AddWithValue("@roomId", roomBed.RoomId);
-                    cmd.Parameters.AddWithValue("@bedTypeId", roomBed.BedTypeId);
-                    cmd.Parameters.AddWithValue("@quantity", roomBed.Quantity);
+                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@p_room_id", roomBed.RoomId);
+                    cmd.Parameters.AddWithValue("@p_bed_type_id", roomBed.BedTypeId);
+                    cmd.Parameters.AddWithValue("@p_quantity", roomBed.Quantity);
 
-                    roomBed.RoomBedId = Convert.ToInt32(cmd.ExecuteScalar());
-                    return roomBed.RoomBedId > 0;
+                    var outputParam = new MySqlParameter("@p_new_id", MySqlDbType.Int32);
+                    outputParam.Direction = System.Data.ParameterDirection.Output;
+                    cmd.Parameters.Add(outputParam);
+
+                    cmd.ExecuteNonQuery();
+
+                    if (outputParam.Value != DBNull.Value)
+                    {
+                        roomBed.RoomBedId = Convert.ToInt32(outputParam.Value);
+                        return roomBed.RoomBedId > 0;
+                    }
+
+                    return false;
                 }
             }
             catch (Exception ex)
@@ -159,19 +164,14 @@ namespace Hotel_ManagementIT13.Data.Repositories
                     shouldCloseConnection = true;
                 }
 
-                string query = @"
-                    UPDATE room_beds 
-                    SET bed_type_id = @bedTypeId, 
-                        quantity = @quantity
-                    WHERE room_bed_id = @roomBedId";
-
                 using (var cmd = transaction != null
-                    ? new MySqlCommand(query, conn, transaction)
-                    : new MySqlCommand(query, conn))
+                    ? new MySqlCommand("sp_UpdateRoomBed", conn, transaction)
+                    : new MySqlCommand("sp_UpdateRoomBed", conn))
                 {
-                    cmd.Parameters.AddWithValue("@roomBedId", roomBed.RoomBedId);
-                    cmd.Parameters.AddWithValue("@bedTypeId", roomBed.BedTypeId);
-                    cmd.Parameters.AddWithValue("@quantity", roomBed.Quantity);
+                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@p_room_bed_id", roomBed.RoomBedId);
+                    cmd.Parameters.AddWithValue("@p_bed_type_id", roomBed.BedTypeId);
+                    cmd.Parameters.AddWithValue("@p_quantity", roomBed.Quantity);
 
                     return cmd.ExecuteNonQuery() > 0;
                 }
@@ -202,13 +202,13 @@ namespace Hotel_ManagementIT13.Data.Repositories
                     shouldCloseConnection = true;
                 }
 
-                string query = "DELETE FROM room_beds WHERE room_bed_id = @roomBedId";
-
                 using (var cmd = transaction != null
-                    ? new MySqlCommand(query, conn, transaction)
-                    : new MySqlCommand(query, conn))
+                    ? new MySqlCommand("sp_DeleteRoomBed", conn, transaction)
+                    : new MySqlCommand("sp_DeleteRoomBed", conn))
                 {
-                    cmd.Parameters.AddWithValue("@roomBedId", roomBedId);
+                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@p_room_bed_id", roomBedId);
+
                     return cmd.ExecuteNonQuery() > 0;
                 }
             }
@@ -238,13 +238,13 @@ namespace Hotel_ManagementIT13.Data.Repositories
                     shouldCloseConnection = true;
                 }
 
-                string query = "DELETE FROM room_beds WHERE room_id = @roomId";
-
                 using (var cmd = transaction != null
-                    ? new MySqlCommand(query, conn, transaction)
-                    : new MySqlCommand(query, conn))
+                    ? new MySqlCommand("sp_DeleteAllBedsForRoom", conn, transaction)
+                    : new MySqlCommand("sp_DeleteAllBedsForRoom", conn))
                 {
-                    cmd.Parameters.AddWithValue("@roomId", roomId);
+                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@p_room_id", roomId);
+
                     return cmd.ExecuteNonQuery() > 0;
                 }
             }
@@ -266,32 +266,39 @@ namespace Hotel_ManagementIT13.Data.Repositories
             using (var conn = DatabaseHelper.GetConnection())
             {
                 conn.Open();
-                string query = @"
-                    SELECT COUNT(*) FROM room_beds 
-                    WHERE room_id = @roomId AND bed_type_id = @bedTypeId";
 
-                using (var cmd = new MySqlCommand(query, conn))
+                using (var cmd = new MySqlCommand("sp_BedTypeExistsInRoom", conn))
                 {
-                    cmd.Parameters.AddWithValue("@roomId", roomId);
-                    cmd.Parameters.AddWithValue("@bedTypeId", bedTypeId);
+                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@p_room_id", roomId);
+                    cmd.Parameters.AddWithValue("@p_bed_type_id", bedTypeId);
 
-                    int count = Convert.ToInt32(cmd.ExecuteScalar());
-                    return count > 0;
+                    var resultParam = new MySqlParameter("@p_exists", MySqlDbType.Int32);
+                    resultParam.Direction = System.Data.ParameterDirection.Output;
+                    cmd.Parameters.Add(resultParam);
+
+                    cmd.ExecuteNonQuery();
+
+                    if (resultParam.Value != DBNull.Value)
+                    {
+                        return Convert.ToInt32(resultParam.Value) > 0;
+                    }
+
+                    return false;
                 }
             }
         }
 
-        // Get bed type by name
         public BedType GetBedTypeByName(string typeName)
         {
             using (var conn = DatabaseHelper.GetConnection())
             {
                 conn.Open();
-                string query = "SELECT * FROM bed_types WHERE bed_type_name = @typeName";
 
-                using (var cmd = new MySqlCommand(query, conn))
+                using (var cmd = new MySqlCommand("sp_GetBedTypeByName", conn))
                 {
-                    cmd.Parameters.AddWithValue("@typeName", typeName);
+                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@p_type_name", typeName);
 
                     using (var reader = cmd.ExecuteReader())
                     {
